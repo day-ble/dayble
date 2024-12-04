@@ -1,0 +1,5 @@
+rootProject.name = 'crowrong-project'
+include 'admin'
+include 'b2c'
+include 'schedule'
+include 'common'
