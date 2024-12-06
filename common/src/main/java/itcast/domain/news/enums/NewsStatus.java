@@ -1,4 +1,4 @@
-package domain.news.enums;
+package itcast.domain.news.enums;
 
 public enum NewsStatus {
     SUMMARY,

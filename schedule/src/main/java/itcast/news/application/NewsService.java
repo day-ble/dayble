@@ -1,4 +1,4 @@
-package com.example.application;
+package itcast.news.application;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

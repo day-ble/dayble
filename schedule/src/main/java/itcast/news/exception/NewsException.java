@@ -1,4 +1,4 @@
-package com.example.exception;
+package itcast.news.exception;
 
 public enum NewsException {
 }
