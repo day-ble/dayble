@@ -1,8 +1,12 @@
 package domain.blog;
 
 import domain.BaseEntity;
+import domain.blog.enums.BlogStatus;
+import domain.user.enums.Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,6 +34,12 @@ public class Blog extends BaseEntity {
     private String content;
 
     @Column(nullable = false)
+    private String originalContent;
+
+    @Enumerated(EnumType.STRING)
+    private Interest interest;
+
+    @Column(nullable = false)
     private LocalDateTime publishedAt;
 
     @Column(nullable = false)
@@ -39,4 +49,10 @@ public class Blog extends BaseEntity {
     private String link;
 
     private String thumbnail;
+
+    @Enumerated(EnumType.STRING)
+    private BlogStatus status;
+
+    @Column(nullable = false)
+    private LocalDateTime sendAt;
 }
