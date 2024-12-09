@@ -1,5 +1,8 @@
 package itcast.news.application;
 
+import itcast.news.dto.request.CreateNewsRequest;
+import itcast.news.repository.NewsRepository;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -13,10 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NewsService {
 
     @Value("${spring.crawler.naver-it-url}")
     private String Url;
+
+    private final NewsRepository newsRepository;
 
     public void newsCrawling() throws IOException {
         Document document = Jsoup.connect(Url).get();
@@ -44,18 +50,14 @@ public class NewsService {
 
                 titles = cleanContent(titles);
                 content = cleanContent(content);
-                LocalDateTime sendAt = convertDateTime(date);
+                LocalDateTime publishedAt = convertDateTime(date);
 
                 // dto 저장
-                System.out.println(link);
-                System.out.println(titles);
-                System.out.println(content);
-                System.out.println(sendAt);
-
                 if (thumbnail.isEmpty()) {
                     System.out.println("썸네일이 없습니다");
                 }
-                System.out.println(thumbnail);
+                CreateNewsRequest newsRequest = new CreateNewsRequest(titles, content, link, thumbnail, publishedAt);
+                newsRepository.save(newsRequest.toEntity(titles, content, link, thumbnail, publishedAt));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
