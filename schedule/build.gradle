@@ -20,6 +20,8 @@ dependencies {
 
     // 크롤링
     implementation 'org.jsoup:jsoup:1.18.3'
+
+    implementation project(':common')
 }
 
 test {

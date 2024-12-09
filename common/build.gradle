@@ -22,7 +22,6 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    implementation project(":schedule")
 }
 
 test {
