@@ -2,6 +2,7 @@ package itcast.domain.blog;
 
 import itcast.domain.BaseEntity;
 import itcast.domain.blog.enums.BlogStatus;
+import itcast.domain.blog.enums.Platform;
 import itcast.domain.user.enums.Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,8 +26,8 @@ public class Blog extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String platform;
+    @Enumerated(EnumType.STRING)
+    private Platform platform;
 
     @Column(nullable = false)
     private String title;
