@@ -1,4 +1,4 @@
-package domain;
+package itcast.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

@@ -1,8 +1,8 @@
-package domain.blog;
+package itcast.domain.blog;
 
-import domain.BaseEntity;
-import domain.blog.enums.BlogStatus;
-import domain.user.enums.Interest;
+import itcast.domain.BaseEntity;
+import itcast.domain.blog.enums.BlogStatus;
+import itcast.domain.user.enums.Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

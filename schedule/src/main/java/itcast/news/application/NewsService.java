@@ -17,7 +17,6 @@ public class NewsService {
     @Value("${spring.crawler.naver-it-url}")
     private String naverUrl;
 
-
     public List<String> newsCrawling() throws IOException {
         Document document = Jsoup.connect(naverUrl).get();
         Elements articles = document.select(".sa_thumb_inner");
@@ -27,7 +26,6 @@ public class NewsService {
             String link = article.select("a").attr("href");
             links.add(link);
         });
-
 
         links.forEach(link -> {
 
@@ -40,6 +38,7 @@ public class NewsService {
                 String thumbnail =
                         url.selectFirst("meta[property=og:image]").attr("content");
 
+                // 저장 부분
                 System.out.println(link);
                 System.out.println(titles);
                 System.out.println(content);
@@ -51,9 +50,7 @@ public class NewsService {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         });
-
         return links;
     }
 }
