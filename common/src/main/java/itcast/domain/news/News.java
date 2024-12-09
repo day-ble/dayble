@@ -5,7 +5,9 @@ import itcast.domain.user.enums.Interest;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import itcast.domain.BaseEntity;
@@ -22,10 +24,12 @@ public class News extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String originalContent;
 
     @Enumerated(EnumType.STRING)
