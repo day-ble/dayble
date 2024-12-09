@@ -1,8 +1,8 @@
-package domain.blogHistory;
+package itcast.domain.blogHistory;
 
-import domain.BaseEntity;
-import domain.news.News;
-import domain.user.User;
+import itcast.domain.BaseEntity;
+import itcast.domain.news.News;
+import itcast.domain.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

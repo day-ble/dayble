@@ -1,4 +1,4 @@
-package domain.user.enums;
+package itcast.domain.user.enums;
 
 public enum ArticleType {
     NEWS,

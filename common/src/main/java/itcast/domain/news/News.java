@@ -1,7 +1,7 @@
-package domain.news;
+package itcast.domain.news;
 
-import domain.news.enums.NewsStatus;
-import domain.user.enums.Interest;
+import itcast.domain.news.enums.NewsStatus;
+import itcast.domain.user.enums.Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import domain.BaseEntity;
+import itcast.domain.BaseEntity;
 
 @Getter
 @Entity
