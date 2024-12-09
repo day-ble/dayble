@@ -1,7 +1,11 @@
 package domain.news;
 
+import domain.news.enums.NewsStatus;
+import domain.user.enums.Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,13 +25,16 @@ public class News extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String platform;
-
-    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String content;
+
+    @Column(nullable = false)
+    private String originalContent;
+
+    @Enumerated(EnumType.STRING)
+    private Interest interest;
 
     @Column(nullable = false)
     private LocalDateTime publishedAt;
@@ -39,4 +46,9 @@ public class News extends BaseEntity {
     private String link;
 
     private String thumbnail;
+
+    @Enumerated(EnumType.STRING)
+    private NewsStatus status;
+
+    private LocalDateTime sendAt;
 }
