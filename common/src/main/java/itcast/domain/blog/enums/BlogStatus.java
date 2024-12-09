@@ -1,4 +1,4 @@
-package domain.blog.enums;
+package itcast.domain.blog.enums;
 
 public enum BlogStatus {
     SUMMARY,

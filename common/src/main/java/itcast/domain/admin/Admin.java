@@ -1,6 +1,6 @@
-package domain.admin;
+package itcast.domain.admin;
 
-import domain.BaseEntity;
+import itcast.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

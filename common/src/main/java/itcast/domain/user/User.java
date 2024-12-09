@@ -1,9 +1,9 @@
-package domain.user;
+package itcast.domain.user;
 
-import domain.BaseEntity;
-import domain.user.enums.ArticleType;
-import domain.user.enums.Interest;
-import domain.user.enums.SendingType;
+import itcast.domain.BaseEntity;
+import itcast.domain.user.enums.ArticleType;
+import itcast.domain.user.enums.Interest;
+import itcast.domain.user.enums.SendingType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
