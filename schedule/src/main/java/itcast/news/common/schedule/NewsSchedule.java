@@ -1,5 +1,6 @@
 package itcast.news.common.schedule;
 
+import itcast.news.application.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -12,25 +13,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Date;
-
 
 @Component
 @RequiredArgsConstructor
 public class NewsSchedule {
-    @Qualifier("crawlNewsJob")
-    private final Job crawlingJob;
-    private final JobLauncher jobLauncher;
 
-    @Scheduled(cron = "${spring.scheduler.cron.crawl-every-3-hour}")
-    public void scheduleNewsCrawling() throws
-            JobInstanceAlreadyCompleteException,
-            JobExecutionAlreadyRunningException,
-            JobParametersInvalidException,
-            JobRestartException {
+    private final NewsService newsService;
+
+    @Scheduled(cron = "${spring.scheduler.cron.news}")
+    public void scheduleNewsCrawling() throws IOException {
         System.out.println("crawling....");
-        jobLauncher.run(crawlingJob,new JobParametersBuilder()
-                .addDate("date", new Date())
-                .toJobParameters());
+        newsService.newsCrawling();
     }
 }
