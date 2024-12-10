@@ -14,7 +14,11 @@ public record CreateNewsRequest(
         LocalDateTime sendAt
 ) {
     public News toEntity(
-            String title, String originalContent, String link, String thumbnail, LocalDateTime publishedAt){
+            String title,
+            String originalContent,
+            String link,
+            String thumbnail,
+            LocalDateTime publishedAt){
         return News.builder()
                 .title(title)
                 .originalContent(originalContent)

@@ -51,8 +51,14 @@ public class News extends BaseEntity {
     private LocalDateTime sendAt;
 
     @Builder
-    public News(String title, String originalContent, String link, Interest interest, NewsStatus status,
-                String thumbnail, LocalDateTime publishedAt) {
+    public News(
+            String title,
+            String originalContent,
+            String link,
+            Interest interest,
+            NewsStatus status,
+            String thumbnail,
+            LocalDateTime publishedAt) {
         this.title = title;
         this.originalContent = originalContent;
         this.link = link;

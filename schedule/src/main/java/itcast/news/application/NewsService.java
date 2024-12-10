@@ -20,12 +20,12 @@ import java.util.List;
 public class NewsService {
 
     @Value("${spring.crawler.naver-it-url}")
-    private String Url;
+    private String url;
 
     private final NewsRepository newsRepository;
 
     public void newsCrawling() throws IOException {
-        Document document = Jsoup.connect(Url).get();
+        Document document = Jsoup.connect(url).get();
         Elements articles = document.select(".sa_thumb_inner");
 
         List<String> links = new ArrayList<>();
