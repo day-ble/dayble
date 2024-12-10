@@ -2,15 +2,12 @@ package itcast.domain.news;
 
 import itcast.domain.news.enums.NewsStatus;
 import itcast.domain.user.enums.Interest;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
+
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import itcast.domain.BaseEntity;
@@ -27,10 +24,12 @@ public class News extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String originalContent;
 
     @Enumerated(EnumType.STRING)
@@ -39,7 +38,6 @@ public class News extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime publishedAt;
 
-    @Column(nullable = false)
     private Long rating;
 
     @Column(nullable = false)
@@ -51,4 +49,23 @@ public class News extends BaseEntity {
     private NewsStatus status;
 
     private LocalDateTime sendAt;
+
+    @PrePersist
+    protected void setDefaultStatus() {
+        if (status == null) {
+            this.status = NewsStatus.ORIGINAL;
+        }
+        if (interest == null) {
+            this.interest = Interest.NEWS;
+        }
+    }
+
+    @Builder
+    public News(String title, String originalContent, String link, String thumbnail, LocalDateTime publishedAt) {
+        this.title = title;
+        this.originalContent = originalContent;
+        this.link = link;
+        this.thumbnail = thumbnail;
+        this.publishedAt = publishedAt;
+    }
 }

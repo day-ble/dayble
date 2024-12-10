@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/itcast
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  batch:
+    jdbc:
+      initialize-schema: always
+  h2:
+    console:
+      enabled: true
+  jpa :
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+  application:
+    name : Schedule
+  scheduler:
+    cron:
+      crawl-every-3-hour: "0 0 */3 * * ? "
+      save-data-every-day: "0 0 1 * * ?"
+      delete-aging-data: "0 0 0 1 0/6 ?"
+    timeout:
+      connection: 5000
+
+  crawler:
+    naver-it-url: "https://news.naver.com/breakingnews/section/105/283"
+
+  logging:
+    level:
+      root: INFO
+      org.jsoup: DEBUG
