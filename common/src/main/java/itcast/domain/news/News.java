@@ -5,6 +5,7 @@ import itcast.domain.news.enums.NewsStatus;
 import itcast.domain.user.enums.Interest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 
 import lombok.NoArgsConstructor;
