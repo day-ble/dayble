@@ -5,7 +5,9 @@ import itcast.domain.user.enums.Interest;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import itcast.domain.BaseEntity;
@@ -27,7 +29,7 @@ public class News extends BaseEntity {
     private String content;
 
     @Lob
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String originalContent;
 
     @Enumerated(EnumType.STRING)
@@ -36,7 +38,6 @@ public class News extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime publishedAt;
 
-    @Column(nullable = false)
     private Long rating;
 
     @Column(nullable = false)

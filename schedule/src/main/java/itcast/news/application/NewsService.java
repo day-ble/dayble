@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,8 @@ public class NewsService {
 
     @Value("${spring.crawler.naver-it-url}")
     private String url;
+    private final int LINK_SIZE = 10;
+    private final int HOUR = 12;
 
     private final NewsRepository newsRepository;
 
@@ -30,15 +33,26 @@ public class NewsService {
 
         List<String> links = new ArrayList<>();
         articles.forEach(article -> {
-            if (links.size() >= 10) {
+            if (links.size() >= LINK_SIZE) {
                 return;
             }
 
             String link = article.select("a").attr("href");
-            links.add(link);
+                links.add(link);
         });
+        List<String> isValidLinks = newsRepository.findAllLinks();
 
-        links.forEach(link -> {
+        List<String> validLinks = links
+                .stream()
+                .filter(link -> !isValidLinks.contains(link))
+                .distinct()
+                .collect(Collectors.toList());
+
+        if(validLinks.isEmpty()) {
+           throw new RuntimeException("No links found");
+        }
+
+        validLinks.forEach(link -> {
             try {
                 Document url = Jsoup.connect(link).get();
                 String titles = url.select("#title_area").text();
