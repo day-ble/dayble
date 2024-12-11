@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News, Long> {
    @Query("select n.link from News n")
-    List<String> findLinks();
+    List<String> findAllLinks();
 }

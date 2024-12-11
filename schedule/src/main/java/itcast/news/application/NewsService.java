@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,16 +32,27 @@ public class NewsService {
         Elements articles = document.select(".sa_thumb_inner");
 
         List<String> links = new ArrayList<>();
+
         articles.forEach(article -> {
             if (links.size() >= LINK_SIZE) {
                 return;
             }
-
             String link = article.select("a").attr("href");
-            links.add(link);
+                links.add(link);
         });
+        List<String> isValidLinks = newsRepository.findAllLinks();
 
-        links.forEach(link -> {
+        List<String> validLinks = links
+                .stream()
+                .filter(link -> !isValidLinks.contains(link))
+                .distinct()
+                .collect(Collectors.toList());
+
+        if(validLinks.isEmpty()) {
+           throw new RuntimeException("No links found");
+        }
+
+        validLinks.forEach(link -> {
             try {
                 Document url = Jsoup.connect(link).get();
                 String titles = url.select("#title_area").text();
@@ -92,4 +104,5 @@ public class NewsService {
                 .trim();
         return info;
     }
+
 }
