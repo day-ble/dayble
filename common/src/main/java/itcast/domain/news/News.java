@@ -14,7 +14,9 @@ import jakarta.persistence.Id;
 
 import jakarta.persistence.Lob;
 import java.time.LocalDateTime;
+
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,10 +33,11 @@ public class News extends BaseEntity {
     private String title;
 
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String originalContent;
 
     @Enumerated(EnumType.STRING)
@@ -43,7 +46,6 @@ public class News extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime publishedAt;
 
-    @Column(nullable = false)
     private Long rating;
 
     @Column(nullable = false)
@@ -55,4 +57,22 @@ public class News extends BaseEntity {
     private NewsStatus status;
 
     private LocalDateTime sendAt;
+
+    @Builder
+    public News(
+            String title,
+            String originalContent,
+            String link,
+            String thumbnail,
+            Interest interest,
+            NewsStatus status,
+            LocalDateTime publishedAt) {
+        this.title = title;
+        this.originalContent = originalContent;
+        this.link = link;
+        this.interest = interest;
+        this.status = status;
+        this.thumbnail = thumbnail;
+        this.publishedAt = publishedAt;
+    }
 }
