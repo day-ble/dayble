@@ -32,11 +32,11 @@ public class NewsService {
         Elements articles = document.select(".sa_thumb_inner");
 
         List<String> links = new ArrayList<>();
-
         articles.forEach(article -> {
             if (links.size() >= LINK_SIZE) {
                 return;
             }
+
             String link = article.select("a").attr("href");
                 links.add(link);
         });
@@ -104,5 +104,4 @@ public class NewsService {
                 .trim();
         return info;
     }
-
 }

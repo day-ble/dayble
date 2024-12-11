@@ -55,9 +55,9 @@ public class News extends BaseEntity {
             String title,
             String originalContent,
             String link,
-            String thumbnail,
             Interest interest,
             NewsStatus status,
+            String thumbnail,
             LocalDateTime publishedAt) {
         this.title = title;
         this.originalContent = originalContent;
