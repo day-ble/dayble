@@ -50,21 +50,20 @@ public class News extends BaseEntity {
 
     private LocalDateTime sendAt;
 
-    @PrePersist
-    protected void setDefaultStatus() {
-        if (status == null) {
-            this.status = NewsStatus.ORIGINAL;
-        }
-        if (interest == null) {
-            this.interest = Interest.NEWS;
-        }
-    }
-
     @Builder
-    public News(String title, String originalContent, String link, String thumbnail, LocalDateTime publishedAt) {
+    public News(
+            String title,
+            String originalContent,
+            String link,
+            String thumbnail,
+            Interest interest,
+            NewsStatus status,
+            LocalDateTime publishedAt) {
         this.title = title;
         this.originalContent = originalContent;
         this.link = link;
+        this.interest = interest;
+        this.status = status;
         this.thumbnail = thumbnail;
         this.publishedAt = publishedAt;
     }
