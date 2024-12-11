@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+/db
+common/src/main/java/itcast/CommonApplication.java

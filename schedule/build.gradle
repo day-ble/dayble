@@ -9,6 +9,14 @@ repositories {
     mavenCentral()
 }
 
+tasks.bootJar {
+    enabled = true
+}
+
+tasks.jar {
+    enabled = false
+}
+
 dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
