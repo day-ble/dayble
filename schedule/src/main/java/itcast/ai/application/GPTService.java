@@ -1,11 +1,14 @@
 package itcast.ai.application;
 
+import static itcast.exception.ErrorCodes.BLOG_NOT_FOUND;
+
 import itcast.ai.client.GPTClient;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.response.GPTSummaryResponse;
 import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.user.enums.Interest;
+import itcast.exception.ItCastApplicationException;
 import itcast.news.repository.BlogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,7 @@ public class GPTService {
         final GPTSummaryResponse response = gptClient.sendRequest(gptSummaryRequest);
 
         final Blog blog = blogRepository.findById(1L)
-                .orElseThrow(() -> new IllegalArgumentException("블로그가 유효하지 않습니다."));
+                .orElseThrow(() -> new ItCastApplicationException(BLOG_NOT_FOUND));
 
         blog.applySummaryUpdate(
                 response.getSummary(),
