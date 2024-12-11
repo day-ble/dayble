@@ -20,17 +20,19 @@ import java.util.List;
 public class NewsService {
 
     @Value("${spring.crawler.naver-it-url}")
-    private String Url;
+    private String url;
+    private final int LINK_SIZE = 10;
+    private final int HOUR = 12;
 
     private final NewsRepository newsRepository;
 
     public void newsCrawling() throws IOException {
-        Document document = Jsoup.connect(Url).get();
+        Document document = Jsoup.connect(url).get();
         Elements articles = document.select(".sa_thumb_inner");
 
         List<String> links = new ArrayList<>();
         articles.forEach(article -> {
-            if (links.size() >= 10) {
+            if (links.size() >= LINK_SIZE) {
                 return;
             }
 
@@ -74,8 +76,8 @@ public class NewsService {
         String[] timeParts = time.split(":");
         int hour = Integer.parseInt(timeParts[0]);
 
-        if (ampm.equals("오후") && hour != 12) {
-            hour += 12;
+        if (ampm.equals("오후") && hour != HOUR) {
+            hour += HOUR;
         }
 
         String timeDate = date + " " + String.format("%02d", hour) + ":" + timeParts[1];
