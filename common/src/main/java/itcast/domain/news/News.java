@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import itcast.domain.BaseEntity;
+
 import lombok.NoArgsConstructor;
 
 @Getter
