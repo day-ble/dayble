@@ -6,6 +6,8 @@ import itcast.domain.user.enums.Interest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import itcast.domain.BaseEntity;
+
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
