@@ -17,8 +17,6 @@ public record CreateNewsRequest(
             String title,
             String originalContent,
             String link,
-            Interest interest,
-            NewsStatus status,
             String thumbnail,
             LocalDateTime publishedAt){
         return News.builder()
