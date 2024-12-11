@@ -13,7 +13,7 @@ public class NewsSchedule {
 
     private final NewsService newsService;
 
-    @Scheduled(cron = "${spring.scheduler.cron.news}")
+    @Scheduled(cron = "${spring.scheduler.cron.news-crawling}")
     public void scheduleNewsCrawling() throws IOException {
         System.out.println("crawling....");
         newsService.newsCrawling();

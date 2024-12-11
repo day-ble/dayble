@@ -88,8 +88,8 @@ public class NewsService {
         String[] timeParts = time.split(":");
         int hour = Integer.parseInt(timeParts[0]);
 
-        if (ampm.equals("오후") && hour != 12) {
-            hour += 12;
+        if (ampm.equals("오후") && hour != HOUR) {
+            hour += HOUR;
         }
 
         String timeDate = date + " " + String.format("%02d", hour) + ":" + timeParts[1];
