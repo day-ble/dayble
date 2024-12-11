@@ -1,11 +1,11 @@
-package itcast;
+package itcast.domain;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AdminApplication {
+public class CommonApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AdminApplication.class, args);
+        SpringApplication.run(CommonApplication.class, args);
     }
 }
