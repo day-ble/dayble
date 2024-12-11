@@ -34,4 +34,3 @@ spring:
     level:
       root: INFO
       org.jsoup: DEBUG
-
