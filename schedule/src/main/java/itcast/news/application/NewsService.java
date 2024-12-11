@@ -36,7 +36,6 @@ public class NewsService {
             if (links.size() >= LINK_SIZE) {
                 return;
             }
-
             String link = article.select("a").attr("href");
                 links.add(link);
         });

@@ -1,16 +1,14 @@
 package itcast.domain.news;
 
+import itcast.domain.BaseEntity;
 import itcast.domain.news.enums.NewsStatus;
 import itcast.domain.user.enums.Interest;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
-
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import itcast.domain.BaseEntity;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -38,6 +36,7 @@ public class News extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime publishedAt;
 
+    @Column(nullable = false)
     private Long rating;
 
     @Column(nullable = false)
