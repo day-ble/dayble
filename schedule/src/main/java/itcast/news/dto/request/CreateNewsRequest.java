@@ -18,7 +18,8 @@ public record CreateNewsRequest(
             String originalContent,
             String link,
             String thumbnail,
-            LocalDateTime publishedAt){
+            LocalDateTime publishedAt
+    ){
         return News.builder()
                 .title(title)
                 .originalContent(originalContent)
