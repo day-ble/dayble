@@ -15,6 +15,8 @@ import itcast.ai.dto.response.GPTSummaryResponse;
 import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.user.enums.Interest;
+import itcast.exception.ItCastApplicationException;
+import itcast.news.repository.BlogRepository;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -92,6 +94,6 @@ class GPTServiceTest {
 
         // when & then
         assertThatThrownBy(() -> gptService.updateBlogBySummaryContent(gptSummaryRequest))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(ItCastApplicationException.class);
     }
 }
