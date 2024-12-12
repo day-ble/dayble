@@ -1,5 +1,6 @@
 package itcast.news.application;
 
+import itcast.domain.news.News;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,9 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,6 +27,8 @@ public class NewsService {
     private String url;
     private final int LINK_SIZE = 10;
     private final int HOUR = 12;
+    private final int YESTERDAY = 1;
+    private final int ALARM_HOUR = 7;
 
     private final NewsRepository newsRepository;
 
@@ -77,7 +82,15 @@ public class NewsService {
         });
     }
 
+    @Transient
     public void newsAlarm() {
+        LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
+        List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
+
+        LocalDateTime today = LocalDateTime.now().minusHours(ALARM_HOUR);
+        createdAlarm.forEach(alarm -> {
+            alarm.newsUpdate(today);
+        });
     }
 
     private LocalDateTime convertDateTime(String info) {
@@ -106,4 +119,6 @@ public class NewsService {
                 .trim();
         return info;
     }
+
+
 }
