@@ -14,10 +14,11 @@ import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.response.GPTSummaryResponse;
 import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
-import itcast.domain.blog.repository.BlogRepository;
 import itcast.domain.user.enums.Interest;
 import java.util.Collections;
 import java.util.Optional;
+
+import itcast.news.repository.BlogRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
