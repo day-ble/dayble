@@ -69,6 +69,22 @@ public class NewsService {
         });
     }
 
+    @Transactional
+    public void newsAlarm() {
+        LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
+        List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
+
+        LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
+        createdAlarm.forEach(alarm -> {
+            alarm.newsUpdate(sendAt, NewsStatus.SUMMARY);
+        });
+    }
+
+    @Transactional
+    public void deleteOldData() throws IOException {
+        newsRepository.deleteOldNews();
+    }
+
     public List<String> findLinks() throws IOException {
         Document document = Jsoup.connect(url).get();
         Elements articles = document.select(".sa_thumb_inner");
@@ -99,16 +115,7 @@ public class NewsService {
         return validLinks;
     }
 
-    @Transactional
-    public void newsAlarm() {
-        LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
-        List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
 
-        LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
-        createdAlarm.forEach(alarm -> {
-            alarm.newsUpdate(sendAt, NewsStatus.SUMMARY);
-        });
-    }
 
     private LocalDateTime convertDateTime(String info) {
         String[] parts = info.split(" ");

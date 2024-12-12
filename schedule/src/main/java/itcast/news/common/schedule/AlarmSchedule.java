@@ -12,8 +12,8 @@ public class AlarmSchedule {
 
     @Scheduled(cron = "${spring.scheduler.cron.alarm-Scheduled}")
     public void CreateAlarmSchedule() {
-        System.out.println("crawling....");
+        System.out.println("alarm schedule....");
         newsService.newsAlarm();
-        System.out.println("crawled End");
+        System.out.println("alarm schedule Finish");
     }
 }
