@@ -77,6 +77,9 @@ public class NewsService {
         });
     }
 
+    public void newsAlarm() {
+    }
+
     private LocalDateTime convertDateTime(String info) {
         String[] parts = info.split(" ");
         String date = parts[0];
