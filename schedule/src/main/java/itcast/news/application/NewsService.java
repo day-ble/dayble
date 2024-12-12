@@ -27,20 +27,16 @@ public class NewsService {
 
     @Value("${spring.crawler.naver-it-url}")
     private String url;
-    private final int LINK_SIZE = 10;
-    private final int HOUR = 12;
-    private final int YESTERDAY = 1;
-    private final int ALARM_HOUR = 7;
-    private final int ALARM_DAY = 2;
+    private static final int LINK_SIZE = 10;
+    private static final int HOUR = 12;
+    private static final int YESTERDAY = 1;
+    private static final int ALARM_HOUR = 7;
+    private static final int ALARM_DAY = 2;
 
     private final NewsRepository newsRepository;
 
     public void newsCrawling() throws IOException {
-        Document document = Jsoup.connect(url).get();
-        Elements articles = document.select(".sa_thumb_inner");
-
         List<String> links = findLinks();
-
         links = isValidLinks(links);
 
         links.forEach(link -> {
@@ -67,22 +63,6 @@ public class NewsService {
                 throw new RuntimeException(e);
             }
         });
-    }
-
-    @Transactional
-    public void newsAlarm() {
-        LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
-        List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
-
-        LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
-        createdAlarm.forEach(alarm -> {
-            alarm.newsUpdate(sendAt, NewsStatus.SUMMARY);
-        });
-    }
-
-    @Transactional
-    public void deleteOldData() throws IOException {
-        newsRepository.deleteOldNews();
     }
 
     public List<String> findLinks() throws IOException {
@@ -115,7 +95,21 @@ public class NewsService {
         return validLinks;
     }
 
+    @Transactional
+    public void newsAlarm() {
+        LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
+        List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
 
+        LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
+        createdAlarm.forEach(alarm -> {
+            alarm.newsUpdate(sendAt, NewsStatus.SUMMARY);
+        });
+    }
+
+    @Transactional
+    public void deleteOldData() throws IOException {
+        newsRepository.deleteOldNews();
+    }
 
     private LocalDateTime convertDateTime(String info) {
         String[] parts = info.split(" ");
