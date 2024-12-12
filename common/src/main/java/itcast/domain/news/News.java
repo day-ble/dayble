@@ -38,7 +38,7 @@ public class News extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime publishedAt;
 
-    private int rating;
+    private Interest rating;
 
     @Column(nullable = false)
     private String link;
@@ -57,7 +57,7 @@ public class News extends BaseEntity {
             String originalContent,
             Interest interest,
             LocalDateTime publishedAt,
-            int rating,
+            Interest rating,
             String link,
             String thumbnail,
             NewsStatus status,

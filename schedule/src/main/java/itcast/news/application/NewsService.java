@@ -3,6 +3,7 @@ package itcast.news.application;
 import itcast.domain.news.News;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -83,7 +84,7 @@ public class NewsService {
         });
     }
 
-    @Transient
+    @Transactional
     public void newsAlarm() {
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
         List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
