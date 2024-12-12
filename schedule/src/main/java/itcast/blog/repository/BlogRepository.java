@@ -1,4 +1,4 @@
-package itcast.news.repository;
+package itcast.blog.repository;
 
 import itcast.domain.blog.Blog;
 import org.springframework.data.jpa.repository.JpaRepository;

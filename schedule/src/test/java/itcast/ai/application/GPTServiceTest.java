@@ -16,11 +16,10 @@ import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.user.enums.Interest;
 import itcast.exception.ItCastApplicationException;
-import itcast.news.repository.BlogRepository;
+import itcast.blog.repository.BlogRepository;
 import java.util.Collections;
 import java.util.Optional;
 
-import itcast.news.repository.BlogRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
