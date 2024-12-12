@@ -1,6 +1,7 @@
 package itcast.news.application;
 
 import itcast.domain.news.News;
+import itcast.domain.news.enums.NewsStatus;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
 import jakarta.transaction.Transactional;
@@ -38,27 +39,11 @@ public class NewsService {
         Document document = Jsoup.connect(url).get();
         Elements articles = document.select(".sa_thumb_inner");
 
-        List<String> links = new ArrayList<>();
-        articles.forEach(article -> {
-            if (links.size() >= LINK_SIZE) {
-                return;
-            }
-            String link = article.select("a").attr("href");
-                links.add(link);
-        });
-        List<String> isValidLinks = newsRepository.findAllLinks();
+        List<String> links = findLinks();
 
-        List<String> validLinks = links
-                .stream()
-                .filter(link -> !isValidLinks.contains(link))
-                .distinct()
-                .collect(Collectors.toList());
+        links = isValidLinks(links);
 
-        if(validLinks.isEmpty()) {
-           throw new RuntimeException("No links found");
-        }
-
-        validLinks.forEach(link -> {
+        links.forEach(link -> {
             try {
                 Document url = Jsoup.connect(link).get();
                 String titles = url.select("#title_area").text();
@@ -84,6 +69,36 @@ public class NewsService {
         });
     }
 
+    public List<String> findLinks() throws IOException {
+        Document document = Jsoup.connect(url).get();
+        Elements articles = document.select(".sa_thumb_inner");
+
+        List<String> links = new ArrayList<>();
+        articles.forEach(article -> {
+            if (links.size() >= LINK_SIZE) {
+                return;
+            }
+            String link = article.select("a").attr("href");
+            links.add(link);
+        });
+        return links;
+    }
+
+    private List<String> isValidLinks(List<String> links) {
+        List<String> isValidLinks = newsRepository.findAllLinks();
+
+        List<String> validLinks = links
+                .stream()
+                .filter(link -> !isValidLinks.contains(link))
+                .distinct()
+                .collect(Collectors.toList());
+
+        if(validLinks.isEmpty()) {
+            throw new RuntimeException("No links found");
+        }
+        return validLinks;
+    }
+
     @Transactional
     public void newsAlarm() {
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
@@ -91,7 +106,7 @@ public class NewsService {
 
         LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
         createdAlarm.forEach(alarm -> {
-            alarm.newsUpdate(sendAt);
+            alarm.newsUpdate(sendAt, NewsStatus.SUMMARY);
         });
     }
 
