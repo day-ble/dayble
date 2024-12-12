@@ -29,6 +29,7 @@ public class NewsService {
     private final int HOUR = 12;
     private final int YESTERDAY = 1;
     private final int ALARM_HOUR = 7;
+    private final int ALARM_DAY = 2;
 
     private final NewsRepository newsRepository;
 
@@ -87,9 +88,9 @@ public class NewsService {
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
         List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
 
-        LocalDateTime today = LocalDateTime.now().minusHours(ALARM_HOUR);
+        LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
         createdAlarm.forEach(alarm -> {
-            alarm.newsUpdate(today);
+            alarm.newsUpdate(sendAt);
         });
     }
 
