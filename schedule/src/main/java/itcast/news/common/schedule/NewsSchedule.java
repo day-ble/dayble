@@ -17,6 +17,6 @@ public class NewsSchedule {
     public void scheduleNewsCrawling() throws IOException {
         System.out.println("crawling....");
         newsService.newsCrawling();
-        System.out.println("crawled End");
+        System.out.println("crawled Finish");
     }
 }
