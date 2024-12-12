@@ -92,4 +92,7 @@ public class News extends BaseEntity {
         this.thumbnail = thumbnail;
         this.publishedAt = publishedAt;
     }
+    public void newsUpdate(LocalDateTime sendAt) {
+        this.sendAt = sendAt;
+    }
 }
