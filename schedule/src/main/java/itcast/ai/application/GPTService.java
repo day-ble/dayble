@@ -1,18 +1,18 @@
 package itcast.ai.application;
 
-import static itcast.exception.ErrorCodes.BLOG_NOT_FOUND;
-
 import itcast.ai.client.GPTClient;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.response.GPTSummaryResponse;
+import itcast.blog.repository.BlogRepository;
 import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.user.enums.Interest;
 import itcast.exception.ItCastApplicationException;
-import itcast.news.repository.BlogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static itcast.exception.ErrorCodes.BLOG_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor

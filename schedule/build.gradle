@@ -23,6 +23,7 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-ses:1.12.3'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.jsoup:jsoup:1.18.3'
+    implementation 'org.json:json:20240303'
 }
 
 test {
