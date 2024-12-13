@@ -1,9 +1,9 @@
 spring:
   datasource:
     url: jdbc:mysql://localhost:3308/itcast
-    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
   h2:
     console:
       enabled: true
@@ -28,6 +28,9 @@ spring:
   crawler:
     naver-it-url: "https://news.naver.com/breakingnews/section/105/283"
 
+crawler:
+  yozm:
+    cron: "0 0 */3 * * *"
   logging:
     level:
       root: INFO

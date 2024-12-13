@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,4 +46,23 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SendingType sendingType;
+
+    @Builder
+    public User(
+            Long id,
+            String kakaoEmail,
+            String email,
+            String nickname,
+            ArticleType articleType,
+            Interest interest,
+            SendingType sendingType
+    ) {
+        this.id = id;
+        this.kakaoEmail = kakaoEmail;
+        this.email = email;
+        this.nickname = nickname;
+        this.articleType = articleType;
+        this.interest = interest;
+        this.sendingType = sendingType;
+    }
 }

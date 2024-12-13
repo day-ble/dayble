@@ -38,7 +38,7 @@ public class Blog extends BaseEntity {
     private String content;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String originalContent;
 
     @Enumerated(EnumType.STRING)
@@ -61,21 +61,37 @@ public class Blog extends BaseEntity {
 
     @Builder
     public Blog(
-            final Long id,
-            final Platform platform,
-            final String title,
-            final String originalContent,
-            final LocalDateTime publishedAt,
-            final String link,
-            final BlogStatus status
+            Platform platform,
+            String title,
+            String originalContent,
+            LocalDateTime publishedAt,
+            String link,
+            String thumbnail,
+            BlogStatus status
     ) {
-        this.id = id;
         this.platform = platform;
         this.title = title;
         this.originalContent = originalContent;
         this.publishedAt = publishedAt;
         this.link = link;
+        this.thumbnail = thumbnail;
         this.status = status;
+    }
+
+    @Builder
+    public Blog(Platform platform, String title, String content, String originalContent, Interest interest,
+                LocalDateTime publishedAt, int rating, String link, String thumbnail, BlogStatus status, LocalDateTime sendAt) {
+        this.platform = platform;
+        this.title = title;
+        this.content = content;
+        this.originalContent = originalContent;
+        this.interest = interest;
+        this.publishedAt = publishedAt;
+        this.rating = rating;
+        this.link = link;
+        this.thumbnail = thumbnail;
+        this.status = status;
+        this.sendAt = sendAt;
     }
 
     public void applySummaryUpdate(

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ public class News extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime publishedAt;
 
-    private Integer rating;
+    private int rating;
 
     @Column(nullable = false)
     private String link;
@@ -52,6 +53,7 @@ public class News extends BaseEntity {
     @Builder
     public News(
             String title,
+            String content,
             String originalContent,
             Interest interest,
             LocalDateTime publishedAt,
@@ -78,9 +80,9 @@ public class News extends BaseEntity {
             String title,
             String originalContent,
             String link,
+            String thumbnail,
             Interest interest,
             NewsStatus status,
-            String thumbnail,
             LocalDateTime publishedAt) {
         this.title = title;
         this.originalContent = originalContent;
