@@ -3,6 +3,7 @@ package itcast.domain.blog;
 import itcast.domain.BaseEntity;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.blog.enums.Platform;
+import itcast.domain.news.enums.NewsStatus;
 import itcast.domain.user.enums.Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +15,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,7 +47,7 @@ public class Blog extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime publishedAt;
 
-    private Long rating;
+    private int rating;
 
     @Column(nullable = false)
     private String link;
@@ -59,7 +59,20 @@ public class Blog extends BaseEntity {
 
     private LocalDateTime sendAt;
 
-    @Builder
+    public Blog(Platform platform, String title, String content, String originalContent, Interest interest,
+                LocalDateTime publishedAt, int rating, String link, String thumbnail, BlogStatus status, LocalDateTime sendAt) {
+        this.platform = platform;
+        this.title = title;
+        this.content = content;
+        this.originalContent = originalContent;
+        this.interest = interest;
+        this.publishedAt = publishedAt;
+        this.rating = rating;
+        this.link = link;
+        this.thumbnail = thumbnail;
+        this.status = status;
+        this.sendAt = sendAt;
+
     public Blog(
             final Long id,
             final Platform platform,
