@@ -28,11 +28,11 @@ public class GPTService {
         final Blog blog = blogRepository.findById(1L)
                 .orElseThrow(() -> new ItCastApplicationException(BLOG_NOT_FOUND));
 
-        blog.applySummaryUpdate(
-                response.getSummary(),
-                Interest.from(response.getCategory()),
-                response.getRating(),
-                BlogStatus.SUMMARY
-        );
+//        blog.applySummaryUpdate(
+//                response.getSummary(),
+//                Interest.from(response.getCategory()),
+//                response.getRating(),
+//                BlogStatus.SUMMARY
+//        );
     }
 }

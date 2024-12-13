@@ -19,8 +19,17 @@ public record AdminNewsResponse(
         LocalDateTime sendAt
 ){
     public AdminNewsResponse(News news) {
-        this(news.getId(), news.getTitle(), news.getContent(), news.getOriginalContent(),
-                news.getInterest(), news.getPublishedAt(), news.getRating(),
-                news.getLink(), news.getThumbnail(), news.getStatus(), news.getSendAt());
+        this(
+                news.getId(),
+                news.getTitle(),
+                news.getContent(),
+                news.getOriginalContent(),
+                news.getInterest(),
+                news.getPublishedAt(),
+                news.getRating(),
+                news.getLink(),
+                news.getThumbnail(),
+                news.getStatus(),
+                news.getSendAt());
     }
 }
