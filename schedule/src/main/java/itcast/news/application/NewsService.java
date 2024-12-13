@@ -118,22 +118,26 @@ public class NewsService {
         newsRepository.deleteOldNews();
     }
 
-    private LocalDateTime convertDateTime(String info) {
+    LocalDateTime convertDateTime(String info) {
         String[] parts = info.split(" ");
-        String date = parts[0];
-        String ampm = parts[1];
-        String time = parts[2];
+        String word = parts[0];
+        String date = parts[1];
+        String ampm = parts[2];
+        String time = parts[3];
 
-        date = date.replaceAll("입력", "");
+        word = word.replaceAll("입력", "");
         String[] timeParts = time.split(":");
         int hour = Integer.parseInt(timeParts[0]);
 
         if (ampm.equals("오후") && hour != HOUR) {
             hour += HOUR;
         }
+        if (ampm.equals("오전")&& hour == HOUR) {
+            hour = 0;
+        }
 
         String timeDate = date + " " + String.format("%02d", hour) + ":" + timeParts[1];
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd. HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime localDateTime = LocalDateTime.parse(timeDate, formatter);
         return localDateTime;
     }
