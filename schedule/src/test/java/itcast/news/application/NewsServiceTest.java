@@ -1,23 +1,30 @@
 package itcast.news.application;
 
+import itcast.domain.news.News;
 import itcast.news.repository.NewsRepository;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +48,23 @@ public class NewsServiceTest {
 
         // then
         assertFalse(articles.isEmpty(), "링크가 없음");
+    }
+
+    @Test
+    @DisplayName("알람 보내는 메소드 테스트")
+    void testUpdateNews() {
+        // given
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        News mockNews = mock(News.class);
+
+        Mockito.when(newsRepository.findAllByCreatedAt(yesterday))
+                .thenReturn(Collections.singletonList(mockNews));
+
+        // When
+        newsService.newsAlarm();
+
+        // Then
+        verify(mockNews).newsUpdate(Mockito.any(LocalDateTime.class));
     }
 
     @Test
@@ -95,5 +119,69 @@ public class NewsServiceTest {
         assertTrue(convertDateMidnight.isEqual(LocalDateTime.of(2020, 1, 1, 0, 1)),
                 "오전 12시 시간이 올바르지 않습니다.");
     }
+
+    @Test
+    @DisplayName("cleanContent 메소드 테스트")
+    void cleanContent() {
+        // give
+        String testWord = "[아니] (이건) 안녕";
+
+        // when
+        String cleanWord = newsService.cleanContent(testWord);
+
+        // then
+        assertTrue(cleanWord.equals("안녕"), "문장이 올바르지 않습니다");
+    }
+
+    @Test
+    @DisplayName("오레된 데이터 삭제 메소드 테스트")
+    void testDeleteOldNews() throws IOException {
+        // When
+        newsService.deleteOldData();
+
+        // Then
+        // newsRepository.deleteOldNews 호출 여부 검증
+        verify(newsRepository, Mockito.times(1)).deleteOldNews();
+    }
+
+    @Test
+    @DisplayName("링크를 찾아 저장하는 메소드 테스트")
+    void findLinksTest() throws IOException {
+        // give
+        String url = "http://example.com";
+        Document document = mock(Document.class);
+        Elements articles = new Elements();
+
+        Element mockElement1 = mock(Element.class);
+        Elements elements1 = mock(Elements.class);
+        when(mockElement1.select("a")).thenReturn(elements1);
+        when(elements1.attr("href")).thenReturn("http://example.com/link1");
+
+        Element mockElement2 = mock(Element.class);
+        Elements elements2 = mock(Elements.class);
+        when(mockElement2.select("a")).thenReturn(elements2);
+        when(elements2.attr("href")).thenReturn("http://example.com/link2");
+
+        articles.add(mockElement1);
+        articles.add(mockElement2);
+        when(document.select(".sa_thumb_inner")).thenReturn(articles);
+
+        Connection connection = mock(Connection.class);
+        when(connection.get()).thenReturn(document);
+
+        try (MockedStatic<Jsoup> jsoupMock = mockStatic(Jsoup.class)) {
+            jsoupMock.when(() -> Jsoup.connect(url)).thenReturn(connection);
+
+            // when
+            List<String> links = newsService.findLinks(url);
+
+            // then
+            assertNotNull(links);
+            assertEquals(2, links.size());
+            assertEquals("http://example.com/link1", links.get(0));
+            assertEquals("http://example.com/link2", links.get(1));
+        }
+    }
+
 
 }

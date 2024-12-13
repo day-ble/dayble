@@ -38,7 +38,7 @@ public class NewsService {
     private final GPTService gptService;
 
     public void newsCrawling() throws IOException {
-        List<String> links = findLinks();
+        List<String> links = findLinks(url);
         links = isValidLinks(links);
 
         links.forEach(link -> {
@@ -72,7 +72,7 @@ public class NewsService {
         });
     }
 
-    public List<String> findLinks() throws IOException {
+    public List<String> findLinks(String url) throws IOException {
         Document document = Jsoup.connect(url).get();
         Elements articles = document.select(".sa_thumb_inner");
 
@@ -95,10 +95,6 @@ public class NewsService {
                 .filter(link -> !isValidLinks.contains(link))
                 .distinct()
                 .collect(Collectors.toList());
-
-        if(validLinks.isEmpty()) {
-            throw new RuntimeException("No links found");
-        }
         return validLinks;
     }
 
@@ -142,7 +138,7 @@ public class NewsService {
         return localDateTime;
     }
 
-    private String cleanContent(String info) {
+    public String cleanContent(String info) {
         info = info.replaceAll("\\[.*?\\]", "")
                 .replaceAll("\\(.*?\\)", "")
                 .trim();
