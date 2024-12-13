@@ -47,7 +47,7 @@ public class Blog extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime publishedAt;
 
-    private Long rating;
+    private Integer rating;
 
     @Column(nullable = false)
     private String link;
@@ -81,7 +81,7 @@ public class Blog extends BaseEntity {
     public void applySummaryUpdate(
             final String content,
             final Interest interest,
-            final Long rating,
+            final Integer rating,
             final BlogStatus status
     ) {
         this.content = content;

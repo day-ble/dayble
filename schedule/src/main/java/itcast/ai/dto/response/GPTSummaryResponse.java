@@ -23,8 +23,8 @@ public record GPTSummaryResponse(
         return extractField(2).replace(",", "");
     }
 
-    public Long getRating() {
-        return Long.parseLong(extractField(3));
+    public Integer getRating() {
+        return Integer.parseInt(extractField(3));
     }
 
     private String extractField(final int index) {

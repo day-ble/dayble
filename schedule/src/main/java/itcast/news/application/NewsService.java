@@ -1,7 +1,9 @@
 package itcast.news.application;
 
+import itcast.ai.Message;
+import itcast.ai.application.GPTService;
+import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.domain.news.News;
-import itcast.domain.news.enums.NewsStatus;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
 import jakarta.transaction.Transactional;
@@ -12,7 +14,6 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.beans.Transient;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ public class NewsService {
     private static final int ALARM_DAY = 2;
 
     private final NewsRepository newsRepository;
+    private final GPTService gptService;
 
     public void newsCrawling() throws IOException {
         List<String> links = findLinks();
@@ -53,15 +55,20 @@ public class NewsService {
                 content = cleanContent(content);
                 LocalDateTime publishedAt = convertDateTime(date);
 
-                // dto 저장
                 if (thumbnail.isEmpty()) {
                     System.out.println("썸네일이 없습니다");
                 }
+
                 CreateNewsRequest newsRequest = new CreateNewsRequest(titles, content, link, thumbnail, publishedAt);
-                newsRepository.save(newsRequest.toEntity(titles, content, link, thumbnail, publishedAt));
+                News news = newsRepository.save(newsRequest.toEntity(titles, content, link, thumbnail, publishedAt));
+                Message message = new Message("user", content);
+                GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini",message,0.7f);
+
+                gptService.updateNewsBySummaryContent(request,news.getId());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
         });
     }
 
@@ -80,7 +87,7 @@ public class NewsService {
         return links;
     }
 
-    private List<String> isValidLinks(List<String> links) {
+    List<String> isValidLinks(List<String> links) {
         List<String> isValidLinks = newsRepository.findAllLinks();
 
         List<String> validLinks = links
@@ -102,7 +109,7 @@ public class NewsService {
 
         LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
         createdAlarm.forEach(alarm -> {
-            alarm.newsUpdate(sendAt, NewsStatus.SUMMARY);
+            alarm.newsUpdate(sendAt);
         });
     }
 
