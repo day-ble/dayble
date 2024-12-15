@@ -4,6 +4,7 @@ import itcast.ai.Message;
 import itcast.ai.application.GPTService;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.domain.news.News;
+import itcast.exception.ItCastApplicationException;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
 import jakarta.transaction.Transactional;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static itcast.exception.ErrorCodes.*;
+
 @Service
 @RequiredArgsConstructor
 public class NewsService {
@@ -37,7 +40,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final GPTService gptService;
 
-    public void newsCrawling() throws IOException {
+    public void newsCrawling() throws IOException, ItCastApplicationException {
         List<String> links = findLinks(url);
         links = isValidLinks(links);
 
@@ -62,9 +65,9 @@ public class NewsService {
                 CreateNewsRequest newsRequest = new CreateNewsRequest(titles, content, link, thumbnail, publishedAt);
                 News news = newsRepository.save(newsRequest.toEntity(titles, content, link, thumbnail, publishedAt));
                 Message message = new Message("user", content);
-                GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini",message,0.7f);
+                GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);
 
-                gptService.updateNewsBySummaryContent(request,news.getId());
+                gptService.updateNewsBySummaryContent(request, news.getId());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -89,7 +92,9 @@ public class NewsService {
 
     List<String> isValidLinks(List<String> links) {
         List<String> isValidLinks = newsRepository.findAllLinks();
-
+        if (isValidLinks.isEmpty()) {
+            throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+        }
         List<String> validLinks = links
                 .stream()
                 .filter(link -> !isValidLinks.contains(link))
@@ -103,42 +108,55 @@ public class NewsService {
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
         List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
 
+        if(createdAlarm.isEmpty()) {
+            throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+        }
         LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
         createdAlarm.forEach(alarm -> {
+            if (alarm == null){
+                throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+            }
             alarm.newsUpdate(sendAt);
         });
     }
 
     @Transactional
-    public void deleteOldData() throws IOException {
+    public void deleteOldData() {
         newsRepository.deleteOldNews();
     }
 
     LocalDateTime convertDateTime(String info) {
+        if (info == null || info.trim().isEmpty()) {
+            throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+        }
         String[] parts = info.split(" ");
-        String word = parts[0];
+        if (parts.length != 4) {
+            throw new ItCastApplicationException(INVALID_NEWS_DATE);
+        }
         String date = parts[1];
         String ampm = parts[2];
         String time = parts[3];
 
-        word = word.replaceAll("입력", "");
         String[] timeParts = time.split(":");
         int hour = Integer.parseInt(timeParts[0]);
 
         if (ampm.equals("오후") && hour != HOUR) {
             hour += HOUR;
         }
-        if (ampm.equals("오전")&& hour == HOUR) {
+        if (ampm.equals("오전") && hour == HOUR) {
             hour = 0;
         }
 
         String timeDate = date + " " + String.format("%02d", hour) + ":" + timeParts[1];
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime localDateTime = LocalDateTime.parse(timeDate, formatter);
-        return localDateTime;
+        return LocalDateTime.parse(timeDate, formatter);
     }
 
     public String cleanContent(String info) {
+        if (info == null || info.trim().isEmpty()) {
+            throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+        }
+
         info = info.replaceAll("\\[.*?\\]", "")
                 .replaceAll("\\(.*?\\)", "")
                 .trim();
