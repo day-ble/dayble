@@ -4,7 +4,6 @@ import itcast.application.AdminBlogService;
 import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.blog.enums.Platform;
-import itcast.domain.news.News;
 import itcast.domain.user.User;
 import itcast.domain.user.enums.Interest;
 import itcast.dto.request.AdminBlogRequest;
@@ -158,5 +157,58 @@ public class AdminBlogServiceTest {
         assertEquals(page, responsePage.getNumber());
         assertEquals(size, responsePage.getSize());
         verify(blogRepository).findBlogByCondition(status, interest, sendAt,  pageable);
+    }
+
+    @Test
+    @DisplayName("블로그 수정 성공")
+    public void SuccessBlogUpdate() {
+        //given
+        Long userId = 1L;
+        Long blogId = 1L;
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
+
+        User user = User.builder()
+                .id(1L)
+                .kakaoEmail("kakao@kakao.com")
+                .build();
+
+        Blog blog = Blog.adminBuilder()
+                .id(1L)
+                .platform(Platform.VELOG)
+                .title("제목")
+                .content("수정본")
+                .originalContent("원본")
+                .interest(Interest.BACKEND)
+                .publishedAt(fixedTime)
+                .rating(5)
+                .link("http://example.com")
+                .thumbnail("http://thumbnail.com")
+                .status(BlogStatus.SUMMARY)
+                .sendAt(fixedTime)
+                .build();
+        AdminBlogRequest adminBlogRequest = new AdminBlogRequest(
+                Platform.VELOG,
+                "제목2",
+                "수정본2",
+                "원본2",
+                Interest.NEWS,
+                fixedTime,
+                3,
+                "http://example2.com",
+                "http://thumbnail2.com",
+                BlogStatus.ORIGINAL,
+                fixedTime
+        );
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+        given(adminRepository.existsByEmail(user.getKakaoEmail())).willReturn(true);
+        given(blogRepository.findById(blogId)).willReturn(Optional.of(blog));
+
+        // when
+        AdminBlogResponse response = adminBlogService.updateBlog(userId, blogId, adminBlogRequest);
+
+        // Then
+        assertEquals("제목2", response.title());
+        assertEquals(BlogStatus.ORIGINAL, response.status());
     }
 }

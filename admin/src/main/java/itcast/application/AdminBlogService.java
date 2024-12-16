@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,27 @@ public class AdminBlogService {
         isAdmin(userId);
         Pageable pageable = PageRequest.of(page, size);
         return blogRepository.findBlogByCondition(blogStatus, interest, sendAt, pageable);
+    }
+
+    @Transactional
+    public AdminBlogResponse updateBlog(Long userId, Long blogId, AdminBlogRequest adminBlogRequest) {
+        isAdmin(userId);
+        Blog blog = blogRepository.findById(blogId).orElseThrow(()->
+                new IdNotFoundException("해당 블로그가 존재하지 않습니다"));
+        blog.update(
+                adminBlogRequest.platform(),
+                adminBlogRequest.title(),
+                adminBlogRequest.content(),
+                adminBlogRequest.originalContent(),
+                adminBlogRequest.interest(),
+                adminBlogRequest.publishedAt(),
+                adminBlogRequest.rating(),
+                adminBlogRequest.link(),
+                adminBlogRequest.thumbnail(),
+                adminBlogRequest.status(),
+                adminBlogRequest.sendAt()
+        );
+        return new AdminBlogResponse(blog);
     }
 
     private void isAdmin(Long id){

@@ -43,7 +43,7 @@ public class AdminNewsService {
     public AdminNewsResponse updateNews(Long userId, Long newsId, AdminNewsRequest adminNewsRequest) {
         isAdmin(userId);
         News news = newsRepository.findById(newsId)
-                .orElseThrow(() -> new IdNotFoundException("해당 뉴스가 존재하지 않습니다"));
+                .orElseThrow(()-> new IdNotFoundException("해당 뉴스가 존재하지 않습니다"));
 
         news.update(adminNewsRequest.title(),
                 adminNewsRequest.content(),
@@ -66,7 +66,6 @@ public class AdminNewsService {
         News news = newsRepository.findById(newsId)
                 .orElseThrow(()-> new IdNotFoundException("해당 뉴스가 존재하지 않습니다"));
         newsRepository.delete(news);
-
         return new AdminNewsResponse(news);
     }
 

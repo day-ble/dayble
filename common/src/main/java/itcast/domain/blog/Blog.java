@@ -79,16 +79,46 @@ public class Blog extends BaseEntity {
     }
 
     @Builder(builderClassName = "adminBuilder", builderMethodName = "adminBuilder")
-    public Blog(Platform platform,
+    public Blog(Long id,
+                Platform platform,
                 String title,
                 String content,
                 String originalContent,
                 Interest interest,
                 LocalDateTime publishedAt,
-                int rating, String link,
+                int rating,
+                String link,
                 String thumbnail,
                 BlogStatus status,
-                LocalDateTime sendAt) {
+                LocalDateTime sendAt
+    ) {
+        this.id = id;
+        this.platform = platform;
+        this.title = title;
+        this.content = content;
+        this.originalContent = originalContent;
+        this.interest = interest;
+        this.publishedAt = publishedAt;
+        this.rating = rating;
+        this.link = link;
+        this.thumbnail = thumbnail;
+        this.status = status;
+        this.sendAt = sendAt;
+    }
+
+    public void update(
+            Platform platform,
+            String title,
+            String content,
+            String originalContent,
+            Interest interest,
+            LocalDateTime publishedAt,
+            int rating,
+            String link,
+            String thumbnail,
+            BlogStatus status,
+            LocalDateTime sendAt
+    ) {
         this.platform = platform;
         this.title = title;
         this.content = content;

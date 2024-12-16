@@ -50,7 +50,8 @@ public class AdminNewsController {
     }
 
     @PutMapping
-    public ResponseTemplate<AdminNewsResponse> updateNews(@RequestParam Long userId, @RequestParam Long newsId,
+    public ResponseTemplate<AdminNewsResponse> updateNews(@RequestParam Long userId,
+                                                          @RequestParam Long newsId,
                                                           @RequestBody AdminNewsRequest adminNewsRequest) {
         AdminNewsResponse response = adminService.updateNews(userId, newsId, adminNewsRequest);
 

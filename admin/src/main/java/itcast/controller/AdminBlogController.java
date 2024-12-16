@@ -19,7 +19,6 @@ import java.time.LocalDate;
 @RequestMapping("/api/blogs")
 public class AdminBlogController {
 
-    private final AdminBlogService adminService;
     private final AdminBlogService adminBlogService;
 
     @PostMapping
@@ -27,7 +26,7 @@ public class AdminBlogController {
             @RequestParam Long userId,
             @RequestBody AdminBlogRequest adminBlogRequest
     ) {
-        AdminBlogResponse response = adminService.createBlog(userId, adminBlogRequest);
+        AdminBlogResponse response = adminBlogService.createBlog(userId, adminBlogRequest);
         return new ResponseTemplate<>(HttpStatus.CREATED, "관리자 블로그 생성 성공", response);
     }
 
@@ -47,5 +46,15 @@ public class AdminBlogController {
                 blogPage.getTotalPages()
         );
         return new ResponseTemplate<>(HttpStatus.OK, "관리자 블로그 조회 성공", blogPageResponse);
+    }
+
+    @PutMapping
+    public ResponseTemplate<AdminBlogResponse> updateBlog(
+            @RequestParam Long userId,
+            @RequestParam Long blogId,
+            @RequestBody AdminBlogRequest adminBlogRequest
+    ){
+        AdminBlogResponse response = adminBlogService.updateBlog(userId, blogId, adminBlogRequest);
+        return new ResponseTemplate<>(HttpStatus.OK, "관리자 블로그 수정 성공", response);
     }
 }
