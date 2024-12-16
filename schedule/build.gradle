@@ -18,12 +18,12 @@ tasks.jar {
 }
 
 dependencies {
-    implementation project(':common')
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'com.amazonaws:aws-java-sdk-ses:1.12.3'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.jsoup:jsoup:1.18.3'
-    implementation 'org.json:json:20240303'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation project(':common')
 }
 
 test {

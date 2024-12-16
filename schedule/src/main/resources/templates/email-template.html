@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${sender}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<br/>
+<p th:text="${content}"></p>
+<img img th:src="'data:image/png;base64,' + ${logoImage}" alt="로고 이미지"/>
+</body>
+</html>
