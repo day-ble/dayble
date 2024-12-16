@@ -32,7 +32,7 @@ public class NewsService {
     private static final int ALARM_HOUR = 7;
     private static final int ALARM_DAY = 2;
 
-    @Value("${spring.crawler.naver-it-url}")
+    @Value("${scheduler.cron.crawling}")
     private String url;
 
     private final NewsRepository newsRepository;
@@ -145,6 +145,4 @@ public class NewsService {
                 .trim();
         return info;
     }
-
-
 }

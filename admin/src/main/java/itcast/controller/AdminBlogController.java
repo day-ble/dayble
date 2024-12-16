@@ -7,11 +7,18 @@ import itcast.domain.user.enums.Interest;
 import itcast.dto.request.AdminBlogRequest;
 import itcast.dto.response.AdminBlogResponse;
 import itcast.dto.response.PageResponse;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import java.time.LocalDate;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +44,8 @@ public class AdminBlogController {
             @RequestParam(required = false) LocalDate sendAt,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<AdminBlogResponse> blogPage = adminBlogService.retrieveBlog(userId, blogStatus,interest, sendAt, page, size);
+        Page<AdminBlogResponse> blogPage = adminBlogService.retrieveBlog(userId, blogStatus, interest, sendAt, page,
+                size);
         PageResponse<AdminBlogResponse> blogPageResponse = new PageResponse<>(
                 blogPage.getContent(),
                 blogPage.getNumber(),
@@ -52,7 +60,7 @@ public class AdminBlogController {
             @RequestParam Long userId,
             @RequestParam Long blogId,
             @RequestBody AdminBlogRequest adminBlogRequest
-    ){
+    ) {
         AdminBlogResponse response = adminBlogService.updateBlog(userId, blogId, adminBlogRequest);
         return new ResponseTemplate<>(HttpStatus.OK, "관리자 블로그 수정 성공", response);
     }

@@ -4,7 +4,6 @@ import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.blog.enums.Platform;
 import itcast.domain.user.enums.Interest;
-
 import java.time.LocalDateTime;
 
 public record AdminBlogResponse(

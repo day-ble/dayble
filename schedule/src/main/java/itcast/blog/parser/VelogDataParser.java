@@ -2,6 +2,7 @@ package itcast.blog.parser;
 
 import itcast.blog.client.JsoupCrawler;
 import itcast.domain.blog.Blog;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -35,7 +36,7 @@ public class VelogDataParser {
     }
 
     public List<Blog> parseTrendingPosts(final List<String> blogUrl) {
-        final String DEFAULT_PUBLISHED_AT = "2024-12-12T12:12:12";    // 출판일 해결 시 삭제
+        final LocalDateTime DEFAULT_PUBLISHED_AT = LocalDateTime.of(2024, 12, 12, 12, 12, 12);
 
         return blogUrl.stream()
                 .map(url -> {

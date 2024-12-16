@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -135,15 +134,15 @@ public class Blog extends BaseEntity {
     public static Blog createVelogBlog(
             final String title,
             final String originalContent,
-            final String publishedAt,
+            final LocalDateTime publishedAt,
             final String link,
             final String thumbnail
-    ){
+    ) {
         return Blog.builder()
                 .platform(Platform.VELOG)
                 .title(title)
                 .originalContent(originalContent)
-                .publishedAt(LocalDateTime.parse(publishedAt))
+                .publishedAt(publishedAt)
                 .link(link)
                 .thumbnail(thumbnail)
                 .status(BlogStatus.ORIGINAL)
@@ -153,7 +152,7 @@ public class Blog extends BaseEntity {
     public static Blog createYozmBlog(
             final String title,
             final String originalContent,
-            final String publishedAt,
+            final LocalDateTime publishedAt,
             final String link,
             final String thumbnail
     ) {
@@ -161,22 +160,22 @@ public class Blog extends BaseEntity {
                 .platform(Platform.YOZM)
                 .title(title)
                 .originalContent(originalContent)
-                .publishedAt(LocalDateTime.parse(publishedAt))
+                .publishedAt(publishedAt)
                 .link(link)
                 .thumbnail(thumbnail)
                 .status(BlogStatus.ORIGINAL)
                 .build();
     }
 
-/*    public void applySummaryUpdate(
+    public void applySummaryUpdate(
             final String content,
             final Interest interest,
-            final int rating,
+            final Integer rating,
             final BlogStatus status
     ) {
         this.content = content;
         this.interest = interest;
         this.rating = rating;
         this.status = status;
-    }*/
+    }
 }

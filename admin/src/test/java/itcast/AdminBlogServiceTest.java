@@ -1,5 +1,10 @@
 package itcast;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
 import itcast.application.AdminBlogService;
 import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
@@ -11,6 +16,10 @@ import itcast.dto.response.AdminBlogResponse;
 import itcast.repository.AdminRepository;
 import itcast.repository.BlogRepository;
 import itcast.repository.UserRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,16 +30,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminBlogServiceTest {
@@ -148,7 +147,8 @@ public class AdminBlogServiceTest {
         given(blogRepository.findBlogByCondition(status, interest, sendAt, pageable)).willReturn(blogPage);
 
         //when
-        Page<AdminBlogResponse> responsePage = adminBlogService.retrieveBlog(userId, status, interest, sendAt, page, size);
+        Page<AdminBlogResponse> responsePage = adminBlogService.retrieveBlog(userId, status, interest, sendAt, page,
+                size);
 
         //then
         assertEquals(2, responsePage.getContent().size());
@@ -156,7 +156,7 @@ public class AdminBlogServiceTest {
         assertEquals("블로그2", responsePage.getContent().get(1).title());
         assertEquals(page, responsePage.getNumber());
         assertEquals(size, responsePage.getSize());
-        verify(blogRepository).findBlogByCondition(status, interest, sendAt,  pageable);
+        verify(blogRepository).findBlogByCondition(status, interest, sendAt, pageable);
     }
 
     @Test
@@ -214,7 +214,7 @@ public class AdminBlogServiceTest {
 
     @Test
     @DisplayName("블로그 삭제 성공")
-    public void successBlogDelete(){
+    public void successBlogDelete() {
         //Given
         Long userId = 1L;
         Long blogId = 1L;
