@@ -18,7 +18,9 @@ import itcast.domain.user.enums.ArticleType;
 import itcast.domain.user.enums.Interest;
 import itcast.domain.user.enums.SendingType;
 import itcast.user.dto.request.ProfileCreateRequest;
+import itcast.user.dto.request.ProfileUpdateRequest;
 import itcast.user.dto.response.ProfileCreateResponse;
+import itcast.user.dto.response.ProfileUpdateResponse;
 import itcast.user.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -101,5 +103,79 @@ class UserServiceTest {
         // Then
         verify(userRepository).findById(userId);
         verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    @DisplayName("회원정보를 성공적으로 수정한다.")
+    public void updateProfile_Success() {
+        // Given
+        Long userId = 1L;
+        ProfileUpdateRequest request = new ProfileUpdateRequest(
+                "newNickname",
+                ArticleType.NEWS,
+                Interest.NEWS,
+                SendingType.EMAIL,
+                "newEmail@example.com"
+        );
+
+        User existingUser = User.builder()
+                .id(userId)
+                .nickname("oldNickname")
+                .email("oldEmail@example.com")
+                .build();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userRepository.existsByNickname(request.nickname())).thenReturn(false);
+        when(userRepository.existsByEmail(request.email())).thenReturn(false);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // When
+        ProfileUpdateResponse response = userService.updateProfile(request, userId);
+
+        // Then
+        assertNotNull(response);
+        assertEquals("newNickname", response.nickname());
+        assertEquals("newEmail@example.com", response.email());
+        assertEquals(Interest.NEWS, response.interest());
+    }
+
+    @Test
+    @DisplayName("회원정보 수정 시 일부 필드가 null 또는 빈 공백일 경우, 해당 필드는 기존 정보를 유지한다.")
+    public void updateProfile_WithPartialFields_Success() {
+        // Given
+        Long userId = 1L;
+        ProfileUpdateRequest request = new ProfileUpdateRequest(
+                "",
+                null,
+                null,
+                SendingType.EMAIL,
+                ""
+        );
+
+        // 기존 사용자 정보
+        User existingUser = User.builder()
+                .id(userId)
+                .nickname("oldNickname")
+                .articleType(ArticleType.NEWS)
+                .interest(Interest.NEWS)
+                .sendingType(SendingType.KAKAO)
+                .email("oldEmail@example.com")
+                .build();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userRepository.existsByNickname(request.nickname())).thenReturn(false);
+        when(userRepository.existsByEmail(request.email())).thenReturn(false);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // When
+        ProfileUpdateResponse response = userService.updateProfile(request, userId);
+
+        // Then
+        assertNotNull(response);
+        assertEquals("oldNickname", response.nickname());
+        assertEquals("oldEmail@example.com", response.email());
+        assertEquals(ArticleType.NEWS, response.articleType());
+        assertEquals(Interest.NEWS, response.interest());
+        assertEquals(SendingType.EMAIL, response.sendingType());
     }
 }

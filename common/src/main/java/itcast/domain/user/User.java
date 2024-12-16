@@ -30,39 +30,35 @@ public class User extends BaseEntity {
     @Column(unique = true)
     private String kakaoEmail;
 
-    private String email;
-
-    @Column(nullable = false)
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ArticleType articleType;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Interest interest;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private SendingType sendingType;
+
+    private String email;
 
     @Builder
     public User(
             Long id,
             String kakaoEmail,
-            String email,
             String nickname,
             ArticleType articleType,
             Interest interest,
-            SendingType sendingType
+            SendingType sendingType,
+            String email
     ) {
         this.id = id;
         this.kakaoEmail = kakaoEmail;
-        this.email = email;
         this.nickname = nickname;
         this.articleType = articleType;
         this.interest = interest;
         this.sendingType = sendingType;
+        this.email = email;
     }
 }
