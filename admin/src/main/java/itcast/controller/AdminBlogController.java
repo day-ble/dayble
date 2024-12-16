@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 
 @RestController
@@ -56,5 +55,11 @@ public class AdminBlogController {
     ){
         AdminBlogResponse response = adminBlogService.updateBlog(userId, blogId, adminBlogRequest);
         return new ResponseTemplate<>(HttpStatus.OK, "관리자 블로그 수정 성공", response);
+    }
+
+    @DeleteMapping
+    public ResponseTemplate<AdminBlogResponse> deleteBlog(@RequestParam Long userId, @RequestParam Long blogId) {
+        AdminBlogResponse response = adminBlogService.deleteBlog(userId, blogId);
+        return new ResponseTemplate<>(HttpStatus.OK, "관리자 블로그 삭제 성공", response);
     }
 }

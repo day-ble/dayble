@@ -61,6 +61,15 @@ public class AdminBlogService {
         return new AdminBlogResponse(blog);
     }
 
+    public AdminBlogResponse deleteBlog(Long userId, Long blogId) {
+        isAdmin(userId);
+        Blog blog = blogRepository.findById(blogId).orElseThrow(()->
+                new IdNotFoundException("해당 블로그가 존재하지 않습니다"));
+        blogRepository.delete(blog);
+
+        return new AdminBlogResponse(blog);
+    }
+
     private void isAdmin(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new IdNotFoundException("해당 유저가 존재하지 않습니다."));

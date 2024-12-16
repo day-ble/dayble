@@ -211,4 +211,35 @@ public class AdminBlogServiceTest {
         assertEquals("제목2", response.title());
         assertEquals(BlogStatus.ORIGINAL, response.status());
     }
+
+    @Test
+    @DisplayName("블로그 삭제 성공")
+    public void successBlogDelete(){
+        //Given
+        Long userId = 1L;
+        Long blogId = 1L;
+
+        User adminUser = User.builder()
+                .id(userId)
+                .kakaoEmail("admin@kakao.com")
+                .build();
+
+        Blog blog = Blog.adminBuilder()
+                .id(1L)
+                .title("테스트 블로그")
+                .content("테스트 내용")
+                .build();
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(adminUser));
+        given(adminRepository.existsByEmail(adminUser.getKakaoEmail())).willReturn(true);
+        given(blogRepository.findById(blogId)).willReturn(Optional.of(blog));
+
+        // When
+        AdminBlogResponse response = adminBlogService.deleteBlog(userId, blogId);
+
+        // Then
+        assertEquals(blog.getId(), response.id());
+        assertEquals(blog.getTitle(), response.title());
+        verify(blogRepository).delete(blog);
+    }
 }
