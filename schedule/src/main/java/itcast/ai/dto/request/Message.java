@@ -1,4 +1,4 @@
-package itcast.ai;
+package itcast.ai.dto.request;
 
 import lombok.AccessLevel;
 import lombok.Getter;

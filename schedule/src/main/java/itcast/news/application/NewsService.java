@@ -29,13 +29,14 @@ import static itcast.exception.ErrorCodes.*;
 @RequiredArgsConstructor
 public class NewsService {
 
-    @Value("${spring.crawler.naver-it-url}")
-    private String url;
     private static final int LINK_SIZE = 10;
     private static final int HOUR = 12;
-    private static final int YESTERDAY = 1;
+    private static final int YESTERDAY = 2;
     private static final int ALARM_HOUR = 7;
     private static final int ALARM_DAY = 2;
+
+    @Value("${spring.crawler.naver-it-url}")
+    private String url;
 
     private final NewsRepository newsRepository;
     private final GPTService gptService;
@@ -135,6 +136,7 @@ public class NewsService {
         String ampm = parts[2];
         String time = parts[3];
 
+        date = date.replaceAll("입력", "");
         String[] timeParts = time.split(":");
         int hour = Integer.parseInt(timeParts[0]);
 

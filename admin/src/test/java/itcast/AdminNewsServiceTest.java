@@ -9,6 +9,7 @@ import itcast.dto.response.AdminNewsResponse;
 import itcast.repository.AdminRepository;
 import itcast.repository.NewsRepository;
 import itcast.repository.UserRepository;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

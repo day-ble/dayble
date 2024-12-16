@@ -1,6 +1,6 @@
 package itcast.ai.client;
 
-import itcast.ai.Message;
+import itcast.ai.dto.request.Message;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.response.GPTSummaryResponse;
 import java.util.List;

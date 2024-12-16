@@ -21,7 +21,7 @@ spring:
     cron:
       news-crawling: "0 0 */3 * * ? "
       alarm-Scheduled: "0 0 1 1/1 * ?"
-      delete-aging-data: "0 0 0 1 0/6 ?"
+      old-delete-data: "0 0 0 1 1,7 ?"
     timeout:
       connection: 5000
 
@@ -70,3 +70,13 @@ openai:
       “summary” : [요약 내용]
       “rating” : [점수]
     }
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+
+server:
+  port: 8081
+

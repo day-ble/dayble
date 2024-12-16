@@ -4,9 +4,10 @@ import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.blog.enums.Platform;
 import itcast.domain.user.enums.Interest;
+
 import java.time.LocalDateTime;
 
-public record AdminBlogResponse (
+public record AdminBlogResponse(
         Long id,
         Platform platform,
         String title,
@@ -19,8 +20,8 @@ public record AdminBlogResponse (
         String thumbnail,
         BlogStatus status,
         LocalDateTime sendAt
-){
-    public AdminBlogResponse(Blog blog){
+) {
+    public AdminBlogResponse(Blog blog) {
         this(
                 blog.getId(),
                 blog.getPlatform(),
