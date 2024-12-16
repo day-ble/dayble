@@ -26,10 +26,10 @@ public class AdminNewsService {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
 
-    public AdminNewsResponse createNews(Long userId, News news) {
+    public AdminNewsResponse createNews(Long userId, AdminNewsRequest adminNewsRequest) {
         isAdmin(userId);
+        News news = AdminNewsRequest.toEntity(adminNewsRequest);
         News savedNews = newsRepository.save(news);
-
         return new AdminNewsResponse(savedNews);
     }
 

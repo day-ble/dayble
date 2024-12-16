@@ -21,7 +21,7 @@ public record AdminBlogRequest(
         LocalDateTime sendAt
 ) {
     public static Blog toEntity(AdminBlogRequest adminBlogRequest) {
-        return Blog.builder()
+        return Blog.adminBuilder()
                 .platform(adminBlogRequest.platform())
                 .title(adminBlogRequest.title())
                 .content(adminBlogRequest.content())

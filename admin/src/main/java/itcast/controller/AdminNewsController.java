@@ -1,10 +1,10 @@
 package itcast.controller;
 
-import itcast.ResponseTemplate;
 import itcast.application.AdminNewsService;
 import itcast.domain.news.enums.NewsStatus;
 import itcast.dto.request.AdminNewsRequest;
 import itcast.dto.response.AdminNewsResponse;
+import itcast.ResponseTemplate;
 import itcast.dto.response.PageResponse;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +27,9 @@ public class AdminNewsController {
     private final AdminNewsService adminService;
 
     @PostMapping
-    public ResponseTemplate<AdminNewsResponse> createNews(@RequestParam Long userId,
-                                                          @RequestBody AdminNewsRequest adminNewsRequest) {
-        AdminNewsResponse response = adminService.createNews(userId, AdminNewsRequest.toEntity(adminNewsRequest));
-
-        return new ResponseTemplate<>(HttpStatus.CREATED, "관리자 뉴스 생성 성공", response);
+    public ResponseTemplate<AdminNewsResponse> createNews(@RequestParam Long userId, @RequestBody AdminNewsRequest adminNewsRequest) {
+        AdminNewsResponse response = adminService.createNews(userId, adminNewsRequest);
+        return new ResponseTemplate<>(HttpStatus.CREATED,"관리자 뉴스 생성 성공", response);
     }
 
     @GetMapping
