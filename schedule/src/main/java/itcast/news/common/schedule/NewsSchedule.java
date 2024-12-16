@@ -15,7 +15,7 @@ public class NewsSchedule {
 
     private final NewsService newsService;
 
-    @Scheduled(cron = "${scheduler.cron.crawling}")
+    @Scheduled(cron = "${scheduler.news.crawling}")
     public void scheduleNewsCrawling() throws IOException {
         log.info("crawling....");
         newsService.newsCrawling();

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class AlarmSchedule {
     private final NewsService newsService;
 
-    @Scheduled(cron = "${scheduler.cron.alarm-scheduled}")
+    @Scheduled(cron = "${scheduler.news.alarm-scheduled}")
     public void CreateAlarmSchedule() {
         log.info("alarm schedule....");
         newsService.newsAlarm();

@@ -66,7 +66,7 @@ public class VelogCrawlingService {
         );
     }
 
-    @Scheduled(cron = "${scheduler.cron.crawling}")
+    @Scheduled(cron = "${scheduler.velog.crawling}")
     public void velogCrawling() {
         log.info("Velog Crawling Start ...");
         crawlBlogs();

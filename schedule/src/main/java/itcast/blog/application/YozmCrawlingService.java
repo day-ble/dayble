@@ -42,7 +42,7 @@ public class YozmCrawlingService {
         );
     }
 
-    @Scheduled(cron = "${scheduler.cron.crawling}")
+    @Scheduled(cron = "${scheduler.yozm.crawling}")
     public void yozmCrawling() {
         log.info("Yozm Crawling Start ...");
         crawlBlogs();

@@ -21,7 +21,15 @@ spring:
         use_sql_comments: true
 
 scheduler:
-  cron:
+  news:
+    crawling: "0 0 */3 * * ?"
+    alarm-scheduled: "0 0 1 1/1 * ?"
+    old-delete-data: "0 0 0 1 1,7 ?"
+  velog:
+    crawling: "0 0 */3 * * ?"
+    alarm-scheduled: "0 0 1 1/1 * ?"
+    old-delete-data: "0 0 0 1 1,7 ?"
+  yozm:
     crawling: "0 0 */3 * * ?"
     alarm-scheduled: "0 0 1 1/1 * ?"
     old-delete-data: "0 0 0 1 1,7 ?"
