@@ -17,7 +17,7 @@ import java.util.List;
 public class VelogCrawlingService {
 
     private final VelogHttpClient velogHttpClient;
-    private final VelogDataParser velogdataParser;
+    private final VelogDataParser velogDataParser;
     private final BlogRepository blogRepository;
 
     public List<Blog> crawlBlogs() {
@@ -44,13 +44,17 @@ public class VelogCrawlingService {
                 """;
 
         String jsonResponse = velogHttpClient.fetchTrendingPostsOfJson(query, variables);
-        List<String> blogUrls = velogdataParser.getBlogUrls(jsonResponse);
-        List<Blog> blogs = velogdataParser.parseTrendingPosts(blogUrls);
+        List<String> blogUrls = velogDataParser.getBlogUrls(jsonResponse);
 
+        List<String> existingUrls = blogRepository.findAllLinks();
+        List<String> filteredBlogUrls = blogUrls.stream()
+                .filter(blogUrl -> !existingUrls.contains(blogUrl))
+                .toList();
+        List<Blog> blogs = velogDataParser.parseTrendingPosts(filteredBlogUrls);
         return blogs;
     }
 
-    @Scheduled(cron = "${crawler.velog.cron}")
+    @Scheduled(cron = "${scheduler.cron.crawling}")
     public void velogCrawling() {
         log.info("Velog Crawling Start ...");
 

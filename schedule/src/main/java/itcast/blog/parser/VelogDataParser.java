@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -50,7 +49,7 @@ public class VelogDataParser {
 
                         log.info("title: {}", title);
 
-                        return Blog.createVelogBlog(url, title, thumbnail, content, DEFAULT_PUBLISHED_AT);
+                        return Blog.createVelogBlog(title, content, DEFAULT_PUBLISHED_AT, url, thumbnail);
                     } catch (Exception e) {
                         log.error("Error", e);
                         return null;

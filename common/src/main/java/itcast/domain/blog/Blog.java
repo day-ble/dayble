@@ -113,7 +113,7 @@ public class Blog extends BaseEntity {
             String originalContent,
             Interest interest,
             LocalDateTime publishedAt,
-            int rating,
+            Integer rating,
             String link,
             String thumbnail,
             BlogStatus status,

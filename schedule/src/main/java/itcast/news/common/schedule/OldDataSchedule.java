@@ -14,7 +14,7 @@ import java.io.IOException;
 public class OldDataSchedule {
     private final NewsService newsService;
 
-    @Scheduled(cron = "${spring.scheduler.cron.old-delete-data}")
+    @Scheduled(cron = "${scheduler.cron.old-delete-data}")
     public void scheduleNewsCrawling() throws IOException {
         log.info("deleting old data....");
         newsService.deleteOldData();

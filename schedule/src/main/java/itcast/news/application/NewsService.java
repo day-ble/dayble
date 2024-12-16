@@ -1,8 +1,8 @@
 package itcast.news.application;
 
-import itcast.ai.Message;
 import itcast.ai.application.GPTService;
 import itcast.ai.dto.request.GPTSummaryRequest;
+import itcast.ai.dto.request.Message;
 import itcast.domain.news.News;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
