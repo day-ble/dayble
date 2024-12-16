@@ -29,8 +29,6 @@ subprojects {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         //test
         testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
-        testRuntimeOnly 'org.junit.platform:junit-platform-commons:1.10.0'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         runtimeOnly 'com.h2database:h2'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -49,7 +47,7 @@ subprojects {
         }
     }
 
-    tasks.named('test') {
+    test {
         useJUnitPlatform()
     }
 }
