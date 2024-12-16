@@ -1,32 +1,32 @@
-package itcast.blog.application;
-
-import itcast.blog.controller.YozmJsoupCrawler;
-import itcast.domain.blog.Blog;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
-@ExtendWith(MockitoExtension.class)
-class YozmCrawlingServiceTest {
-
-    @InjectMocks
-    private YozmCrawlingService yozmCrawlingService;
-    @Mock
-    private YozmJsoupCrawler yozmJsoupCrawler;
+//package itcast.blog.application;
+//
+//import itcast.blog.controller.YozmJsoupCrawler;
+//import itcast.domain.blog.Blog;
+//import org.jsoup.Jsoup;
+//import org.jsoup.nodes.Document;
+//import org.junit.jupiter.api.DisplayName;
+//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.extension.ExtendWith;
+//import org.mockito.InjectMocks;
+//import org.mockito.Mock;
+//import org.mockito.junit.jupiter.MockitoExtension;
+//
+//import java.io.File;
+//import java.io.IOException;
+//import java.util.List;
+//
+//import static org.assertj.core.api.Assertions.assertThat;
+//import static org.mockito.ArgumentMatchers.any;
+//import static org.mockito.ArgumentMatchers.anyString;
+//import static org.mockito.Mockito.when;
+//
+//@ExtendWith(MockitoExtension.class)
+//class YozmCrawlingServiceTest {
+//
+//    @InjectMocks
+//    private YozmCrawlingService yozmCrawlingService;
+//    @Mock
+//    private YozmJsoupCrawler yozmJsoupCrawler;
 
 //    @Test
 //    @DisplayName("각 페이지별로 블로그 가져오기")
@@ -58,4 +58,4 @@ class YozmCrawlingServiceTest {
 //        assertThat(blog.getTitle()).isEqualTo("더 이상 외면할 수 없는 양자컴퓨터 | 요즘IT");
 //        assertThat(blog.getThumbnail()).isEqualTo("https://yozm.wishket.com/media/news/2888/3.png");
 //    }
-}
+//}
