@@ -7,7 +7,6 @@ import itcast.dto.response.AdminNewsResponse;
 import itcast.ResponseTemplate;
 import itcast.dto.response.PageResponse;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +21,8 @@ public class AdminNewsController {
     private final AdminNewsService adminService;
 
     @PostMapping
-    public ResponseTemplate<AdminNewsResponse> createNews(@RequestParam Long userId,
-            @RequestBody AdminNewsRequest adminNewsRequest) {
-        AdminNewsResponse response = adminService.createNews(userId, adminNewsRequest.toEntity(adminNewsRequest));
+    public ResponseTemplate<AdminNewsResponse> createNews(@RequestParam Long userId, @RequestBody AdminNewsRequest adminNewsRequest) {
+        AdminNewsResponse response = adminService.createNews(userId, AdminNewsRequest.toEntity(adminNewsRequest));
 
         return new ResponseTemplate<>(HttpStatus.CREATED, "관리자 뉴스 생성 성공", response);
     }
@@ -44,5 +42,12 @@ public class AdminNewsController {
                 newsPage.getTotalPages()
         );
         return new ResponseTemplate<>(HttpStatus.OK, "관리자 뉴스 조회 성공", newPageResponse);
+    }
+
+    @PutMapping
+    public ResponseTemplate<AdminNewsResponse> updateNews(@RequestParam Long userId, @RequestParam Long newsId, @RequestBody AdminNewsRequest adminNewsRequest) {
+        AdminNewsResponse response = adminService.updateNews(userId, newsId, adminNewsRequest);
+
+        return new ResponseTemplate<>(HttpStatus.OK, "관리자 뉴스 수정 성공", response);
     }
 }
