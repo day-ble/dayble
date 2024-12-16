@@ -10,11 +10,11 @@ repositories {
 }
 
 tasks.bootJar {
-    enabled = true
+    enabled = false
 }
 
 tasks.jar {
-    enabled = false
+    enabled = true
 }
 
 dependencies {

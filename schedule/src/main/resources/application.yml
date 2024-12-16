@@ -19,9 +19,9 @@ spring:
         use_sql_comments: true
   scheduler:
     cron:
-      crawl-every-3-hour: "0 0 0/3 1/1 * ? *"
-      save-data-every-day: "0 0 1 1/1 * ? *"
-      delete-aging-data: "0 0 0 1 * ?"
+      news-crawling: "0 0 */3 * * ? "
+      alarm-Scheduled: "0 0 1 1/1 * ?"
+      old-delete-data: "0 0 0 1 1,7 ?"
     timeout:
       connection: 5000
 
@@ -36,7 +36,7 @@ crawler:
       root: INFO
       org.jsoup: DEBUG
 openai:
-  prompt: |
+  blog-prompt: |
     \n\n
     내용을 보고 요약해주세요. 그리고 GPT가 생각하기에 프론트엔드 쪽인지 백엔드 쪽인지 판별해주고 읽었을때 점수를 매겨줄 수 있을까요?
     **필수 조건**:
@@ -50,6 +50,23 @@ openai:
     **응답 형식**:
     {
       “category” : [FRONTEND or BACKEND]
+      “summary” : [요약 내용]
+      “rating” : [점수]
+    }
+  news-prompt: |
+    \n\n
+    내용을 보고 요약해주세요. 그리고 GPT가 읽었을때 점수를 매겨줄 수 있을까요?
+    **필수 조건**:
+        1. 응답 형식을 필수적으로 맞춰서 작성해야합니다.
+        2. 카테고리를 정할 때 무조건 NEWS로 주어야 합니다.
+        3. 점수는 1에서 10까지의 정수로 알려주시고 GPT가 생각하기에 내용에 대한 유익한 점수를 매겨줄 수 있나요?
+    **점수 조건**:
+    1. 유익성 (4점) : 독자가 얻을 수 있는 실질적인 정보와 지식의 가치.
+    2. 작성의 명료성 (3점) : 내용이 얼마나 명확하고 이해하기 쉽게 작성되었는지 평가.
+    3. 독창성 및 참신함 (3점) : 내용이 새로운 관점을 제시하거나 기존 정보를 창의적으로 다루었는지 평가.
+    **응답 형식**:
+    {
+      “category” : NEWS
       “summary” : [요약 내용]
       “rating” : [점수]
     }
