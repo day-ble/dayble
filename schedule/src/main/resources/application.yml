@@ -7,7 +7,7 @@ spring:
   h2:
     console:
       enabled: true
-  jpa :
+  jpa:
     database: mysql
     hibernate:
       ddl-auto: update
