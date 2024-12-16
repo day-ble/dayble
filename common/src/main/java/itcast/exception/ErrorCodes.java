@@ -10,6 +10,7 @@ public enum ErrorCodes {
     // 뉴스 exception
     INVALID_NEWS_CONTENT("뉴스의 내용이 없습니다",2002L,HttpStatus.BAD_REQUEST),
     INVALID_NEWS_DATE("출판 날짜 형식이 아닙니다",2003L ,HttpStatus.BAD_REQUEST),
+    CRAWLING_PARSE_ERROR("크롤링에 실패했습니다",2004L,HttpStatus.BAD_REQUEST),
 
 
     BAD_REQUEST("BAD_REQUEST", 9404L, HttpStatus.BAD_REQUEST),

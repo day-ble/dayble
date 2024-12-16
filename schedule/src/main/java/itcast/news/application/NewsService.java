@@ -1,8 +1,8 @@
 package itcast.news.application;
 
-import itcast.ai.Message;
 import itcast.ai.application.GPTService;
 import itcast.ai.dto.request.GPTSummaryRequest;
+import itcast.ai.dto.request.Message;
 import itcast.domain.news.News;
 import itcast.exception.ItCastApplicationException;
 import itcast.news.dto.request.CreateNewsRequest;
@@ -31,7 +31,7 @@ public class NewsService {
 
     private static final int LINK_SIZE = 10;
     private static final int HOUR = 12;
-    private static final int YESTERDAY = 2;
+    private static final int YESTERDAY = 1;
     private static final int ALARM_HOUR = 7;
     private static final int ALARM_DAY = 2;
 
@@ -94,12 +94,11 @@ public class NewsService {
         if (isValidLinks.isEmpty()) {
             throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
         }
-        List<String> validLinks = links
+        return links
                 .stream()
                 .filter(link -> !isValidLinks.contains(link))
                 .distinct()
                 .toList();
-        return validLinks;
     }
 
     @Transactional

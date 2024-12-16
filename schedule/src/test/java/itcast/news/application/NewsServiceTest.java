@@ -183,5 +183,9 @@ public class NewsServiceTest {
         }
     }
 
+    @Test
+    @DisplayName("newsCrawling 메소드 테스트")
+    void newsCrawlingTest(){
 
+    }
 }
