@@ -3,6 +3,7 @@ package itcast.dto.response;
 import itcast.domain.news.News;
 import itcast.domain.news.enums.NewsStatus;
 import itcast.domain.user.enums.Interest;
+
 import java.time.LocalDateTime;
 
 public record AdminNewsResponse(
@@ -17,7 +18,7 @@ public record AdminNewsResponse(
         String thumbnail,
         NewsStatus status,
         LocalDateTime sendAt
-){
+) {
     public AdminNewsResponse(News news) {
         this(
                 news.getId(),
