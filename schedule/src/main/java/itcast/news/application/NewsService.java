@@ -31,9 +31,7 @@ public class NewsService {
     private static final int YESTERDAY = 2;
     private static final int ALARM_HOUR = 7;
     private static final int ALARM_DAY = 2;
-
-    @Value("${scheduler.cron.crawling}")
-    private String url;
+    private static final String url = "https://news.naver.com/breakingnews/section/105/283";
 
     private final NewsRepository newsRepository;
     private final GPTService gptService;

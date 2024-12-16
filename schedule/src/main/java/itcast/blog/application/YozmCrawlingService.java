@@ -34,8 +34,6 @@ public class YozmCrawlingService {
         blogs.forEach(blog -> {
                     Blog originalBlog = Blog.createYozmBlog(blog.getTitle(), blog.getOriginalContent(), blog.getPublishedAt(),
                             blog.getLink(), blog.getThumbnail());
-                    log.info("title: {}", blog.getTitle());
-                    log.info("href: {}",  blog.getLink());
                     Blog savedId = blogRepository.save(originalBlog);
                     Message message = new Message("user", blog.getOriginalContent());
                     GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);

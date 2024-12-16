@@ -2,18 +2,21 @@ package itcast.blog.parser;
 
 import itcast.blog.client.JsoupCrawler;
 import itcast.domain.blog.Blog;
+
 import java.time.LocalDateTime;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
-import org.springframework.context.annotation.Configuration;
+import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
 @Slf4j
-@Configuration
+@Component
 @RequiredArgsConstructor
 public class YozmDataParser {
 
@@ -28,6 +31,7 @@ public class YozmDataParser {
                 .mapToObj(pageNum -> BASE_URL + pageNum + SORTED_URL)
                 .map(jsoupCrawler::getHtmlDocumentOrNull).filter(Objects::nonNull)
                 .map(doc -> doc.select("a.item-title.link-text.link-underline.text900"))
+                .flatMap(Elements::stream)
                 .map(link -> link.attr("abs:href"))
                 .toList();
     }
@@ -35,16 +39,17 @@ public class YozmDataParser {
     public List<Blog> parseTrendingPosts(List<String> blogUrls) {
         final LocalDateTime DEFAULT_PUBLISHED_AT = LocalDateTime.of(2024, 12, 12, 12, 12, 12);
         return blogUrls.stream()
-                .map(href -> {
-                    Document document = jsoupCrawler.getHtmlDocumentOrNull(href);
+                .map(url -> {
+                    Document document = jsoupCrawler.getHtmlDocumentOrNull(url);
                     String title = Objects.requireNonNull(document).title();
                     String thumbnail = document.selectFirst("meta[property=og:image]").attr("content");
                     String content = document.select("div.next-news-contents").text();
                     String publishedDate = document.select("div.content-meta-elem").eq(5).text();
 
                     log.info("title: {}", title);
-                    return Blog.createYozmBlog(title, content, DEFAULT_PUBLISHED_AT, href, thumbnail);
+                    return Blog.createYozmBlog(title, content, DEFAULT_PUBLISHED_AT, url, thumbnail);
                 })
+                .filter(Objects::nonNull)
                 .toList();
     }
 }
