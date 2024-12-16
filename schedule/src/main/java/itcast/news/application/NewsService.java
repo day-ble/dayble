@@ -40,7 +40,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final GPTService gptService;
 
-    public void newsCrawling() throws IOException, ItCastApplicationException {
+    public void newsCrawling() throws IOException {
         List<String> links = findLinks(url);
         links = isValidLinks(links);
 
@@ -59,19 +59,17 @@ public class NewsService {
                 LocalDateTime publishedAt = convertDateTime(date);
 
                 if (thumbnail.isEmpty()) {
-                    System.out.println("썸네일이 없습니다");
+                    throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
                 }
 
                 CreateNewsRequest newsRequest = new CreateNewsRequest(titles, content, link, thumbnail, publishedAt);
                 News news = newsRepository.save(newsRequest.toEntity(titles, content, link, thumbnail, publishedAt));
                 Message message = new Message("user", content);
                 GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);
-
                 gptService.updateNewsBySummaryContent(request, news.getId());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new ItCastApplicationException(CRAWLING_PARSE_ERROR);
             }
-
         });
     }
 
@@ -99,7 +97,7 @@ public class NewsService {
                 .stream()
                 .filter(link -> !isValidLinks.contains(link))
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
         return validLinks;
     }
 
@@ -108,12 +106,12 @@ public class NewsService {
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
         List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
 
-        if(createdAlarm.isEmpty()) {
+        if (createdAlarm.isEmpty()) {
             throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
         }
         LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
         createdAlarm.forEach(alarm -> {
-            if (alarm == null){
+            if (alarm == null) {
                 throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
             }
             alarm.newsUpdate(sendAt);
@@ -162,6 +160,5 @@ public class NewsService {
                 .trim();
         return info;
     }
-
 
 }
