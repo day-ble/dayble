@@ -27,7 +27,7 @@ public class CustomNewsRepositoryImpl implements CustomNewsRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<AdminNewsResponse> findNewsBYCondition(NewsStatus status, LocalDate sendAt, Pageable pageable) {
+    public Page<AdminNewsResponse> findNewsByCondition(NewsStatus status, LocalDate sendAt, Pageable pageable) {
         QNews news = QNews.news;
 
         JPQLQuery<AdminNewsResponse> query = queryFactory

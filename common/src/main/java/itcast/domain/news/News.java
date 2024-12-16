@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+
 import lombok.NoArgsConstructor;
 
 @Getter
@@ -100,6 +101,30 @@ public class News extends BaseEntity {
         this.status = status;
         this.thumbnail = thumbnail;
         this.publishedAt = publishedAt;
+    }
+
+    public void update(
+            String title,
+            String content,
+            String originalContent,
+            Interest interest,
+            LocalDateTime publishedAt,
+            int rating,
+            String link,
+            String thumbnail,
+            NewsStatus status,
+            LocalDateTime sendAt
+    ) {
+        this.title = title;
+        this.content = content;
+        this.originalContent = originalContent;
+        this.interest = interest;
+        this.publishedAt = publishedAt;
+        this.rating = rating;
+        this.link = link;
+        this.thumbnail = thumbnail;
+        this.status = status;
+        this.sendAt = sendAt;
     }
 
     public void newsUpdate(LocalDateTime sendAt) {

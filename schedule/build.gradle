@@ -13,10 +13,6 @@ tasks.bootJar {
     enabled = false
 }
 
-tasks.jar {
-    enabled = true
-}
-
 dependencies {
     implementation project(':common')
 
@@ -28,7 +24,6 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.18.3'
     implementation 'org.json:json:20240303'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
     // monitoring

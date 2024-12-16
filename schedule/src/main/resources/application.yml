@@ -30,7 +30,10 @@ spring:
 
 crawler:
   yozm:
+    cron: "0 0 */4 * * *"
+  velog:
     cron: "0 0 */3 * * *"
+
   logging:
     level:
       root: INFO

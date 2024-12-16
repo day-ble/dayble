@@ -87,7 +87,7 @@ public class Blog extends BaseEntity {
             String originalContent,
             Interest interest,
             LocalDateTime publishedAt,
-            int rating,
+            Integer rating,
             String link,
             String thumbnail,
             BlogStatus status,
@@ -106,7 +106,43 @@ public class Blog extends BaseEntity {
         this.sendAt = sendAt;
     }
 
-    public void applySummaryUpdate(
+    public static Blog createVelogBlog(
+            final String title,
+            final String originalContent,
+            final String publishedAt,
+            final String link,
+            final String thumbnail
+    ){
+        return Blog.builder()
+                .platform(Platform.VELOG)
+                .title(title)
+                .originalContent(originalContent)
+                .publishedAt(LocalDateTime.parse(publishedAt))
+                .link(link)
+                .thumbnail(thumbnail)
+                .status(BlogStatus.ORIGINAL)
+                .build();
+    }
+
+    public static Blog createYozmBlog(
+            final String title,
+            final String originalContent,
+            final String publishedAt,
+            final String link,
+            final String thumbnail
+    ) {
+        return Blog.builder()
+                .platform(Platform.YOZM)
+                .title(title)
+                .originalContent(originalContent)
+                .publishedAt(LocalDateTime.parse(publishedAt))
+                .link(link)
+                .thumbnail(thumbnail)
+                .status(BlogStatus.ORIGINAL)
+                .build();
+    }
+
+/*    public void applySummaryUpdate(
             final String content,
             final Interest interest,
             final Integer rating,
@@ -116,5 +152,5 @@ public class Blog extends BaseEntity {
         this.interest = interest;
         this.rating = rating;
         this.status = status;
-    }
+    }*/
 }

@@ -12,7 +12,7 @@ public record AdminNewsRequest(
         String originalContent,
         Interest interest,
         LocalDateTime publishedAt,
-        int rating,
+        Integer rating,
         String link,
         String thumbnail,
         NewsStatus status,
