@@ -10,18 +10,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import itcast.domain.user.User;
 import itcast.domain.user.enums.ArticleType;
 import itcast.domain.user.enums.Interest;
 import itcast.domain.user.enums.SendingType;
+import itcast.jwt.repository.UserRepository;
 import itcast.user.dto.request.ProfileCreateRequest;
 import itcast.user.dto.request.ProfileUpdateRequest;
 import itcast.user.dto.response.ProfileCreateResponse;
 import itcast.user.dto.response.ProfileUpdateResponse;
-import itcast.user.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {

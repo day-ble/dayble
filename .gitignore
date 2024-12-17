@@ -38,3 +38,5 @@ out/
 
 /db
 common/src/main/java/itcast/CommonApplication.java
+
+**/.run/

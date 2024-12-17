@@ -2,13 +2,13 @@ package itcast.controller;
 
 import itcast.ResponseTemplate;
 import itcast.application.AdminBlogService;
-import itcast.auth.jwt.CheckAuth;
-import itcast.auth.jwt.LoginMember;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.user.enums.Interest;
 import itcast.dto.request.AdminBlogRequest;
 import itcast.dto.response.AdminBlogResponse;
 import itcast.dto.response.PageResponse;
+import itcast.jwt.CheckAuth;
+import itcast.jwt.LoginMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

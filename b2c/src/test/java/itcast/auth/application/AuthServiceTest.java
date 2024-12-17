@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 
 import itcast.auth.client.KakaoClient;
 import itcast.auth.dto.response.KakaoUserInfo;
-import itcast.auth.jwt.JwtUtil;
+import itcast.jwt.JwtUtil;
 import itcast.domain.user.User;
-import itcast.user.repository.UserRepository;
+import itcast.jwt.repository.UserRepository;
 
 public class AuthServiceTest {
 
@@ -44,6 +44,7 @@ public class AuthServiceTest {
         // Given
         String code = "sampleCode";
         String accessToken = "sampleAccessToken";
+        String jwtToken = "mockJwtToken";
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo("newuser@naver.com");
         User newUser = User.builder()
                 .id(1L)
@@ -58,10 +59,17 @@ public class AuthServiceTest {
         when(jwtUtil.createToken(anyLong(), anyString())).thenReturn("mockJwtToken");
 
         // When
-        HttpHeaders headers = authService.kakaoLogin(code);
+        String token = authService.getAccessToken(code);
+        ResponseCookie cookie = ResponseCookie.from("Authorization", token)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(3600)
+                .build();
 
         // Then
-        assertNotNull(headers);
+        assertNotNull(cookie);
+        assertEquals("Authorization", cookie.getName());
+        assertEquals(jwtToken, cookie.getValue());
         verify(kakaoClient).getAccessToken(code);
         verify(kakaoClient).getKakaoUserInfo(accessToken);
         verify(userRepository).save(any(User.class));
@@ -74,6 +82,7 @@ public class AuthServiceTest {
         // Given
         String code = "sampleCode";
         String accessToken = "sampleAccessToken";
+        String jwtToken = "mockJwtToken";
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo("user@naver.com");
         User existingUser = User.builder()
                 .id(1L)
@@ -87,10 +96,17 @@ public class AuthServiceTest {
         when(jwtUtil.createToken(anyLong(), anyString())).thenReturn("mockJwtToken");
 
         // When
-        HttpHeaders headers = authService.kakaoLogin(code);
+        String token = authService.getAccessToken(code);
+        ResponseCookie cookie = ResponseCookie.from("Authorization", token)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(3600)
+                .build();
 
         // Then
-        assertNotNull(headers);
+        assertNotNull(cookie);
+        assertEquals("Authorization", cookie.getName());
+        assertEquals(jwtToken, cookie.getValue());
         verify(kakaoClient).getAccessToken(code);
         verify(kakaoClient).getKakaoUserInfo(accessToken);
         verify(userRepository).findByKakaoEmail("user@naver.com");
