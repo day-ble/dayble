@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import itcast.domain.user.User;
 import itcast.domain.user.enums.ArticleType;
 import itcast.domain.user.enums.Interest;
+import itcast.jwt.repository.UserRepository;
 import itcast.user.dto.request.ProfileCreateRequest;
 import itcast.user.dto.request.ProfileUpdateRequest;
 import itcast.user.dto.response.ProfileCreateResponse;
@@ -13,7 +14,6 @@ import itcast.user.dto.response.ProfileUpdateResponse;
 import itcast.user.exception.EmailAlreadyExistsException;
 import itcast.user.exception.NicknameAlreadyExistsException;
 import itcast.user.exception.UserNotFoundException;
-import itcast.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

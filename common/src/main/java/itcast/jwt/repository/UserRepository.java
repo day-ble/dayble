@@ -1,4 +1,4 @@
-package itcast.user.repository;
+package itcast.jwt.repository;
 
 import java.util.Optional;
 

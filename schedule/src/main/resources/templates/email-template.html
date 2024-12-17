@@ -1,12 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-  <title th:text="${sender}"></title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="UTF-8">
+    <title>Email Notification</title>
 </head>
 <body>
-<br/>
-<p th:text="${content}"></p>
-<img img th:src="'data:image/png;base64,' + ${logoImage}" alt="로고 이미지"/>
+<h2 th:text="${subject}"></h2>
+<img th:src="${logoImage}" alt="logo" style="width: 300px; height: auto;"/>
+<hr/>
+<div th:each="content : ${contents}">
+    <p>
+        <b>Title:</b> <span th:text="${content.title}"></span>
+    </p>
+    <p>
+        <b>Summary:</b> <span th:text="${content.summary}"></span>
+    </p>
+    <p>
+        <b>Original Link:</b>
+        <a th:href="${content.originalLink}" th:text="${content.originalLink}"></a>
+    </p>
+    <p>
+        <b>Thumbnail:</b><br/>
+        <a th:href="${content.originalLink}" target="_blank">
+            <img th:src="${content.thumbnail}" alt="Thumbnail Image" style="width: 300px; height: auto;"/>
+        </a>
+    </p>
+    <hr/>
+</div>
 </body>
 </html>

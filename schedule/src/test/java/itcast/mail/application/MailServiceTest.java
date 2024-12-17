@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import itcast.mail.dto.request.EmailSender;
+import itcast.mail.dto.request.MailContent;
 import itcast.mail.dto.request.SendMailRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -32,10 +33,16 @@ class MailServiceTest {
     @DisplayName("올바르게 요청을 하면 메일이 전송된다.")
     void mail_send_success_test() {
         // given
+        final List<MailContent> contents = List.of(
+                new MailContent("블로그 제목 1", "요약 내용 1", "https://link1.com", "test thumbnail"),
+                new MailContent("블로그 제목 2", "요약 내용 2", "https://link2.com", "test thumbnail"),
+                new MailContent("블로그 제목 3", "요약 내용 3", "https://link3.com", "test thumbnail")
+        );
+
         final SendMailRequest sendMailRequest = new SendMailRequest(
                 List.of("seonjun0906@gmail.com"),
                 "안녕하세요1",
-                "안녕하세요2"
+                contents
         );
 
         final SendEmailRequest sendEmailRequest = mock(SendEmailRequest.class);

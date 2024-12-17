@@ -1,4 +1,4 @@
-package itcast.auth.jwt;
+package itcast.jwt;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authCheckInterceptor)
-                .excludePathPatterns("/auth/kakao/callback");
+                .excludePathPatterns("/auth/kakao/callback", "/auth/kakao/token");
     }
 
     @Override

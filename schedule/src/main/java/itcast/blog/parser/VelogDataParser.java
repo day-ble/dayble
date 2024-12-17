@@ -27,11 +27,12 @@ public class VelogDataParser {
         final JSONObject jsonObject = new JSONObject(jsonResponse);
         final JSONArray trendingPosts = jsonObject.getJSONObject("data").getJSONArray("trendingPosts");
 
-        return IntStream.range(0, trendingPosts.length()).mapToObj(trendingPosts::getJSONObject).map(post -> {
-            final String username = post.getJSONObject("user").getString("username");
-            final String urlSlug = post.getString("url_slug");
-            return "https://velog.io/@" + username + "/" + urlSlug; // BLOG URL
-        }).toList();
+        return IntStream.range(0, trendingPosts.length())
+                .mapToObj(trendingPosts::getJSONObject).map(post -> {
+                    final String username = post.getJSONObject("user").getString("username");
+                    final String urlSlug = post.getString("url_slug");
+                    return "https://velog.io/@" + username + "/" + urlSlug; // BLOG URL
+                }).toList();
     }
 
     public List<Blog> parseTrendingPosts(final List<String> blogUrl) {
@@ -54,6 +55,8 @@ public class VelogDataParser {
                         log.error("Error", e);
                         return null;
                     }
-                }).filter(Objects::nonNull).toList();
+                })
+                .filter(Objects::nonNull)
+                .toList();
     }
 }
