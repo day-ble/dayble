@@ -12,9 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-
 import java.time.LocalDateTime;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -79,8 +77,35 @@ public class Blog extends BaseEntity {
         this.status = status;
     }
 
-    @Builder
-    public Blog(
+    @Builder(builderClassName = "adminBuilder", builderMethodName = "adminBuilder")
+    public Blog(Long id,
+                Platform platform,
+                String title,
+                String content,
+                String originalContent,
+                Interest interest,
+                LocalDateTime publishedAt,
+                int rating,
+                String link,
+                String thumbnail,
+                BlogStatus status,
+                LocalDateTime sendAt
+    ) {
+        this.id = id;
+        this.platform = platform;
+        this.title = title;
+        this.content = content;
+        this.originalContent = originalContent;
+        this.interest = interest;
+        this.publishedAt = publishedAt;
+        this.rating = rating;
+        this.link = link;
+        this.thumbnail = thumbnail;
+        this.status = status;
+        this.sendAt = sendAt;
+    }
+
+    public void update(
             Platform platform,
             String title,
             String content,
@@ -109,15 +134,15 @@ public class Blog extends BaseEntity {
     public static Blog createVelogBlog(
             final String title,
             final String originalContent,
-            final String publishedAt,
+            final LocalDateTime publishedAt,
             final String link,
             final String thumbnail
-    ){
+    ) {
         return Blog.builder()
                 .platform(Platform.VELOG)
                 .title(title)
                 .originalContent(originalContent)
-                .publishedAt(LocalDateTime.parse(publishedAt))
+                .publishedAt(publishedAt)
                 .link(link)
                 .thumbnail(thumbnail)
                 .status(BlogStatus.ORIGINAL)
@@ -127,7 +152,7 @@ public class Blog extends BaseEntity {
     public static Blog createYozmBlog(
             final String title,
             final String originalContent,
-            final String publishedAt,
+            final LocalDateTime publishedAt,
             final String link,
             final String thumbnail
     ) {
@@ -135,14 +160,14 @@ public class Blog extends BaseEntity {
                 .platform(Platform.YOZM)
                 .title(title)
                 .originalContent(originalContent)
-                .publishedAt(LocalDateTime.parse(publishedAt))
+                .publishedAt(publishedAt)
                 .link(link)
                 .thumbnail(thumbnail)
                 .status(BlogStatus.ORIGINAL)
                 .build();
     }
 
-/*    public void applySummaryUpdate(
+    public void applySummaryUpdate(
             final String content,
             final Interest interest,
             final Integer rating,
@@ -152,5 +177,5 @@ public class Blog extends BaseEntity {
         this.interest = interest;
         this.rating = rating;
         this.status = status;
-    }*/
+    }
 }

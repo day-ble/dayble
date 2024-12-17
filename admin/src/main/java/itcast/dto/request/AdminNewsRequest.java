@@ -3,7 +3,6 @@ package itcast.dto.request;
 import itcast.domain.news.News;
 import itcast.domain.news.enums.NewsStatus;
 import itcast.domain.user.enums.Interest;
-
 import java.time.LocalDateTime;
 
 public record AdminNewsRequest(

@@ -4,7 +4,6 @@ import itcast.ai.application.GPTService;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.request.Message;
 import itcast.domain.news.News;
-import itcast.exception.ItCastApplicationException;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
 import jakarta.transaction.Transactional;
@@ -31,12 +30,10 @@ public class NewsService {
 
     private static final int LINK_SIZE = 10;
     private static final int HOUR = 12;
-    private static final int YESTERDAY = 1;
+    private static final int YESTERDAY = 2;
     private static final int ALARM_HOUR = 7;
     private static final int ALARM_DAY = 2;
-
-    @Value("${spring.crawler.naver-it-url}")
-    private String url;
+    private static final String url = "https://news.naver.com/breakingnews/section/105/283";
 
     private final NewsRepository newsRepository;
     private final GPTService gptService;
@@ -91,9 +88,6 @@ public class NewsService {
 
     List<String> isValidLinks(List<String> links) {
         List<String> isValidLinks = newsRepository.findAllLinks();
-        if (isValidLinks.isEmpty()) {
-            throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
-        }
         return links
                 .stream()
                 .filter(link -> !isValidLinks.contains(link))
@@ -161,5 +155,4 @@ public class NewsService {
                 .trim();
         return info;
     }
-
 }

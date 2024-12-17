@@ -1,17 +1,25 @@
 package itcast.ai.application;
 
-import itcast.ai.Message;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import itcast.ai.client.GPTClient;
 import itcast.ai.dto.request.GPTSummaryRequest;
+import itcast.ai.dto.request.Message;
 import itcast.ai.dto.response.GPTSummaryResponse;
+import itcast.blog.repository.BlogRepository;
 import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
+import itcast.domain.user.enums.ArticleType;
 import itcast.domain.user.enums.Interest;
 import itcast.exception.ItCastApplicationException;
-import itcast.blog.repository.BlogRepository;
 import java.util.Collections;
 import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,14 +27,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.Collections;
-import java.util.Optional;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -64,18 +64,17 @@ class GPTServiceTest {
         GPTSummaryResponse.Choice choice = new GPTSummaryResponse.Choice(messages);
         GPTSummaryResponse response = new GPTSummaryResponse(Collections.singletonList(choice));
 
-        when(gptClient.sendRequest(gptSummaryRequest)).thenReturn(response);
-        ;
+        when(gptClient.sendRequest(gptSummaryRequest, ArticleType.BLOG)).thenReturn(response);
         when(blogRepository.findById(blogId)).thenReturn(Optional.of(blog));
 
         // when
-        gptService.updateBlogBySummaryContent(gptSummaryRequest);
+        gptService.updateBlogBySummaryContent(gptSummaryRequest, 1L);
 
         // then
         verify(blog, times(1)).applySummaryUpdate(any(), any(), any(), any());
-        verify(blog, times(1)).applySummaryUpdate(eq("test summary"), eq(Interest.BACKEND), eq(8L),
+        verify(blog, times(1)).applySummaryUpdate(eq("test summary"), eq(Interest.BACKEND), eq(8),
                 eq(BlogStatus.SUMMARY));
-        verify(gptClient, times(1)).sendRequest(gptSummaryRequest);
+        verify(gptClient, times(1)).sendRequest(gptSummaryRequest, ArticleType.BLOG);
     }
 
     @Test
@@ -92,7 +91,10 @@ class GPTServiceTest {
         when(blogRepository.findById(blogId)).thenReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> gptService.updateBlogBySummaryContent(gptSummaryRequest))
+        assertThatThrownBy(() -> gptService.updateBlogBySummaryContent(gptSummaryRequest, blogId))
                 .isInstanceOf(ItCastApplicationException.class);
     }
 }
+
+
+

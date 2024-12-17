@@ -37,7 +37,7 @@ public class GPTClient {
                 .uri("/v1/chat/completions")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + secretKey)
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                .bodyValue(toRequestBody(gptSummaryRequest,type))
+                .bodyValue(toRequestBody(gptSummaryRequest, type))
                 .retrieve()
                 .bodyToMono(GPTSummaryResponse.class)
                 .block();
@@ -46,7 +46,7 @@ public class GPTClient {
     private Map<String, Object> toRequestBody(final GPTSummaryRequest gptSummaryRequest, final ArticleType type) {
         return Map.of(
                 "model", gptSummaryRequest.model(),
-                "messages", toMessages(gptSummaryRequest.message(),type),
+                "messages", toMessages(gptSummaryRequest.message(), type),
                 "temperature", gptSummaryRequest.temperature()
         );
     }

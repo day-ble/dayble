@@ -1,9 +1,5 @@
 package itcast;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
 import itcast.application.AdminNewsService;
 import itcast.domain.news.News;
 import itcast.domain.news.enums.NewsStatus;
@@ -13,7 +9,7 @@ import itcast.dto.request.AdminNewsRequest;
 import itcast.dto.response.AdminNewsResponse;
 import itcast.repository.AdminRepository;
 import itcast.repository.NewsRepository;
-import itcast.repository.UserRepository;
+import itcast.user.repository.UserRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +24,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminNewsServiceTest {
@@ -65,18 +65,30 @@ public class AdminNewsServiceTest {
                 .status(NewsStatus.SUMMARY)
                 .sendAt(fixedTime)
                 .build();
+        AdminNewsRequest adminNewsRequest = new AdminNewsRequest(
+                "제목",
+                "수정본",
+                "원본",
+                Interest.NEWS,
+                fixedTime,
+                5,
+                "http://example.com",
+                "http://thumbnail.com",
+                NewsStatus.SUMMARY,
+                fixedTime
+                );
 
         given(userRepository.findById(userId)).willReturn(Optional.of(user));
         given(adminRepository.existsByEmail(user.getKakaoEmail())).willReturn(true);
-        given(newsRepository.save(news)).willReturn(news);
+        given(newsRepository.save(any(News.class))).willReturn(news);
 
         // When
-        AdminNewsResponse response = adminNewsService.createNews(userId, news);
+        AdminNewsResponse response = adminNewsService.createNews(userId, adminNewsRequest);
 
         // Then
         assertEquals("제목", response.title());
         assertEquals(NewsStatus.SUMMARY, response.status());
-        verify(newsRepository).save(news);
+        verify(newsRepository).save(any(News.class));
     }
 
     @Test
@@ -194,6 +206,7 @@ public class AdminNewsServiceTest {
     @Test
     @DisplayName("뉴스 삭제 성공")
     public void successDeleteNews() {
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
         // Given
         Long userId = 1L;
         Long newsId = 1L;
@@ -202,9 +215,17 @@ public class AdminNewsServiceTest {
                 .kakaoEmail("admin@kakao.com")
                 .build();
         News news = News.builder()
-                .id(newsId)
-                .title("테스트 뉴스")
-                .content("테스트 내용")
+                .id(1L)
+                .title("제목")
+                .content("수정본")
+                .originalContent("원본")
+                .interest(Interest.NEWS)
+                .publishedAt(fixedTime)
+                .rating(5)
+                .link("http://example.com")
+                .thumbnail("http://thumbnail.com")
+                .status(NewsStatus.SUMMARY)
+                .sendAt(fixedTime)
                 .build();
 
         given(userRepository.findById(userId)).willReturn(Optional.of(adminUser));

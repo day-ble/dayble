@@ -4,10 +4,12 @@ spring:
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   h2:
     console:
       enabled: true
-  jpa :
+
+  jpa:
     database: mysql
     hibernate:
       ddl-auto: update
@@ -17,27 +19,23 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
-  scheduler:
-    cron:
-      news-crawling: "0 0 */3 * * ? "
-      alarm-Scheduled: "0 0 1 1/1 * ?"
-      old-delete-data: "0 0 0 1 1,7 ?"
-    timeout:
-      connection: 5000
 
-  crawler:
-    naver-it-url: "https://news.naver.com/breakingnews/section/105/283"
-
-crawler:
-  yozm:
-    cron: "0 0 */4 * * *"
+scheduler:
+  news:
+    crawling: "0 0 */3 * * ?"
+    alarm-scheduled: "0 0 1 1/1 * ?"
+    old-delete-data: "0 0 0 1 1,7 ?"
   velog:
-    cron: "0 0 */3 * * *"
+    crawling: "0 0 */3 * * ?"
+    alarm-scheduled: "0 0 1 1/1 * ?"
+    old-delete-data: "0 0 0 1 1,7 ?"
+  yozm:
+    crawling: "0 0 */3 * * ?"
+    alarm-scheduled: "0 0 1 1/1 * ?"
+    old-delete-data: "0 0 0 1 1,7 ?"
+  timeout:
+    connection: 5000
 
-  logging:
-    level:
-      root: INFO
-      org.jsoup: DEBUG
 openai:
   blog-prompt: |
     \n\n
@@ -52,9 +50,9 @@ openai:
     3. 독창성 및 참신함 (3점) : 내용이 새로운 관점을 제시하거나 기존 정보를 창의적으로 다루었는지 평가.
     **응답 형식**:
     {
-      “category” : [FRONTEND or BACKEND]
-      “summary” : [요약 내용]
-      “rating” : [점수]
+      "category" : [FRONTEND or BACKEND]
+      "summary" : [요약 내용]
+      "rating" : [점수]
     }
   news-prompt: |
     \n\n
@@ -69,9 +67,9 @@ openai:
     3. 독창성 및 참신함 (3점) : 내용이 새로운 관점을 제시하거나 기존 정보를 창의적으로 다루었는지 평가.
     **응답 형식**:
     {
-      “category” : NEWS
-      “summary” : [요약 내용]
-      “rating” : [점수]
+      "category" : NEWS
+      "summary" : [요약 내용]
+      "rating" : [점수]
     }
 
 management:
@@ -82,4 +80,3 @@ management:
 
 server:
   port: 8081
-

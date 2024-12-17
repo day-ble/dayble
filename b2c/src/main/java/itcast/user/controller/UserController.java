@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import itcast.ResponseTemplate;
+import itcast.auth.jwt.CheckAuth;
+import itcast.auth.jwt.LoginMember;
 import itcast.user.application.UserService;
 import itcast.user.dto.request.ProfileCreateRequest;
 import itcast.user.dto.request.ProfileUpdateRequest;
@@ -25,27 +27,28 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/{id}")
+    @CheckAuth
+    @PostMapping()
     public ResponseTemplate<ProfileCreateResponse> createProfile(
-            @PathVariable Long id,
+            @LoginMember Long id,
             @RequestBody @Valid ProfileCreateRequest request
     ) {
         ProfileCreateResponse response = userService.createProfile(request, id);
         return new ResponseTemplate<>(HttpStatus.OK, "회원 정보 작성이 완료되었습니다.", response);
     }
-
-    @PatchMapping("/{id}")
+    @CheckAuth
+    @PatchMapping()
     public ResponseTemplate<ProfileUpdateResponse> updateProfile(
-            @PathVariable Long id,
+            @LoginMember Long id,
             @RequestBody @Valid ProfileUpdateRequest request
     ) {
         ProfileUpdateResponse response = userService.updateProfile(request, id);
         return new ResponseTemplate<>(HttpStatus.OK, "회원 정보 수정이 완료되었습니다.", response);
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseTemplate<Void> deleteProfile(@PathVariable Long id) {
-        userService.deleteProfile(id);
-        return new ResponseTemplate<>(HttpStatus.OK, "회원 정보 삭제가 완료되었습니다.", null);
+    @CheckAuth
+    @DeleteMapping()
+    public ResponseTemplate<Void> deleteUser(@LoginMember Long id) {
+        userService.deleteUser(id);
+        return new ResponseTemplate<>(HttpStatus.OK, "회원탈퇴가 완료되었습니다.", null);
     }
 }

@@ -60,7 +60,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteProfile(Long id) {
+    public void deleteUser(Long id) {
         User user = findUserByIdOrThrow(id);
         userRepository.delete(user);
         }

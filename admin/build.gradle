@@ -18,6 +18,7 @@ tasks.jar {
 }
 
 dependencies {
+    implementation project(':b2c')
     implementation project(':common')
 
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"

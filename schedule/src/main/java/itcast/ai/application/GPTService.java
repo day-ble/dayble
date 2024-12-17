@@ -13,7 +13,6 @@ import itcast.domain.news.enums.NewsStatus;
 import itcast.domain.user.enums.ArticleType;
 import itcast.domain.user.enums.Interest;
 import itcast.exception.ItCastApplicationException;
-import itcast.blog.repository.BlogRepository;
 import itcast.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

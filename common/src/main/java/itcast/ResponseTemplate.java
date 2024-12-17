@@ -1,7 +1,9 @@
 package itcast;
 
 import lombok.Getter;
+import lombok.Setter;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 @Getter
@@ -20,4 +22,5 @@ public class ResponseTemplate<T> {
         this.statusCode = httpStatus.value();
         this.message = message;
     }
+
 }
