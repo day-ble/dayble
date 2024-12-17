@@ -167,6 +167,10 @@ public class Blog extends BaseEntity {
                 .build();
     }
 
+    public void updateSendAt(LocalDateTime sendDateLater) {
+        this.sendAt = sendDateLater;
+    }
+
     public void applySummaryUpdate(
             final String content,
             final Interest interest,
