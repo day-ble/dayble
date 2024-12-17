@@ -1,5 +1,6 @@
 package itcast.news.application;
 
+import itcast.ai.application.GPTService;
 import itcast.domain.news.News;
 import itcast.news.repository.NewsRepository;
 import org.jsoup.Connection;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -26,7 +26,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 @ExtendWith(MockitoExtension.class)
 public class NewsServiceTest {
 
@@ -35,6 +34,9 @@ public class NewsServiceTest {
 
     @Mock
     private NewsRepository newsRepository;
+
+    @Mock
+    private GPTService gptService;
 
     @Test
     @DisplayName("크롤링 테스트")
@@ -54,17 +56,17 @@ public class NewsServiceTest {
     @DisplayName("알람 보내는 메소드 테스트")
     void testUpdateNews() {
         // given
-        LocalDate yesterday = LocalDate.now().minusDays(1);
+        LocalDate yesterday = LocalDate.now().minusDays(2);
         News mockNews = mock(News.class);
 
-        Mockito.when(newsRepository.findAllByCreatedAt(yesterday))
+       when(newsRepository.findAllByCreatedAt(yesterday))
                 .thenReturn(Collections.singletonList(mockNews));
 
         // When
         newsService.newsAlarm();
 
         // Then
-        verify(mockNews).newsUpdate(Mockito.any(LocalDateTime.class));
+        verify(mockNews).newsUpdate(any(LocalDateTime.class));
     }
 
     @Test
@@ -141,7 +143,7 @@ public class NewsServiceTest {
 
         // Then
         // newsRepository.deleteOldNews 호출 여부 검증
-        verify(newsRepository, Mockito.times(1)).deleteOldNews();
+        verify(newsRepository,times(1)).deleteOldNews();
     }
 
     @Test
@@ -183,9 +185,4 @@ public class NewsServiceTest {
         }
     }
 
-    @Test
-    @DisplayName("newsCrawling 메소드 테스트")
-    void newsCrawlingTest(){
-
-    }
 }

@@ -6,6 +6,7 @@ import static itcast.exception.ErrorCodes.NEWS_NOT_FOUND;
 import itcast.ai.client.GPTClient;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.response.GPTSummaryResponse;
+import itcast.blog.repository.BlogRepository;
 import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.news.News;

@@ -4,6 +4,7 @@ import itcast.ai.application.GPTService;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.request.Message;
 import itcast.domain.news.News;
+import itcast.exception.ItCastApplicationException;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
 import jakarta.transaction.Transactional;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static itcast.exception.ErrorCodes.*;
 
@@ -33,13 +32,13 @@ public class NewsService {
     private static final int YESTERDAY = 2;
     private static final int ALARM_HOUR = 7;
     private static final int ALARM_DAY = 2;
-    private static final String url = "https://news.naver.com/breakingnews/section/105/283";
+    private static final String URL = "https://news.naver.com/breakingnews/section/105/283";
 
     private final NewsRepository newsRepository;
     private final GPTService gptService;
 
     public void newsCrawling() throws IOException {
-        List<String> links = findLinks(url);
+        List<String> links = findLinks(URL);
         links = isValidLinks(links);
 
         links.forEach(link -> {
@@ -100,10 +99,8 @@ public class NewsService {
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
         List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
 
-        if (createdAlarm.isEmpty()) {
-            throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
-        }
         LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
+
         createdAlarm.forEach(alarm -> {
             if (alarm == null) {
                 throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
