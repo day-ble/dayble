@@ -10,13 +10,13 @@ import itcast.exception.IdNotFoundException;
 import itcast.exception.NotAdminException;
 import itcast.repository.AdminRepository;
 import itcast.repository.BlogRepository;
-import itcast.repository.UserRepository;
-import java.time.LocalDate;
+import itcast.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -34,8 +34,7 @@ public class AdminBlogService {
         return new AdminBlogResponse(savedBlogs);
     }
 
-    public Page<AdminBlogResponse> retrieveBlog(Long userId, BlogStatus blogStatus, Interest interest, LocalDate sendAt,
-                                                int page, int size) {
+    public Page<AdminBlogResponse> retrieveBlog(Long userId, BlogStatus blogStatus, Interest interest, LocalDate sendAt, int page, int size) {
         isAdmin(userId);
         Pageable pageable = PageRequest.of(page, size);
         return blogRepository.findBlogByCondition(blogStatus, interest, sendAt, pageable);
@@ -44,7 +43,7 @@ public class AdminBlogService {
     @Transactional
     public AdminBlogResponse updateBlog(Long userId, Long blogId, AdminBlogRequest adminBlogRequest) {
         isAdmin(userId);
-        Blog blog = blogRepository.findById(blogId).orElseThrow(() ->
+        Blog blog = blogRepository.findById(blogId).orElseThrow(()->
                 new IdNotFoundException("해당 블로그가 존재하지 않습니다"));
         blog.update(
                 adminBlogRequest.platform(),
@@ -64,16 +63,16 @@ public class AdminBlogService {
 
     public AdminBlogResponse deleteBlog(Long userId, Long blogId) {
         isAdmin(userId);
-        Blog blog = blogRepository.findById(blogId).orElseThrow(() ->
+        Blog blog = blogRepository.findById(blogId).orElseThrow(()->
                 new IdNotFoundException("해당 블로그가 존재하지 않습니다"));
         blogRepository.delete(blog);
 
         return new AdminBlogResponse(blog);
     }
 
-    private void isAdmin(Long id) {
+    private void isAdmin(Long id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundException("해당 유저가 존재하지 않습니다."));
+                .orElseThrow(()-> new IdNotFoundException("해당 유저가 존재하지 않습니다."));
         String email = user.getKakaoEmail();
         if (!adminRepository.existsByEmail(email)) {
             throw new NotAdminException("접근할 수 없는 유저입니다.");

@@ -1,10 +1,12 @@
 package itcast.controller;
 
-import itcast.ResponseTemplate;
 import itcast.application.AdminNewsService;
+import itcast.auth.jwt.CheckAuth;
+import itcast.auth.jwt.LoginMember;
 import itcast.domain.news.enums.NewsStatus;
 import itcast.dto.request.AdminNewsRequest;
 import itcast.dto.response.AdminNewsResponse;
+import itcast.ResponseTemplate;
 import itcast.dto.response.PageResponse;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,16 +29,20 @@ public class AdminNewsController {
 
     private final AdminNewsService adminService;
 
+    @CheckAuth
     @PostMapping
-    public ResponseTemplate<AdminNewsResponse> createNews(@RequestParam Long userId,
-                                                          @RequestBody AdminNewsRequest adminNewsRequest) {
+    public ResponseTemplate<AdminNewsResponse> createNews(
+            @LoginMember Long userId,
+            @RequestBody AdminNewsRequest adminNewsRequest
+    ) {
         AdminNewsResponse response = adminService.createNews(userId, adminNewsRequest);
-        return new ResponseTemplate<>(HttpStatus.CREATED, "관리자 뉴스 생성 성공", response);
+        return new ResponseTemplate<>(HttpStatus.CREATED,"관리자 뉴스 생성 성공", response);
     }
 
+    @CheckAuth
     @GetMapping
     public ResponseTemplate<PageResponse<AdminNewsResponse>> retrieveNews(
-            @RequestParam Long userId,
+            @LoginMember Long userId,
             @RequestParam(required = false) NewsStatus status,
             @RequestParam(required = false) LocalDate sendAt,
             @RequestParam(defaultValue = "0") int page,
@@ -50,17 +57,20 @@ public class AdminNewsController {
         return new ResponseTemplate<>(HttpStatus.OK, "관리자 뉴스 조회 성공", newPageResponse);
     }
 
-    @PutMapping
-    public ResponseTemplate<AdminNewsResponse> updateNews(@RequestParam Long userId,
-                                                          @RequestParam Long newsId,
-                                                          @RequestBody AdminNewsRequest adminNewsRequest) {
+    @CheckAuth
+    @PutMapping("/{newsId}")
+    public ResponseTemplate<AdminNewsResponse> updateNews(
+            @LoginMember Long userId,
+            @PathVariable Long newsId,
+            @RequestBody AdminNewsRequest adminNewsRequest
+    ) {
         AdminNewsResponse response = adminService.updateNews(userId, newsId, adminNewsRequest);
-
         return new ResponseTemplate<>(HttpStatus.OK, "관리자 뉴스 수정 성공", response);
     }
 
-    @DeleteMapping
-    public ResponseTemplate<AdminNewsResponse> deleteNews(@RequestParam Long userId, @RequestParam Long newsId) {
+    @CheckAuth
+    @DeleteMapping("/{newsId}")
+    public ResponseTemplate<AdminNewsResponse> deleteNews(@LoginMember Long userId, @PathVariable Long newsId) {
         AdminNewsResponse response = adminService.deleteNews(userId, newsId);
         return new ResponseTemplate<>(HttpStatus.OK, "관리자 뉴스 삭제 성공", response);
     }

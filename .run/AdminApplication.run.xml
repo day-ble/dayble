@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="AdminApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <envs>
+      <env name="SPRING_KAKAO_CLIENT_ID" value="3fe75b0246f140316c59424d7d0fd4c2" />
+    </envs>
     <module name="crowrong-project.admin.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="itcast.AdminApplication" />
     <extension name="coverage">
