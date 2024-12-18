@@ -12,6 +12,9 @@ public enum ErrorCodes {
     INVALID_NEWS_DATE("출판 날짜 형식이 아닙니다",2003L ,HttpStatus.BAD_REQUEST),
     CRAWLING_PARSE_ERROR("크롤링에 실패했습니다",2004L,HttpStatus.BAD_REQUEST),
     TODAY_NEWS_NOT_FOUND("뉴스 선택에 실패했습니다",2005L,HttpStatus.NOT_FOUND),
+    NOT_FOUND_EMAIL("이메일을 찾을 수 없습니다",2006L,HttpStatus.NOT_FOUND),
+    NOT_FOUND_SEND_DATA("발송 데이터를 찾을 수 없습니다",2007L,HttpStatus.NOT_FOUND),
+    INVALID_INTEREST_TYPE_ERROR("invalid타입이 맞지 않습니다",2008L,HttpStatus.BAD_REQUEST),
 
 
     BAD_REQUEST("BAD_REQUEST", 9404L, HttpStatus.BAD_REQUEST),
