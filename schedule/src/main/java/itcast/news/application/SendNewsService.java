@@ -74,7 +74,7 @@ public class SendNewsService {
         mailService.send(mailRequest);
     }
 
-    private List<String> retrieveUserEmails(Interest interest) {
+    public List<String> retrieveUserEmails(Interest interest) {
         if (interest != Interest.NEWS) {
             throw new ItCastApplicationException(ErrorCodes.INVALID_INTEREST_TYPE_ERROR);
         }
