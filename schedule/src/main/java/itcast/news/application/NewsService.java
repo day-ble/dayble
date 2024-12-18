@@ -29,9 +29,6 @@ public class NewsService {
 
     private static final int LINK_SIZE = 10;
     private static final int HOUR = 12;
-    private static final int YESTERDAY = 2;
-    private static final int ALARM_HOUR = 7;
-    private static final int ALARM_DAY = 2;
     private static final String URL = "https://news.naver.com/breakingnews/section/105/283";
 
     private final NewsRepository newsRepository;
@@ -92,21 +89,6 @@ public class NewsService {
                 .filter(link -> !isValidLinks.contains(link))
                 .distinct()
                 .toList();
-    }
-
-    @Transactional
-    public void newsAlarm() {
-        LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
-        List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
-
-        LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
-
-        createdAlarm.forEach(alarm -> {
-            if (alarm == null) {
-                throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
-            }
-            alarm.newsUpdate(sendAt);
-        });
     }
 
     @Transactional
