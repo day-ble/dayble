@@ -1,33 +1,41 @@
 package itcast.news.application;
 
 import itcast.domain.news.News;
-import itcast.exception.ItCastApplicationException;
 import itcast.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-
-import static itcast.exception.ErrorCodes.TODAY_NEWS_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
 public class SendNewsService {
 
-    private static final int NEWS_SIZE = 3;
+
+    private static final int YESTERDAY = 1;
+    private static final int ALARM_HOUR = 2;
+    private static final int ALARM_DAY = 2;
+
     private final NewsRepository newsRepository;
 
-    private static List<News> NEWS_LIST = Arrays.asList();
+    @Transactional
     public void selectNews() {
-        NEWS_LIST = newsRepository.findTop3ByTodayOrderByRating();
-        if (NEWS_LIST.isEmpty() || NEWS_LIST.size() < NEWS_SIZE) {
-            throw new ItCastApplicationException(TODAY_NEWS_NOT_FOUND);
-        }
+        LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
+        List<News> newsList = newsRepository.findRatingTot3ByCreatedAtOrdarByRating(yesterday);
 
+        LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
+
+        newsList.forEach(alarm -> {
+            alarm.newsUpdate(sendAt);
+        });
     }
 
     public void sendNews() {
+        List<News> sendNews = newsRepository.findAllBySendAt();
+
 
     }
 }
