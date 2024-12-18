@@ -20,4 +20,11 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     @Modifying
     @Query("DELETE FROM News n WHERE n.createdAt <= CURRENT_DATE - 6 MONTH")
     void deleteOldNews();
+
+    @Query(""" 
+            select n.title, n.link, n.thumbnail, n.content 
+            from News n 
+            where date_format(n.sendAt, '%Y-%m-%d') = CURDATE()
+            order by n.rating desc limit 3""")
+    List<News> findTop3ByTodayOrderByRating();
 }
