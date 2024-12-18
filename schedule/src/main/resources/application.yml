@@ -28,7 +28,7 @@ scheduler:
   blog:
     crawling: "0 0 */3 * * ?"
     selecting: "0 6 * * * *"
-    sending: "0 9 * * *"
+    sending: "0 9 * * * *"
   timeout:
     connection: 5000
 

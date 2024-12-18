@@ -41,7 +41,6 @@ class MailServiceTest {
 
         final SendMailRequest sendMailRequest = new SendMailRequest(
                 List.of("seonjun0906@gmail.com"),
-                "안녕하세요1",
                 contents
         );
 
