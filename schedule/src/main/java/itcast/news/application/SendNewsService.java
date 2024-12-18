@@ -1,6 +1,14 @@
 package itcast.news.application;
 
 import itcast.domain.news.News;
+import itcast.domain.user.User;
+import itcast.domain.user.enums.Interest;
+import itcast.exception.ErrorCodes;
+import itcast.exception.ItCastApplicationException;
+import itcast.jwt.repository.UserRepository;
+import itcast.mail.application.MailService;
+import itcast.mail.dto.request.MailContent;
+import itcast.mail.dto.request.SendMailRequest;
 import itcast.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,22 +28,59 @@ public class SendNewsService {
     private static final int ALARM_DAY = 2;
 
     private final NewsRepository newsRepository;
+    private final UserRepository userRepository;
+    private final MailService mailService;
 
     @Transactional
     public void selectNews() {
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
         List<News> newsList = newsRepository.findRatingTot3ByCreatedAtOrdarByRating(yesterday);
 
+        if (newsList == null || newsList.isEmpty()) {
+            throw new ItCastApplicationException(ErrorCodes.INVALID_NEWS_CONTENT);
+        }
+
         LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
 
-        newsList.forEach(alarm -> {
-            alarm.newsUpdate(sendAt);
+        newsList.forEach(news -> {
+            news.newsUpdate(sendAt);
         });
     }
 
     public void sendNews() {
         List<News> sendNews = newsRepository.findAllBySendAt();
 
+        if (sendNews == null || sendNews.isEmpty()) {
+            throw new ItCastApplicationException(ErrorCodes.NOT_FOUND_SEND_DATA);
+        }
 
+        List<MailContent> mailContents = sendNews.stream()
+                .map(news ->
+                        MailContent.builder()
+                                .title(news.getTitle())
+                                .originalLink(news.getLink())
+                                .summary(news.getContent())
+                                .thumbnail(news.getThumbnail())
+                                .build())
+                .toList();
+
+        List<String> emails = retrieveUserEmails(Interest.NEWS);
+
+        if (emails == null || emails.isEmpty()) {
+            throw new ItCastApplicationException(ErrorCodes.NOT_FOUND_EMAIL);
+        }
+
+        SendMailRequest mailRequest = new SendMailRequest(emails, mailContents);
+        mailService.send(mailRequest);
+    }
+
+    private List<String> retrieveUserEmails(Interest interest) {
+        if (interest != Interest.NEWS) {
+            throw new ItCastApplicationException(ErrorCodes.INVALID_INTEREST_TYPE_ERROR);
+        }
+        return userRepository.findAllByInterest(interest)
+                .stream()
+                .map(User::getEmail)
+                .toList();
     }
 }
