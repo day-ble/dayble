@@ -25,7 +25,7 @@ public class AlarmSchedule {
     public void selectNewsSchedule() {
         log.info("Selecting schedule....");
         sendNewsService.selectNews();
-        log.info("Selecting Finish");
+        log.info("Selecting schedule Finish");
     }
 
     @Scheduled(cron = "${scheduler.news.send-alarm}")
