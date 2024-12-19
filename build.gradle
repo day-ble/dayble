@@ -46,8 +46,7 @@ subprojects {
             extendsFrom annotationProcessor
         }
     }
-
-    tasks.named('test') {
-        useJUnitPlatform()
-    }
+}
+test {
+    useJUnitPlatform()
 }

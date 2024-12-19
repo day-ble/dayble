@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News, Long> {
-    @Query("select n.link from News n")
+   @Query("select n.link from News n")
     List<String> findAllLinks();
 
     @Query("select n from News n where function('DATE',n.createdAt) = :yesterday ")

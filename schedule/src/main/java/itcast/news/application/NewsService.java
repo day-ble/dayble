@@ -4,6 +4,7 @@ import itcast.ai.application.GPTService;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.request.Message;
 import itcast.domain.news.News;
+import itcast.exception.ItCastApplicationException;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
 import jakarta.transaction.Transactional;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,7 +20,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static itcast.exception.ErrorCodes.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,13 +32,13 @@ public class NewsService {
     private static final int YESTERDAY = 2;
     private static final int ALARM_HOUR = 7;
     private static final int ALARM_DAY = 2;
-    private static final String url = "https://news.naver.com/breakingnews/section/105/283";
+    private static final String URL = "https://news.naver.com/breakingnews/section/105/283";
 
     private final NewsRepository newsRepository;
     private final GPTService gptService;
 
     public void newsCrawling() throws IOException {
-        List<String> links = findLinks(url);
+        List<String> links = findLinks(URL);
         links = isValidLinks(links);
 
         links.forEach(link -> {
@@ -55,19 +56,17 @@ public class NewsService {
                 LocalDateTime publishedAt = convertDateTime(date);
 
                 if (thumbnail.isEmpty()) {
-                    System.out.println("썸네일이 없습니다");
+                    throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
                 }
 
                 CreateNewsRequest newsRequest = new CreateNewsRequest(titles, content, link, thumbnail, publishedAt);
                 News news = newsRepository.save(newsRequest.toEntity(titles, content, link, thumbnail, publishedAt));
                 Message message = new Message("user", content);
-                GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini",message,0.7f);
-
-                gptService.updateNewsBySummaryContent(request,news.getId());
+                GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);
+                gptService.updateNewsBySummaryContent(request, news.getId());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new ItCastApplicationException(CRAWLING_PARSE_ERROR);
             }
-
         });
     }
 
@@ -88,17 +87,11 @@ public class NewsService {
 
     List<String> isValidLinks(List<String> links) {
         List<String> isValidLinks = newsRepository.findAllLinks();
-
-        List<String> validLinks = links
+        return links
                 .stream()
                 .filter(link -> !isValidLinks.contains(link))
                 .distinct()
-                .collect(Collectors.toList());
-
-        if(validLinks.isEmpty()) {
-            throw new RuntimeException("No links found");
-        }
-        return validLinks;
+                .toList();
     }
 
     @Transactional
@@ -107,21 +100,31 @@ public class NewsService {
         List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
 
         LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
+
         createdAlarm.forEach(alarm -> {
+            if (alarm == null) {
+                throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+            }
             alarm.newsUpdate(sendAt);
         });
     }
 
     @Transactional
-    public void deleteOldData() throws IOException {
+    public void deleteOldData() {
         newsRepository.deleteOldNews();
     }
 
-    private LocalDateTime convertDateTime(String info) {
+    LocalDateTime convertDateTime(String info) {
+        if (info == null || info.trim().isEmpty()) {
+            throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+        }
         String[] parts = info.split(" ");
-        String date = parts[0];
-        String ampm = parts[1];
-        String time = parts[2];
+        if (parts.length != 4) {
+            throw new ItCastApplicationException(INVALID_NEWS_DATE);
+        }
+        String date = parts[1];
+        String ampm = parts[2];
+        String time = parts[3];
 
         date = date.replaceAll("입력", "");
         String[] timeParts = time.split(":");
@@ -130,14 +133,20 @@ public class NewsService {
         if (ampm.equals("오후") && hour != HOUR) {
             hour += HOUR;
         }
+        if (ampm.equals("오전") && hour == HOUR) {
+            hour = 0;
+        }
 
         String timeDate = date + " " + String.format("%02d", hour) + ":" + timeParts[1];
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd. HH:mm");
-        LocalDateTime localDateTime = LocalDateTime.parse(timeDate, formatter);
-        return localDateTime;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(timeDate, formatter);
     }
 
-    private String cleanContent(String info) {
+    public String cleanContent(String info) {
+        if (info == null || info.trim().isEmpty()) {
+            throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+        }
+
         info = info.replaceAll("\\[.*?\\]", "")
                 .replaceAll("\\(.*?\\)", "")
                 .trim();
