@@ -8,6 +8,17 @@ public enum ErrorCodes {
 
     BLOG_NOT_FOUND("블로그가 유효하지 않습니다.", 1001L, HttpStatus.NOT_FOUND),
     NEWS_NOT_FOUND("뉴스가 유효하지 않습니다.", 2001L, HttpStatus.NOT_FOUND),
+    //user
+    USER_NOT_FOUND("사용자를 찾을 수 없습니다.", 3001L, HttpStatus.NOT_FOUND),
+    NICKNAME_ALREADY_EXISTS("이미 사용 중인 닉네임입니다.", 3002L, HttpStatus.CONFLICT),
+    EMAIL_ALREADY_EXISTS("이미 사용 중인 이메일입니다.", 3003L, HttpStatus.CONFLICT),
+    PHONE_NUMBER_ALREADY_EXISTS("이미 등록된 전화번호입니다.", 3004L, HttpStatus.CONFLICT),
+    //jwt
+    JWT_TOKEN_CREATE_ERROR("JWT 토큰 생성에 실패했습니다.", 4001L, HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_TOKEN("유효하지 않거나 만료된 토큰입니다.", 4002L, HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED_ACCESS("로그인이 필요한 기능입니다.", 4003L, HttpStatus.UNAUTHORIZED),
+    //message
+    MESSAGE_SENDING_FAILED("메시지 발송 실패", 4004L, HttpStatus.BAD_REQUEST),
 
     // 뉴스 exception
     INVALID_NEWS_CONTENT("뉴스의 내용이 없습니다",2002L,HttpStatus.BAD_REQUEST),
