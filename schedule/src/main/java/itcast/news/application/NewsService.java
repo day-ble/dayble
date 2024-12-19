@@ -114,7 +114,7 @@ public class NewsService {
         newsRepository.deleteOldNews();
     }
 
-    LocalDateTime convertDateTime(String info) {
+    public LocalDateTime convertDateTime(String info) {
         if (info == null || info.trim().isEmpty()) {
             throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
         }

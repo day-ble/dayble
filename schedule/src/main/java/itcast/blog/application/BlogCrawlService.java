@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static itcast.blog.constant.VelogQuery.VELOG_QUERY;
+import static itcast.blog.constant.VelogQuery.VELOG_VARIABLES;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -27,61 +30,42 @@ public class BlogCrawlService {
     private final GPTService gptService;
 
     public void crawlVelog() {
-        String query = """
-                query trendingPosts($input: TrendingPostsInput!) {
-                    trendingPosts(input: $input) {
-                        title
-                        user {
-                            username
-                        }
-                        url_slug
-                    }
-                }
-                """;
-
-        String variables = """
-                {
-                    "input": {
-                        "limit": 20,
-                        "offset": 40,
-                        "timeframe": "day"
-                    }
-                }
-                """;
-
-        String jsonResponse = velogHttpClient.fetchTrendingPostsOfJson(query, variables);
+        String jsonResponse = velogHttpClient.fetchTrendingPostsOfJson(VELOG_QUERY, VELOG_VARIABLES);
         List<String> blogUrls = velogDataParser.getBlogUrls(jsonResponse);
 
-        List<String> existingUrls = blogRepository.findAllLinks();
-        List<String> filteredBlogUrls = blogUrls.stream()
-                .filter(blogUrl -> !existingUrls.contains(blogUrl))
-                .toList();
+        List<String> filteredBlogUrls = filterAllLinks(blogUrls);
         List<Blog> blogs = velogDataParser.parseTrendingPosts(filteredBlogUrls);
 
-        blogs.forEach(blog -> {
-                    Blog originalBlog = Blog.createVelogBlog(blog.getTitle(), blog.getOriginalContent(), blog.getPublishedAt(),
-                            blog.getLink(), blog.getThumbnail());
-                    Blog savedId = blogRepository.save(originalBlog);
-                    Message message = new Message("user", blog.getOriginalContent());
-                    GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);
-                    gptService.updateBlogBySummaryContent(request, savedId.getId());
-                }
-        );
+        saveAndSendForGpt(blogs);
     }
 
     public void crawlYozm() {
         List<String> blogUrls = yozmDataParser.getBlogUrls();
 
-        List<String> existingUrls = blogRepository.findAllLinks();
-        List<String> filteredBlogUrls = blogUrls.stream()
-                .filter(blogUrl -> !existingUrls.contains(blogUrl))
-                .toList();
-
+        List<String> filteredBlogUrls = filterAllLinks(blogUrls);
         List<Blog> blogs = yozmDataParser.parseTrendingPosts(filteredBlogUrls);
 
+        saveAndSendForGpt(blogs);
+    }
+
+    private List<String> filterAllLinks(List<String> blogUrls) {
+        List<String> existingUrls = blogRepository.findAllLinks();
+        return blogUrls.stream()
+                .filter(blogUrl -> !existingUrls.contains(blogUrl))
+                .toList();
+    }
+
+    private void saveAndSendForGpt(List<Blog> blogs) {
         blogs.forEach(blog -> {
-                    Blog originalBlog = Blog.createYozmBlog(blog.getTitle(), blog.getOriginalContent(), blog.getPublishedAt(),
-                            blog.getLink(), blog.getThumbnail());
+                    Blog originalBlog = Blog.builder()
+                            .platform(blog.getPlatform())
+                            .title(blog.getTitle())
+                            .originalContent(blog.getOriginalContent())
+                            .publishedAt(blog.getPublishedAt())
+                            .link(blog.getLink())
+                            .thumbnail(blog.getThumbnail())
+                            .status(blog.getStatus())
+                            .build();
                     Blog savedId = blogRepository.save(originalBlog);
                     Message message = new Message("user", blog.getOriginalContent());
                     GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);

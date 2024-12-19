@@ -23,7 +23,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +47,7 @@ public class AdminBlogServiceTest {
     public void SuccessBlogCreate() {
         //given
         Long userId = 1L;
-        LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
+        LocalDate fixedTime = LocalDate.of(2024, 12, 1);
 
         User user = User.builder()
                 .id(1L)
@@ -119,12 +118,12 @@ public class AdminBlogServiceTest {
                         "요약내용1",
                         "원본내용1",
                         Interest.BACKEND,
-                        LocalDateTime.now(),
+                        LocalDate.now(),
                         5,
                         "http://link1.com",
                         "http:thumb1.com",
                         BlogStatus.SUMMARY,
-                        LocalDateTime.of(2024, 12, 1, 13, 0)),
+                        LocalDate.of(2024, 12, 1)),
                 new AdminBlogResponse(
                         2L,
                         Platform.VELOG,
@@ -132,12 +131,12 @@ public class AdminBlogServiceTest {
                         "요약내용2",
                         "원본내용2",
                         Interest.BACKEND,
-                        LocalDateTime.now(),
+                        LocalDate.now(),
                         5,
                         "http://link2.com",
                         "http:thumb2.com",
                         BlogStatus.SUMMARY,
-                        LocalDateTime.of(2024, 12, 1, 13, 0))
+                        LocalDate.of(2024, 12, 1))
         );
 
         Pageable pageable = PageRequest.of(page, size);
@@ -165,7 +164,7 @@ public class AdminBlogServiceTest {
         //given
         Long userId = 1L;
         Long blogId = 1L;
-        LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
+        LocalDate fixedTime = LocalDate.of(2024, 12, 1);
 
         User user = User.builder()
                 .id(1L)

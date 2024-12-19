@@ -6,7 +6,6 @@ import itcast.domain.blog.enums.Platform;
 import itcast.domain.user.enums.Interest;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record AdminBlogResponse(
         Long id,
@@ -15,7 +14,7 @@ public record AdminBlogResponse(
         String content,
         String originalContent,
         Interest interest,
-        LocalDateTime publishedAt,
+        LocalDate publishedAt,
         int rating,
         String link,
         String thumbnail,

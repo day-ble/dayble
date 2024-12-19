@@ -13,8 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static itcast.domain.blog.QBlog.blog;
@@ -78,8 +78,8 @@ public class CustomBlogRepositoryImpl implements CustomBlogRepository {
             return null;
         }
 
-        LocalDateTime startAt = sendAt.atStartOfDay();
-        LocalDateTime endAt = sendAt.plusDays(1).atStartOfDay();
+        LocalDate startAt = sendAt;
+        LocalDate endAt = sendAt.plusDays(1);
 
         return blog.sendAt.between(startAt, endAt);
     }

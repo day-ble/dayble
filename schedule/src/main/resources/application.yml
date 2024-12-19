@@ -29,6 +29,7 @@ scheduler:
     crawling: "0 0 */3 * * ?"
     selecting: "0 0 6 * * *"
     sending: "0 0 8 * * *"
+    # "30/30 * * * * *"
   timeout:
     connection: 5000
 

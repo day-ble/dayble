@@ -4,21 +4,13 @@ import itcast.domain.BaseEntity;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.blog.enums.Platform;
 import itcast.domain.user.enums.Interest;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -46,7 +38,7 @@ public class Blog extends BaseEntity {
     private Interest interest;
 
     @Column(nullable = false)
-    private LocalDateTime publishedAt;
+    private LocalDate publishedAt;
 
     private Integer rating;
 
@@ -65,7 +57,7 @@ public class Blog extends BaseEntity {
             Platform platform,
             String title,
             String originalContent,
-            LocalDateTime publishedAt,
+            LocalDate publishedAt,
             String link,
             String thumbnail,
             BlogStatus status
@@ -86,7 +78,7 @@ public class Blog extends BaseEntity {
                 String content,
                 String originalContent,
                 Interest interest,
-                LocalDateTime publishedAt,
+                LocalDate publishedAt,
                 int rating,
                 String link,
                 String thumbnail,
@@ -113,7 +105,7 @@ public class Blog extends BaseEntity {
             String content,
             String originalContent,
             Interest interest,
-            LocalDateTime publishedAt,
+            LocalDate publishedAt,
             Integer rating,
             String link,
             String thumbnail,
@@ -131,42 +123,6 @@ public class Blog extends BaseEntity {
         this.thumbnail = thumbnail;
         this.status = status;
         this.sendAt = sendAt;
-    }
-
-    public static Blog createVelogBlog(
-            final String title,
-            final String originalContent,
-            final LocalDateTime publishedAt,
-            final String link,
-            final String thumbnail
-    ) {
-        return Blog.builder()
-                .platform(Platform.VELOG)
-                .title(title)
-                .originalContent(originalContent)
-                .publishedAt(publishedAt)
-                .link(link)
-                .thumbnail(thumbnail)
-                .status(BlogStatus.ORIGINAL)
-                .build();
-    }
-
-    public static Blog createYozmBlog(
-            final String title,
-            final String originalContent,
-            final LocalDateTime publishedAt,
-            final String link,
-            final String thumbnail
-    ) {
-        return Blog.builder()
-                .platform(Platform.YOZM)
-                .title(title)
-                .originalContent(originalContent)
-                .publishedAt(publishedAt)
-                .link(link)
-                .thumbnail(thumbnail)
-                .status(BlogStatus.ORIGINAL)
-                .build();
     }
 
     public void updateSendAt(LocalDate sendDate) {

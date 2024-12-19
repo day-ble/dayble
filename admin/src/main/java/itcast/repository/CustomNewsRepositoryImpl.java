@@ -72,8 +72,8 @@ public class CustomNewsRepositoryImpl implements CustomNewsRepository {
             return null;
         }
 
-        LocalDateTime startAt = sendAt.atStartOfDay();
-        LocalDateTime endAt = sendAt.plusDays(1).atStartOfDay();
+        LocalDate startAt = sendAt;
+        LocalDate endAt = sendAt.plusDays(1);
 
         return news.sendAt.between(startAt, endAt);
     }
