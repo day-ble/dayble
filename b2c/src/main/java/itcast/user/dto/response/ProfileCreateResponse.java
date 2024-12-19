@@ -12,7 +12,8 @@ public record ProfileCreateResponse(
         ArticleType articleType,
         Interest interest,
         SendingType sendingType,
-        String email
+        String email,
+        String phoneNumber
 ) {
     public static ProfileCreateResponse fromEntity(User user) {
         return new ProfileCreateResponse(
@@ -22,7 +23,8 @@ public record ProfileCreateResponse(
                 user.getArticleType(),
                 user.getInterest(),
                 user.getSendingType(),
-                user.getEmail()
+                user.getEmail(),
+                user.getPhoneNumber()
         );
     }
 

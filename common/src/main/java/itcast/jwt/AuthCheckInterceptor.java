@@ -2,11 +2,15 @@ package itcast.jwt;
 
 import java.util.Optional;
 
+import java.util.UUID;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import itcast.domain.user.User;
+import itcast.exception.ErrorCodes;
+import itcast.exception.ItCastApplicationException;
 import itcast.jwt.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,9 +24,10 @@ public class AuthCheckInterceptor implements HandlerInterceptor {
     private final UserRepository userRepository;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws
+            Exception {
         if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            HandlerMethod handlerMethod = (HandlerMethod)handler;
 
             if (handlerMethod.hasMethodAnnotation(CheckAuth.class)) {
                 String token = null;
@@ -44,15 +49,21 @@ public class AuthCheckInterceptor implements HandlerInterceptor {
                     }
                 }
                 if (token == null) {
-                    throw new RuntimeException("로그인이 필요한 기능입니다.");
+                    throw new ItCastApplicationException(ErrorCodes.UNAUTHORIZED_ACCESS);
                 }
 
                 Long userId = jwtUtil.getUserIdFromToken(token);
                 Optional<User> user = userRepository.findById(userId);
                 if (user.isEmpty()) {
-                    throw new RuntimeException("유효하지 않은 사용자입니다.");
+                    throw new ItCastApplicationException(ErrorCodes. USER_NOT_FOUND);
                 }
                 request.setAttribute("userId", userId);
+
+                String requestId = UUID.randomUUID().toString();
+                MDC.put("request_id", requestId);
+                MDC.put("controller", request.getRequestURI());
+                MDC.put("method", request.getMethod());
+                MDC.put("userId", userId.toString());
                 return true;
             }
         }

@@ -20,10 +20,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info, metrics, prometheus, logfile
-  endpoint:
-    logfile:
-      external-file: ./b2c/logs/b2c.log
+        include: health, info, metrics, prometheus
 
 server:
   port: 8080

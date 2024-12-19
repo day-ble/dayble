@@ -6,14 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import itcast.domain.user.User;
 import itcast.domain.user.enums.ArticleType;
 import itcast.domain.user.enums.Interest;
+import itcast.exception.ErrorCodes;
+import itcast.exception.ItCastApplicationException;
 import itcast.jwt.repository.UserRepository;
 import itcast.user.dto.request.ProfileCreateRequest;
 import itcast.user.dto.request.ProfileUpdateRequest;
 import itcast.user.dto.response.ProfileCreateResponse;
 import itcast.user.dto.response.ProfileUpdateResponse;
-import itcast.user.exception.EmailAlreadyExistsException;
-import itcast.user.exception.NicknameAlreadyExistsException;
-import itcast.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,7 +24,7 @@ public class UserService {
     @Transactional
     public ProfileCreateResponse createProfile(ProfileCreateRequest request, Long id) {
         User existingUser = findUserByIdOrThrow(id);
-        validateConstraints(request.nickname(), request.email());
+        validateConstraints(request.nickname(), request.email(), request.phoneNumber());
 
         if (ArticleType.NEWS.equals(request.articleType())) {
             request = new ProfileCreateRequest(
@@ -33,7 +32,8 @@ public class UserService {
                     request.articleType(),
                     Interest.NEWS,
                     request.sendingType(),
-                    request.email()
+                    request.email(),
+                    request.phoneNumber()
             );
         }
         User updatedUser = request.toEntity(existingUser);
@@ -44,14 +44,15 @@ public class UserService {
     @Transactional
     public ProfileUpdateResponse updateProfile(ProfileUpdateRequest request, Long id) {
         User existingUser = findUserByIdOrThrow(id);
-        validateConstraints(request.nickname(), request.email());
+        validateConstraints(request.nickname(), request.email(), request.phoneNumber());
         if (ArticleType.NEWS.equals(request.articleType())) {
             request = new ProfileUpdateRequest(
                     request.nickname(),
                     request.articleType(),
                     Interest.NEWS,
                     request.sendingType(),
-                    request.email()
+                    request.email(),
+                    request.phoneNumber()
             );
         }
         User updatedUser = request.toEntity(existingUser);
@@ -67,14 +68,17 @@ public class UserService {
 
     private User findUserByIdOrThrow(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ItCastApplicationException(ErrorCodes.USER_NOT_FOUND));
     }
-    private void validateConstraints(String nickname, String email) {
+    private void validateConstraints(String nickname, String email, String phoneNumber) {
         if (userRepository.existsByNickname(nickname)) {
-            throw new NicknameAlreadyExistsException("이미 사용 중인 닉네임입니다.");
+            throw new ItCastApplicationException(ErrorCodes.NICKNAME_ALREADY_EXISTS);
         }
         if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyExistsException("이미 사용 중인 이메일입니다.");
+            throw new ItCastApplicationException(ErrorCodes.EMAIL_ALREADY_EXISTS);
+        }
+        if (userRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new ItCastApplicationException(ErrorCodes.PHONE_NUMBER_ALREADY_EXISTS);
         }
     }
 }

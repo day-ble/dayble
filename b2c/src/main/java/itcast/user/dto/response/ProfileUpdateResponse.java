@@ -12,7 +12,8 @@ public record ProfileUpdateResponse(
         ArticleType articleType,
         Interest interest,
         SendingType sendingType,
-        String email
+        String email,
+        String phoneNumber
 ) {
     public static ProfileUpdateResponse fromEntity(User user) {
         return new ProfileUpdateResponse(
@@ -22,7 +23,8 @@ public record ProfileUpdateResponse(
                 user.getArticleType(),
                 user.getInterest(),
                 user.getSendingType(),
-                user.getEmail()
+                user.getEmail(),
+                user.getPhoneNumber()
         );
     }
 }
