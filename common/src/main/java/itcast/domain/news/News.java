@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 
 import jakarta.persistence.Lob;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.AccessLevel;
@@ -58,7 +59,7 @@ public class News extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private NewsStatus status;
 
-    private LocalDateTime sendAt;
+    private LocalDate sendAt;
 
     @Builder
     public News(
@@ -72,7 +73,7 @@ public class News extends BaseEntity {
             String link,
             String thumbnail,
             NewsStatus status,
-            LocalDateTime sendAt
+            LocalDate sendAt
     ) {
         this.id = id;
         this.title = title;
@@ -111,11 +112,11 @@ public class News extends BaseEntity {
             String originalContent,
             Interest interest,
             LocalDateTime publishedAt,
-            int rating,
+            Integer rating,
             String link,
             String thumbnail,
             NewsStatus status,
-            LocalDateTime sendAt
+            LocalDate sendAt
     ) {
         this.title = title;
         this.content = content;
@@ -129,7 +130,7 @@ public class News extends BaseEntity {
         this.sendAt = sendAt;
     }
 
-    public void newsUpdate(LocalDateTime sendAt) {
+    public void newsUpdate(LocalDate sendAt) {
         this.sendAt = sendAt;
     }
 

@@ -11,7 +11,7 @@ public record CreateNewsRequest(
         String originalContent,
         String link,
         String thumbnail,
-        LocalDateTime sendAt
+        LocalDateTime publishedAt
 ) {
     public News toEntity(
             String title,

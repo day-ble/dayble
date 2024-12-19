@@ -24,7 +24,6 @@ public class SendNewsService {
 
 
     private static final int YESTERDAY = 1;
-    private static final int ALARM_HOUR = 2;
     private static final int ALARM_DAY = 2;
 
     private final NewsRepository newsRepository;
@@ -40,7 +39,7 @@ public class SendNewsService {
             throw new ItCastApplicationException(ErrorCodes.INVALID_NEWS_CONTENT);
         }
 
-        LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
+        LocalDate sendAt = LocalDate.now().plusDays(ALARM_DAY);
 
         newsList.forEach(news -> {
             news.newsUpdate(sendAt);
@@ -56,12 +55,11 @@ public class SendNewsService {
 
         List<MailContent> mailContents = sendNews.stream()
                 .map(news ->
-                        MailContent.builder()
-                                .title(news.getTitle())
-                                .originalLink(news.getLink())
-                                .summary(news.getContent())
-                                .thumbnail(news.getThumbnail())
-                                .build())
+                        MailContent.of(
+                                news.getTitle(),
+                                news.getContent(),
+                                news.getLink(),
+                                news.getThumbnail()))
                 .toList();
 
         List<String> emails = retrieveUserEmails(Interest.NEWS);
