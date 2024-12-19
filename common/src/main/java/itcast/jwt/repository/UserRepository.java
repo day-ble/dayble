@@ -20,5 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByKakaoEmail(String kakaoEmail);
 
     @Query("SELECT u FROM User u WHERE u.interest = :interest")
-    List<String> findAllByInterest(@Param("interest")Interest interest);
+    List<User> findAllByInterest(@Param("interest")Interest interest);
+
+    User findByEmail(String email);
 }

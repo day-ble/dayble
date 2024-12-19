@@ -62,7 +62,10 @@ public class BlogSendService {
     }
 
     private List<String> retrieveUserEmails(Interest interest) {
-        return userRepository.findAllByInterest(interest);
+        return userRepository.findAllByInterest(interest)
+                .stream()
+                .map(User::getEmail)
+                .toList();
     }
 
     private void createBlogHistory(List<Blog> blogs, List<String> userEmails) {

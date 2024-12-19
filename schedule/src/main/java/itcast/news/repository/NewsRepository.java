@@ -21,6 +21,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     @Query("DELETE FROM News n WHERE n.createdAt <= CURRENT_DATE - 6 MONTH")
     void deleteOldNews();
 
-    @Query("select n.title, n.content, n.link, n.thumbnail from News n where n.sendAt is not null")
+    @Query("select n from News n where n.sendAt is not null")
     List<News> findAllBySendAt();
 }
