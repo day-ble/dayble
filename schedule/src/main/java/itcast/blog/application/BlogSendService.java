@@ -52,9 +52,6 @@ public class BlogSendService {
     }
 
     private List<String> retrieveUserEmails(Interest interest) {
-        return userRepository.findAllByInterest(interest)
-                .stream()
-                .map(User::getEmail)
-                .toList();
+        return userRepository.findAllByInterest(interest);
     }
 }

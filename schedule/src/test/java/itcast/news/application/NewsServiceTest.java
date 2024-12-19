@@ -83,10 +83,10 @@ public class NewsServiceTest {
     @DisplayName("convertDateTime 메서드 테스트")
     void convertDateTimeTest() {
         // give
-        String testPmDate = "입력 2020-01-01 오후 01:01";
-        String testAmDate = "입력 2020-01-01 오전 01:01";
-        String testNoonDate = "입력 2020-01-01 오후 12:01";
-        String testMidnighDate = "입력 2020-01-01 오전 12:01";
+        String testPmDate = "입력2020.01.01. 오후 01:01";
+        String testAmDate = "입력2020.01.01. 오전 01:01";
+        String testNoonDate = "입력2020.01.01. 오후 12:01";
+        String testMidnighDate = "입력2020.01.01. 오전 12:01";
 
         // when
         LocalDateTime convertDatePm = newsService.convertDateTime(testPmDate);

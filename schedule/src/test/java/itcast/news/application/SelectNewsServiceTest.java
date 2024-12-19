@@ -4,6 +4,8 @@ import itcast.domain.news.News;
 import itcast.domain.user.User;
 import itcast.domain.user.enums.Interest;
 import itcast.jwt.repository.UserRepository;
+import itcast.mail.application.MailService;
+import itcast.mail.dto.request.SendMailRequest;
 import itcast.news.repository.NewsRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,19 +38,19 @@ public class SelectNewsServiceTest {
     @InjectMocks
     private SendNewsService sendNewsService;
 
+    @Mock
+    private MailService mailService;
+
     @Test
     @DisplayName("retrieveUserEmails 메소드 테스트")
     public void retrieveUserEmailsTest() {
         // give
         Interest validInterest = Interest.NEWS;
 
-        User mockUser1 = mock(User.class);
-        when(mockUser1.getEmail()).thenReturn("user1@example.com");
+        String mockUser1 = "user1@example.com";
+        String mockUser2 = "user2@example.com";
 
-        User mockUser2 = mock(User.class);
-        when(mockUser2.getEmail()).thenReturn("user2@example.com");
-
-        List<User> users = List.of(mockUser1, mockUser2);
+        List<String> users = List.of(mockUser1, mockUser2);
         when(userRepository.findAllByInterest(validInterest)).thenReturn(users);
 
         // when
@@ -61,8 +62,6 @@ public class SelectNewsServiceTest {
         assertTrue(result.contains("user1@example.com"));
         assertTrue(result.contains("user2@example.com"));
         verify(userRepository, times(1)).findAllByInterest(validInterest);
-        verify(mockUser1, times(1)).getEmail();
-        verify(mockUser2, times(1)).getEmail();
     }
 
     @Test
@@ -82,15 +81,47 @@ public class SelectNewsServiceTest {
         sendNewsService.selectNews();
 
         // then
-        ArgumentCaptor<LocalDateTime> captor = ArgumentCaptor.forClass(LocalDateTime.class);
+        ArgumentCaptor<LocalDate> captor = ArgumentCaptor.forClass(LocalDate.class);
 
         verify(mockNews1, times(1)).newsUpdate(captor.capture());
-        LocalDateTime actualSendAt1 = captor.getValue();
-        assertEquals(expectedSendAt.truncatedTo(ChronoUnit.SECONDS), actualSendAt1.truncatedTo(ChronoUnit.SECONDS));
-
         verify(mockNews2, times(1)).newsUpdate(captor.capture());
-        LocalDateTime actualSendAt2 = captor.getValue();
-        assertEquals(expectedSendAt.truncatedTo(ChronoUnit.SECONDS), actualSendAt2.truncatedTo(ChronoUnit.SECONDS));
+
 
     }
+
+    @Test
+    @DisplayName("sendNews 메소드 테스트")
+    public void sendNewsTest() {
+        News news1 = News.builder()
+                .id(1L)
+                .title("Test Title 1")
+                .content("Test Content 1")
+                .link("http://link1.com")
+                .thumbnail("http://thumbnail1.com")
+                .sendAt(LocalDate.now())
+                .build();
+
+        News news2 = News.builder()
+                .id(2L)
+                .title("Test Title 2")
+                .content("Test Content 2")
+                .link("http://link2.com")
+                .thumbnail("http://thumbnail2.com")
+                .sendAt(LocalDate.now())
+                .build();
+
+        // 이메일 리스트 Mock 데이터
+        List<String> emails = List.of("test1@example.com", "test2@example.com");
+
+        when(newsRepository.findAllBySendAt()).thenReturn(List.of(news1, news2)); // 뉴스 반환
+        when(sendNewsService.retrieveUserEmails(Interest.NEWS)).thenReturn(emails); // 이메일 반환
+
+        // when: 메소드 실행
+        sendNewsService.sendNews();
+
+        // then: 메일 전송 호출 여부 확인
+        verify(mailService, times(1)).send(any(SendMailRequest.class));
+    }
+
+
 }

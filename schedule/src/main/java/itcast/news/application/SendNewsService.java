@@ -76,9 +76,6 @@ public class SendNewsService {
         if (interest != Interest.NEWS) {
             throw new ItCastApplicationException(ErrorCodes.INVALID_INTEREST_TYPE_ERROR);
         }
-        return userRepository.findAllByInterest(interest)
-                .stream()
-                .map(User::getEmail)
-                .toList();
+        return userRepository.findAllByInterest(interest);
     }
 }
