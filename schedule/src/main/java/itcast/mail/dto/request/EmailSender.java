@@ -5,7 +5,6 @@ import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
-import java.io.IOException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +17,7 @@ import org.thymeleaf.context.Context;
 @RequiredArgsConstructor
 public class EmailSender {
 
-    private static final String MAIL_SUBJECT = "[IT-Cast 뉴스레터] 오늘의 인기 블로그를 확인해보세요~🔖";
+    private static final String MAIL_SUBJECT = "[IT-Cast 뉴스레터] 오늘의 인기 글을 확인해보세요~🔖";
 
     @Value("${aws.ses.sender-email}")
     private String senderEmail;
@@ -30,7 +29,7 @@ public class EmailSender {
                 .withToAddresses(request.receivers());
 
         final Message message = new Message()
-                .withSubject(createContent(String.format("%s - %s", senderEmail, MAIL_SUBJECT)))
+                .withSubject(createContent(String.format(MAIL_SUBJECT)))
                 .withBody(new Body()
                         .withHtml(createContent(createHtmlBody(request))));
 
@@ -51,7 +50,6 @@ public class EmailSender {
         context.setVariable("sender", senderEmail);
         context.setVariable("subject", MAIL_SUBJECT);
         context.setVariable("contents", request.contents());
-        context.setVariable("logoImage", "https://travel-spring.s3.ap-northeast-2.amazonaws.com/logo.png");
 
         return templateEngine.process("email-template", context);
     }
