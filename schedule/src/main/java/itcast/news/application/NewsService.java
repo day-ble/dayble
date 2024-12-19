@@ -4,7 +4,6 @@ import itcast.ai.application.GPTService;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.request.Message;
 import itcast.domain.news.News;
-import itcast.exception.ItCastApplicationException;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
 import jakarta.transaction.Transactional;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,8 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static itcast.exception.ErrorCodes.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

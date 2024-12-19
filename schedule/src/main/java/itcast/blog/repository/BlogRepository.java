@@ -24,4 +24,6 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
             ORDER BY b.rating DESC, b.publishedAt DESC
             """)
     List<Blog> findByBlogForSelection(Platform platform, Interest interest, LocalDateTime recentDateTime, int minRating, Pageable pageable);
+
+    List<Blog> findAllBySendAtAndInterest(LocalDateTime todayAtNineAM, Interest interest);
 }
