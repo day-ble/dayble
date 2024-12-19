@@ -66,7 +66,7 @@ public class NewsServiceTest {
         newsService.newsAlarm();
 
         // Then
-        verify(mockNews).newsUpdate(any(LocalDateTime.class));
+        verify(mockNews).newsUpdate(any(LocalDate.class));
     }
 
     @Test

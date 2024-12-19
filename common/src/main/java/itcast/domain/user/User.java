@@ -30,6 +30,7 @@ public class User extends BaseEntity {
     @Column(unique = true)
     private String kakaoEmail;
 
+    @Column(unique = true)
     private String email;
 
     private String nickname;

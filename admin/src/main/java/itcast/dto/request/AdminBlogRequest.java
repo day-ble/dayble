@@ -4,6 +4,8 @@ import itcast.domain.blog.Blog;
 import itcast.domain.blog.enums.BlogStatus;
 import itcast.domain.blog.enums.Platform;
 import itcast.domain.user.enums.Interest;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record AdminBlogRequest(
@@ -17,7 +19,7 @@ public record AdminBlogRequest(
         String link,
         String thumbnail,
         BlogStatus status,
-        LocalDateTime sendAt
+        LocalDate sendAt
 ) {
     public static Blog toEntity(AdminBlogRequest adminBlogRequest) {
         return Blog.adminBuilder()

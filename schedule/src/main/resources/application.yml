@@ -27,8 +27,8 @@ scheduler:
     old-delete-data: "0 0 0 1 1,7 ?"
   blog:
     crawling: "0 0 */3 * * ?"
-    selecting: "0 6 * * * *"
-    sending: "0 9 * * * *"
+    selecting: "0 0 6 * * *"
+    sending: "0 0 8 * * *"
   timeout:
     connection: 5000
 

@@ -53,10 +53,9 @@ public class BlogSelectService {
     }
 
     private void updateSendAt(List<Blog> blogs, LocalDate today) {
-        LocalDate twoDaysLater = today.plusDays(2);
-        LocalDateTime twoDaysLaterAtNineAM = twoDaysLater.atTime(9, 0);
+        LocalDate sendDate = today.plusDays(2);
         blogs.forEach(blog -> {
-            blog.updateSendAt(twoDaysLaterAtNineAM);
+            blog.updateSendAt(sendDate);
             blogRepository.save(blog);
         });
     }

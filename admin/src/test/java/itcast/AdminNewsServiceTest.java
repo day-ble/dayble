@@ -47,6 +47,7 @@ public class AdminNewsServiceTest {
         //given
         Long userId = 1L;
         LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
+        LocalDate sendAt = LocalDate.of(2024, 12, 1);
 
         User user = User.builder()
                 .id(1L)
@@ -63,7 +64,7 @@ public class AdminNewsServiceTest {
                 .link("http://example.com")
                 .thumbnail("http://thumbnail.com")
                 .status(NewsStatus.SUMMARY)
-                .sendAt(fixedTime)
+                .sendAt(sendAt)
                 .build();
         AdminNewsRequest adminNewsRequest = new AdminNewsRequest(
                 "제목",
@@ -75,7 +76,7 @@ public class AdminNewsServiceTest {
                 "http://example.com",
                 "http://thumbnail.com",
                 NewsStatus.SUMMARY,
-                fixedTime
+                sendAt
                 );
 
         given(userRepository.findById(userId)).willReturn(Optional.of(user));
@@ -118,7 +119,7 @@ public class AdminNewsServiceTest {
                         "http://link1.com",
                         "http:thumb1.com",
                         NewsStatus.SUMMARY,
-                        LocalDateTime.of(2024, 12, 1, 13, 0)),
+                        LocalDate.of(2024, 12, 1)),
                 new AdminNewsResponse(
                         2L,
                         "뉴스2",
@@ -130,7 +131,7 @@ public class AdminNewsServiceTest {
                         "http://link2.com",
                         "http:thumb2.com",
                         NewsStatus.SUMMARY,
-                        LocalDateTime.of(2024, 12, 1, 13, 0))
+                        LocalDate.of(2024, 12, 1))
         );
 
         Pageable pageable = PageRequest.of(page, size);
@@ -159,6 +160,7 @@ public class AdminNewsServiceTest {
         Long userId = 1L;
         Long newsId = 1L;
         LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
+        LocalDate sendAt = LocalDate.of(2024, 12, 1);
 
         User user = User.builder()
                 .id(userId)
@@ -176,7 +178,7 @@ public class AdminNewsServiceTest {
                 .link("http://example.com")
                 .thumbnail("http://thumbnail.com")
                 .status(NewsStatus.SUMMARY)
-                .sendAt(fixedTime)
+                .sendAt(sendAt)
                 .build();
         AdminNewsRequest adminNewsRequest = new AdminNewsRequest(
                 "제목2",
@@ -188,7 +190,7 @@ public class AdminNewsServiceTest {
                 "http://example2.com",
                 "http://thumbnail2.com",
                 NewsStatus.ORIGINAL,
-                fixedTime
+                sendAt
         );
 
         given(userRepository.findById(userId)).willReturn(Optional.of(user));
@@ -207,6 +209,7 @@ public class AdminNewsServiceTest {
     @DisplayName("뉴스 삭제 성공")
     public void successDeleteNews() {
         LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
+        LocalDate sendAt = LocalDate.of(2024, 12, 1);
         // Given
         Long userId = 1L;
         Long newsId = 1L;
@@ -225,7 +228,7 @@ public class AdminNewsServiceTest {
                 .link("http://example.com")
                 .thumbnail("http://thumbnail.com")
                 .status(NewsStatus.SUMMARY)
-                .sendAt(fixedTime)
+                .sendAt(sendAt)
                 .build();
 
         given(userRepository.findById(userId)).willReturn(Optional.of(adminUser));

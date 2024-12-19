@@ -12,11 +12,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -56,7 +58,7 @@ public class Blog extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BlogStatus status;
 
-    private LocalDateTime sendAt;
+    private LocalDate sendAt;
 
     @Builder
     public Blog(
@@ -89,7 +91,7 @@ public class Blog extends BaseEntity {
                 String link,
                 String thumbnail,
                 BlogStatus status,
-                LocalDateTime sendAt
+                LocalDate sendAt
     ) {
         this.id = id;
         this.platform = platform;
@@ -116,7 +118,7 @@ public class Blog extends BaseEntity {
             String link,
             String thumbnail,
             BlogStatus status,
-            LocalDateTime sendAt
+            LocalDate sendAt
     ) {
         this.platform = platform;
         this.title = title;
@@ -167,8 +169,8 @@ public class Blog extends BaseEntity {
                 .build();
     }
 
-    public void updateSendAt(LocalDateTime sendDateLater) {
-        this.sendAt = sendDateLater;
+    public void updateSendAt(LocalDate sendDate) {
+        this.sendAt = sendDate;
     }
 
     public void applySummaryUpdate(

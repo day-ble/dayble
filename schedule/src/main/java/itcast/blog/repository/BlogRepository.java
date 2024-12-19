@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,5 +26,5 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
             """)
     List<Blog> findByBlogForSelection(Platform platform, Interest interest, LocalDateTime recentDateTime, int minRating, Pageable pageable);
 
-    List<Blog> findAllBySendAtAndInterest(LocalDateTime todayAtNineAM, Interest interest);
+    List<Blog> findAllBySendAtAndInterest(LocalDate today, Interest interest);
 }

@@ -99,7 +99,7 @@ public class NewsService {
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
         List<News> createdAlarm = newsRepository.findAllByCreatedAt(yesterday);
 
-        LocalDateTime sendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
+        LocalDate sendAt = LocalDate.now().plusDays(ALARM_DAY);
 
         createdAlarm.forEach(alarm -> {
             if (alarm == null) {

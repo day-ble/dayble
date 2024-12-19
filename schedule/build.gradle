@@ -10,13 +10,12 @@ repositories {
 }
 
 tasks.bootJar {
-    enabled = false
-}
-
-tasks.jar {
     enabled = true
 }
 
+tasks.jar {
+    enabled = false
+}
 
 dependencies {
     implementation project(':common')
