@@ -11,16 +11,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News, Long> {
-   @Query("select n.link from News n")
+   @Query("SELECT n.link FROM News n")
     List<String> findAllLinks();
 
-    @Query("select n from News n where function('DATE',n.createdAt) = :yesterday order by n.rating desc limit 3")
-    List<News> findRatingTot3ByCreatedAtOrdarByRating(@Param("yesterday") LocalDate yesterday);
+    @Query("SELECT n FROM News n WHERE FUNCTION('DATE',n.createdAt) = :yesterday ORDER BY n.rating DESC LIMIT 3")
+    List<News> findRatingTop3ByCreatedAt(@Param("yesterday") LocalDate yesterday);
 
     @Modifying
     @Query("DELETE FROM News n WHERE n.createdAt <= CURRENT_DATE - 6 MONTH")
     void deleteOldNews();
 
-    @Query("select n from News n where n.sendAt is not null")
+    @Query("SELECT n FROM News n WHERE n.sendAt IS NOT NULL")
     List<News> findAllBySendAt();
 }

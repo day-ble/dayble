@@ -6,6 +6,7 @@ import itcast.domain.user.enums.Interest;
 import itcast.domain.user.enums.SendingType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public record ProfileCreateRequest(
         @NotBlank(message = "닉네임을 입력해주세요.")
@@ -17,7 +18,10 @@ public record ProfileCreateRequest(
         @NotNull(message = "발송 타입을 선택해주세요.")
         SendingType sendingType,
         @NotBlank(message = "이메일을 입력해주세요.")
-        String email
+        String email,
+        @NotBlank(message = "휴대폰 번호를 입력해주세요.")
+        @Pattern(regexp = "^010-[0-9]{4}-[0-9]{4}$", message = "올바른 휴대폰 번호 형식이 아닙니다. 예: 010-1234-5678")
+        String phoneNumber
 ) {
     public User toEntity(User existingUser) {
         return User.builder()
@@ -28,6 +32,7 @@ public record ProfileCreateRequest(
                 .interest(interest)
                 .sendingType(sendingType)
                 .email(email)
+                .phoneNumber(phoneNumber)
                 .build();
     }
 }

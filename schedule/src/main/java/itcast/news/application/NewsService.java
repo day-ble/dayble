@@ -83,8 +83,7 @@ public class NewsService {
 
     public List<String> isValidLinks(List<String> links) {
         List<String> isValidLinks = newsRepository.findAllLinks();
-        return links
-                .stream()
+        return links.stream()
                 .filter(link -> !isValidLinks.contains(link))
                 .distinct()
                 .toList();

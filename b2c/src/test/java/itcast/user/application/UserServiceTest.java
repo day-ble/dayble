@@ -40,7 +40,8 @@ class UserServiceTest {
                 ArticleType.NEWS,
                 Interest.NEWS,
                 SendingType.EMAIL,
-                "test@example.com"
+                "test@example.com",
+                "010-8765-4321"
         );
 
         User existingUser = User.builder()
@@ -80,7 +81,8 @@ class UserServiceTest {
                 ArticleType.NEWS,
                 Interest.FRONTEND,
                 SendingType.EMAIL,
-                "test@example.com"
+                "test@example.com",
+                "010-8765-4321"
         );
 
         User existingUser = User.builder()
@@ -114,7 +116,8 @@ class UserServiceTest {
                 ArticleType.NEWS,
                 Interest.NEWS,
                 SendingType.EMAIL,
-                "newEmail@example.com"
+                "newEmail@example.com",
+                "010-8765-4321"
         );
 
         User existingUser = User.builder()
@@ -148,7 +151,8 @@ class UserServiceTest {
                 null,
                 null,
                 SendingType.EMAIL,
-                ""
+                "",
+                "010-8765-4321"
         );
 
         // 기존 사용자 정보
@@ -157,7 +161,7 @@ class UserServiceTest {
                 .nickname("oldNickname")
                 .articleType(ArticleType.NEWS)
                 .interest(Interest.NEWS)
-                .sendingType(SendingType.KAKAO)
+                .sendingType(SendingType.MESSAGE)
                 .email("oldEmail@example.com")
                 .build();
 

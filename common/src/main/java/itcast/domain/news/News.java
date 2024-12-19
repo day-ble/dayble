@@ -1,5 +1,6 @@
 package itcast.domain.news;
 
+import itcast.domain.BaseEntity;
 import itcast.domain.news.enums.NewsStatus;
 import itcast.domain.user.enums.Interest;
 import itcast.domain.BaseEntity;
@@ -20,8 +21,10 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity

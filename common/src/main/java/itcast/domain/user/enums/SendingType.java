@@ -1,6 +1,6 @@
 package itcast.domain.user.enums;
 
 public enum SendingType {
-    KAKAO,
+    MESSAGE,
     EMAIL
 }

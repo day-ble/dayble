@@ -10,7 +10,8 @@ public record ProfileUpdateRequest(
         ArticleType articleType,
         Interest interest,
         SendingType sendingType,
-        String email
+        String email,
+        String phoneNumber
 ) {
     public User toEntity(User existingUser) {
         return User.builder()
@@ -21,6 +22,7 @@ public record ProfileUpdateRequest(
                 .interest(interest != null ? interest : existingUser.getInterest())
                 .sendingType(sendingType != null ? sendingType : existingUser.getSendingType())
                 .email(isValid(email) ? email : existingUser.getEmail())
+                .phoneNumber(isValid(phoneNumber) ? phoneNumber : existingUser.getPhoneNumber())
                 .build();
     }
 

@@ -37,7 +37,9 @@ services:
     image: grafana/promtail:2.9.0
     container_name: promtail
     volumes:
-      - ./b2c/logs:/b2c/log
+      - ./admin/logs:/admin/logs
+      - ./schedule/logs:/schedule/logs
+      - ./b2c/logs:/b2c/logs
       - /var/log:/var/log  # 로컬 로그 파일
       - ./promtail-config.yml:/etc/promtail/promtail-config.yml
     command: -config.file=/etc/promtail/promtail-config.yml
