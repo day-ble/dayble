@@ -1,11 +1,15 @@
 package itcast.application;
 
+import static itcast.exception.ErrorCodes.NEWS_NOT_FOUND;
+
 import itcast.domain.news.News;
 import itcast.domain.news.enums.NewsStatus;
 import itcast.domain.user.User;
 import itcast.dto.request.AdminNewsRequest;
 import itcast.dto.response.AdminNewsResponse;
+import itcast.exception.ErrorCodes;
 import itcast.exception.IdNotFoundException;
+import itcast.exception.ItCastApplicationException;
 import itcast.exception.NotAdminException;
 import itcast.jwt.repository.UserRepository;
 import itcast.repository.AdminRepository;
@@ -43,7 +47,7 @@ public class AdminNewsService {
     public AdminNewsResponse updateNews(Long userId, Long newsId, AdminNewsRequest adminNewsRequest) {
         isAdmin(userId);
         News news = newsRepository.findById(newsId)
-                .orElseThrow(() -> new IdNotFoundException("해당 뉴스가 존재하지 않습니다"));
+                .orElseThrow(() -> new ItCastApplicationException(NEWS_NOT_FOUND));
 
         news.update(adminNewsRequest.title(),
                 adminNewsRequest.content(),
@@ -64,17 +68,17 @@ public class AdminNewsService {
     public AdminNewsResponse deleteNews(Long userId, Long newsId) {
         isAdmin(userId);
         News news = newsRepository.findById(newsId)
-                .orElseThrow(() -> new IdNotFoundException("해당 뉴스가 존재하지 않습니다"));
+                .orElseThrow(() -> new ItCastApplicationException(NEWS_NOT_FOUND));
         newsRepository.delete(news);
         return new AdminNewsResponse(news);
     }
 
     private void isAdmin(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundException("해당 유저가 존재하지 않습니다."));
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new ItCastApplicationException(ErrorCodes.USER_NOT_FOUND));
         String email = user.getKakaoEmail();
         if (!adminRepository.existsByEmail(email)) {
-            throw new NotAdminException("접근할 수 없는 유저입니다.");
+            throw new ItCastApplicationException(ErrorCodes.INVALID_USER);
         }
     }
 }

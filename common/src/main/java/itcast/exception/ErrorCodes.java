@@ -1,17 +1,19 @@
 package itcast.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public enum ErrorCodes {
 
     BLOG_NOT_FOUND("블로그가 유효하지 않습니다.", 1001L, HttpStatus.NOT_FOUND),
     NEWS_NOT_FOUND("뉴스가 유효하지 않습니다.", 2001L, HttpStatus.NOT_FOUND),
 
     // 뉴스 exception
-    INVALID_NEWS_CONTENT("뉴스의 내용이 없습니다", 2002L, HttpStatus.BAD_REQUEST),
-    INVALID_NEWS_DATE("출판 날짜 형식이 아닙니다", 2003L, HttpStatus.BAD_REQUEST),
-    CRAWLING_PARSE_ERROR("크롤링에 실패했습니다", 2004L, HttpStatus.BAD_REQUEST),
-    
+    INVALID_NEWS_CONTENT("뉴스의 내용이 없습니다",2002L,HttpStatus.BAD_REQUEST),
+    INVALID_NEWS_DATE("출판 날짜 형식이 아닙니다",2003L ,HttpStatus.BAD_REQUEST),
+    CRAWLING_PARSE_ERROR("크롤링에 실패했습니다",2004L,HttpStatus.BAD_REQUEST),
+
     TODAY_NEWS_NOT_FOUND("뉴스 선택에 실패했습니다", 2005L, HttpStatus.NOT_FOUND),
     NOT_FOUND_EMAIL("이메일을 찾을 수 없습니다", 2006L, HttpStatus.NOT_FOUND),
     NOT_FOUND_SEND_DATA("발송 데이터를 찾을 수 없습니다", 2007L, HttpStatus.NOT_FOUND),

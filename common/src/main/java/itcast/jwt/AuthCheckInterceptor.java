@@ -2,6 +2,8 @@ package itcast.jwt;
 
 import java.util.Optional;
 
+import java.util.UUID;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -53,6 +55,12 @@ public class AuthCheckInterceptor implements HandlerInterceptor {
                     throw new RuntimeException("유효하지 않은 사용자입니다.");
                 }
                 request.setAttribute("userId", userId);
+
+                String requestId = UUID.randomUUID().toString();
+                MDC.put("request_id", requestId);
+                MDC.put("controller", request.getRequestURI());
+                MDC.put("method", request.getMethod());
+                MDC.put("userId", userId.toString());
                 return true;
             }
         }

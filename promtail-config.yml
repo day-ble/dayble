@@ -16,6 +16,7 @@ scrape_configs:
         labels:
           job: varlogs
           __path__: /var/log/*.log
+
   - job_name: b2clog
     static_configs:
       - targets:
@@ -24,4 +25,26 @@ scrape_configs:
           job: b2clog
           __path__: /b2c/log/*.log
 
+  - job_name: admin_logs_warn
+    static_configs:
+      - targets:
+          - http://loki:3100
+        labels:
+          job: admin_logs_warn
+          __path__: /admin/logs/warn/warn.log
 
+  - job_name: admin_logs_error
+    static_configs:
+      - targets:
+          - http://loki:3100
+        labels:
+          job: admin_logs_error
+          __path__: /admin/logs/error/error.log
+
+  - job_name: admin_logs_info
+    static_configs:
+      - targets:
+          - http://loki:3100
+        labels:
+          job: admin_logs_info
+          __path__: /admin/logs/info/info.log
