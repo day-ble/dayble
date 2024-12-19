@@ -23,8 +23,9 @@ spring:
 scheduler:
   news:
     crawling: "0 0 */3 * * ?"
-    alarm-scheduled: "0 0 1 1/1 * ?"
     old-delete-data: "0 0 0 1 1,7 ?"
+    select-news: "0 0 6 * * ?"
+    send-alarm: "0 0 8 * * ?"
   blog:
     crawling: "0 0 */3 * * ?"
     selecting: "0 0 6 * * *"

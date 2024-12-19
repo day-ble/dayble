@@ -53,23 +53,6 @@ public class NewsServiceTest {
     }
 
     @Test
-    @DisplayName("알람 보내는 메소드 테스트")
-    void testUpdateNews() {
-        // given
-        LocalDate yesterday = LocalDate.now().minusDays(2);
-        News mockNews = mock(News.class);
-
-       when(newsRepository.findAllByCreatedAt(yesterday))
-                .thenReturn(Collections.singletonList(mockNews));
-
-        // When
-        newsService.newsAlarm();
-
-        // Then
-        verify(mockNews).newsUpdate(any(LocalDate.class));
-    }
-
-    @Test
     @DisplayName("중복 된 메소드 체크 테스트")
     void isValidLinksTest() {
         // give
@@ -100,10 +83,10 @@ public class NewsServiceTest {
     @DisplayName("convertDateTime 메서드 테스트")
     void convertDateTimeTest() {
         // give
-        String testPmDate = "입력 2020-01-01 오후 01:01";
-        String testAmDate = "입력 2020-01-01 오전 01:01";
-        String testNoonDate = "입력 2020-01-01 오후 12:01";
-        String testMidnighDate = "입력 2020-01-01 오전 12:01";
+        String testPmDate = "입력2020.01.01. 오후 01:01";
+        String testAmDate = "입력2020.01.01. 오전 01:01";
+        String testNoonDate = "입력2020.01.01. 오후 12:01";
+        String testMidnighDate = "입력2020.01.01. 오전 12:01";
 
         // when
         LocalDateTime convertDatePm = newsService.convertDateTime(testPmDate);
