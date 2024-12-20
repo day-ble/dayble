@@ -1,11 +1,12 @@
 package itcast.news.application;
 
 import itcast.domain.news.News;
+import itcast.domain.newsHistory.NewsHistory;
 import itcast.domain.user.User;
 import itcast.domain.user.enums.Interest;
 import itcast.jwt.repository.UserRepository;
 import itcast.mail.application.MailService;
-import itcast.mail.dto.request.SendMailRequest;
+import itcast.news.repository.NewsHistoryRepository;
 import itcast.news.repository.NewsRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,8 @@ public class SelectNewsServiceTest {
 
     @Mock
     private NewsRepository newsRepository;
+    @Mock
+    private NewsHistoryRepository newsHistoryRepository;
 
     @InjectMocks
     private SendNewsService sendNewsService;
@@ -47,11 +50,17 @@ public class SelectNewsServiceTest {
         // give
         Interest validInterest = Interest.NEWS;
 
-        String mockUser1 = "user1@example.com";
-        String mockUser2 = "user2@example.com";
+        User user1 = User.builder()
+                .email("test1@example.com")
+                .interest(Interest.NEWS)
+                .build();
+        User user2 = User.builder()
+                .email("test2@example.com")
+                .interest(Interest.NEWS)
+                .build();
 
-        List<String> users = List.of(mockUser1, mockUser2);
-        when(userRepository.findAllByInterest(validInterest)).thenReturn(users);
+        List<User> mockUsers = List.of(user1, user2);
+        when(userRepository.findAllByInterest(validInterest)).thenReturn(mockUsers);
 
         // when
         List<String> result = sendNewsService.retrieveUserEmails(validInterest);
@@ -59,8 +68,8 @@ public class SelectNewsServiceTest {
         // then
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertTrue(result.contains("user1@example.com"));
-        assertTrue(result.contains("user2@example.com"));
+        assertTrue(result.contains("test1@example.com"));
+        assertTrue(result.contains("test2@example.com"));
         verify(userRepository, times(1)).findAllByInterest(validInterest);
     }
 
@@ -75,7 +84,7 @@ public class SelectNewsServiceTest {
         News mockNews2 = mock(News.class);
         List<News> mockNewsList = List.of(mockNews1, mockNews2);
 
-        when(newsRepository.findRatingTot3ByCreatedAtOrdarByRating(yesterday)).thenReturn(mockNewsList);
+        when(newsRepository.findRatingTop3ByCreatedAt(yesterday)).thenReturn(mockNewsList);
 
         // when
         sendNewsService.selectNews();
@@ -86,41 +95,52 @@ public class SelectNewsServiceTest {
         verify(mockNews1, times(1)).newsUpdate(captor.capture());
         verify(mockNews2, times(1)).newsUpdate(captor.capture());
 
-
     }
 
     @Test
-    @DisplayName("sendNews 메소드 테스트")
-    public void sendNewsTest() {
+    @DisplayName("createNewsHistory 메소드 테스트")
+    public void createNewsHistoryTest() {
+        // give
         News news1 = News.builder()
                 .id(1L)
-                .title("Test Title 1")
+                .title("Test News 1")
                 .content("Test Content 1")
-                .link("http://link1.com")
-                .thumbnail("http://thumbnail1.com")
                 .sendAt(LocalDate.now())
                 .build();
 
         News news2 = News.builder()
                 .id(2L)
-                .title("Test Title 2")
+                .title("Test News 2")
                 .content("Test Content 2")
-                .link("http://link2.com")
-                .thumbnail("http://thumbnail2.com")
                 .sendAt(LocalDate.now())
                 .build();
 
-        // 이메일 리스트 Mock 데이터
-        List<String> emails = List.of("test1@example.com", "test2@example.com");
+        User user1 = User.builder().id(1L).email("test1@example.com").build();
+        User user2 = User.builder().id(2L).email("test2@example.com").build();
 
-        when(newsRepository.findAllBySendAt()).thenReturn(List.of(news1, news2)); // 뉴스 반환
-        when(sendNewsService.retrieveUserEmails(Interest.NEWS)).thenReturn(emails); // 이메일 반환
+        List<News> sendNews = List.of(news1, news2);
+        List<User> users = List.of(user1, user2);
+        when(userRepository.findAllByInterest(Interest.NEWS)).thenReturn(users);
 
-        // when: 메소드 실행
-        sendNewsService.sendNews();
+        // when
+        sendNewsService.createNewsHistory(sendNews);
 
-        // then: 메일 전송 호출 여부 확인
-        verify(mailService, times(1)).send(any(SendMailRequest.class));
+        // then
+        ArgumentCaptor<List<NewsHistory>> captor = ArgumentCaptor.forClass(List.class);
+        verify(newsHistoryRepository, times(1)).saveAll(captor.capture());
+
+        List<NewsHistory> savedNewsHistories = captor.getValue();
+
+        assertEquals(4, savedNewsHistories.size());
+        assertTrue(savedNewsHistories.stream()
+                .anyMatch(nh -> nh.getUser().equals(user1) && nh.getNews().equals(news1)));
+        assertTrue(savedNewsHistories.stream()
+                .anyMatch(nh -> nh.getUser().equals(user1) && nh.getNews().equals(news2)));
+        assertTrue(savedNewsHistories.stream()
+                .anyMatch(nh -> nh.getUser().equals(user2) && nh.getNews().equals(news1)));
+        assertTrue(savedNewsHistories.stream()
+                .anyMatch(nh -> nh.getUser().equals(user2) && nh.getNews().equals(news2)));
+
     }
 
 
