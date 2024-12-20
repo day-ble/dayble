@@ -99,8 +99,8 @@
         <div class="number" th:text="${iterStat.count}">1</div>
         <img th:src="${content.thumbnail}" alt="Thumbnail Image" style="width: 300px; height: auto;"/>
         <div class="news-content">
-            <h3 th:text="${content.title}">뉴스제목</h3>
-            <p th:text="${content.summary}">뉴스요약 내용입니다.</p>
+            <h3 th:text="${content.title}"></h3>
+            <p th:text="${content.summary}"></p>
             <a th:href="${content.originalLink()}" target="_blank">자세히 보기</a>
         </div>
     </div>
