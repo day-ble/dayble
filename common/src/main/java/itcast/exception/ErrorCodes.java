@@ -13,6 +13,7 @@ public enum ErrorCodes {
     NICKNAME_ALREADY_EXISTS("이미 사용 중인 닉네임입니다.", 3002L, HttpStatus.CONFLICT),
     EMAIL_ALREADY_EXISTS("이미 사용 중인 이메일입니다.", 3003L, HttpStatus.CONFLICT),
     PHONE_NUMBER_ALREADY_EXISTS("이미 등록된 전화번호입니다.", 3004L, HttpStatus.CONFLICT),
+    INVALID_USER("접근할 수 없는 유저 입니다.", 3005L, HttpStatus.FORBIDDEN),
     //jwt
     JWT_TOKEN_CREATE_ERROR("JWT 토큰 생성에 실패했습니다.", 4001L, HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_TOKEN("유효하지 않거나 만료된 토큰입니다.", 4002L, HttpStatus.UNAUTHORIZED),
