@@ -1,6 +1,7 @@
 package itcast.news.application;
 
 import itcast.domain.news.News;
+import itcast.domain.newsHistory.NewsHistory;
 import itcast.domain.user.User;
 import itcast.domain.user.enums.Interest;
 import itcast.exception.ErrorCodes;
@@ -9,6 +10,7 @@ import itcast.jwt.repository.UserRepository;
 import itcast.mail.application.MailService;
 import itcast.mail.dto.request.MailContent;
 import itcast.mail.dto.request.SendMailRequest;
+import itcast.news.repository.NewsHistoryRepository;
 import itcast.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +32,14 @@ public class SendNewsService {
 
     private final NewsRepository newsRepository;
     private final UserRepository userRepository;
+    private final NewsHistoryRepository newsHistoryRepository;
     private final MailService mailService;
+
 
     @Transactional
     public void selectNews() {
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
-        List<News> newsList = newsRepository.findRatingTot3ByCreatedAtOrdarByRating(yesterday);
+        List<News> newsList = newsRepository.findRatingTop3ByCreatedAt(yesterday);
 
         if (newsList == null || newsList.isEmpty()) {
             throw new ItCastApplicationException(ErrorCodes.INVALID_NEWS_CONTENT);
@@ -70,6 +76,7 @@ public class SendNewsService {
 
         SendMailRequest mailRequest = new SendMailRequest(emails, mailContents);
         mailService.send(mailRequest);
+        createNewsHistory(sendNews);
     }
 
     public List<String> retrieveUserEmails(Interest interest) {
@@ -81,7 +88,20 @@ public class SendNewsService {
                 .map(User::getEmail)
                 .toList();
     }
-    public void createNewsHistory(String email) {
 
+    public void createNewsHistory(List<News> sendNews) {
+        List<User> users = userRepository.findAllByInterest(Interest.NEWS);
+        List<NewsHistory> newsHistories = new ArrayList<>();
+
+        for (News news : sendNews) {
+            for (User user : users) {
+                NewsHistory newsHistory = NewsHistory.builder()
+                        .user(user)
+                        .news(news)
+                        .build();
+                newsHistories.add(newsHistory);
+            }
+        }
+        newsHistoryRepository.saveAll(newsHistories);
     }
 }
