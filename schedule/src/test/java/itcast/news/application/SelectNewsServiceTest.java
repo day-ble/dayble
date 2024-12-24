@@ -78,7 +78,6 @@ public class SelectNewsServiceTest {
     public void selectNewsTest() {
         // give
         LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
-        LocalDateTime expectedSendAt = LocalDateTime.now().plusDays(ALARM_DAY).plusHours(ALARM_HOUR);
 
         News mockNews1 = mock(News.class);
         News mockNews2 = mock(News.class);
@@ -87,7 +86,7 @@ public class SelectNewsServiceTest {
         when(newsRepository.findRatingTop3ByCreatedAt(yesterday)).thenReturn(mockNewsList);
 
         // when
-        sendNewsService.selectNews();
+        sendNewsService.selectNews(yesterday);
 
         // then
         ArgumentCaptor<LocalDate> captor = ArgumentCaptor.forClass(LocalDate.class);

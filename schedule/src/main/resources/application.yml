@@ -5,9 +5,6 @@ spring:
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  kakao:
-    client-id: bc2c718aa374df7f4b52201962968bbd
-
   h2:
     console:
       enabled: true

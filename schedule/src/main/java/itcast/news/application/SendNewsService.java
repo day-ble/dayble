@@ -17,17 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class SendNewsService {
 
-
-    private static final int YESTERDAY = 1;
     private static final int ALARM_DAY = 2;
 
     private final NewsRepository newsRepository;
@@ -35,10 +30,8 @@ public class SendNewsService {
     private final NewsHistoryRepository newsHistoryRepository;
     private final MailService mailService;
 
-
     @Transactional
-    public void selectNews() {
-        LocalDate yesterday = LocalDate.now().minusDays(YESTERDAY);
+    public void selectNews(LocalDate yesterday) {
         List<News> newsList = newsRepository.findRatingTop3ByCreatedAt(yesterday);
 
         if (newsList == null || newsList.isEmpty()) {
@@ -91,17 +84,13 @@ public class SendNewsService {
 
     public void createNewsHistory(List<News> sendNews) {
         List<User> users = userRepository.findAllByInterest(Interest.NEWS);
-        List<NewsHistory> newsHistories = new ArrayList<>();
-
-        for (News news : sendNews) {
-            for (User user : users) {
-                NewsHistory newsHistory = NewsHistory.builder()
-                        .user(user)
-                        .news(news)
-                        .build();
-                newsHistories.add(newsHistory);
-            }
-        }
+        List<NewsHistory> newsHistories = sendNews.stream()
+                .flatMap(news -> users.stream()
+                        .map(user -> NewsHistory.builder()
+                                .user(user)
+                                .news(news)
+                                .build()))
+                .toList();
         newsHistoryRepository.saveAll(newsHistories);
     }
 }
