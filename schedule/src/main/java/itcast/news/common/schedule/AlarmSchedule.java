@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -17,7 +19,8 @@ public class AlarmSchedule {
     @Scheduled(cron = "${scheduler.news.select-news}")
     public void selectNewsSchedule() {
         log.info("Selecting schedule....");
-        sendNewsService.selectNews();
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        sendNewsService.selectNews(yesterday);
         log.info("Selecting schedule Finish");
     }
 
