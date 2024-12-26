@@ -1,6 +1,7 @@
 package itcast.news.application;
 
 import itcast.ai.application.GPTService;
+import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.domain.news.News;
 import itcast.news.repository.NewsRepository;
 import org.jsoup.Connection;
@@ -11,16 +12,15 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -166,6 +166,33 @@ public class NewsServiceTest {
             assertEquals("http://example.com/link1", links.get(0));
             assertEquals("http://example.com/link2", links.get(1));
         }
+    }
+
+    @Test
+    @DisplayName("updateNewsSummary 메소드 테스트")
+    void updateNewsSummaryTest() {
+        // give
+        News news = News.builder()
+                .id(1L)
+                .title("Sample News")
+                .content("Original Content")
+                .build();
+        String content = "Updated Summary Content";
+
+        doNothing().when(gptService).updateNewsBySummaryContent(any(GPTSummaryRequest.class), eq(news.getId()));
+
+        // when
+        assertDoesNotThrow(() -> newsService.updateNewsSummary(news, content));
+
+        ArgumentCaptor<GPTSummaryRequest> captor = ArgumentCaptor.forClass(GPTSummaryRequest.class);
+        verify(gptService, times(1)).updateNewsBySummaryContent(captor.capture(), eq(news.getId()));
+
+        // then
+        GPTSummaryRequest capturedRequest = captor.getValue();
+        assertEquals("gpt-4o-mini", capturedRequest.model());
+        assertEquals("user", capturedRequest.message().getRole());
+        assertEquals(content, capturedRequest.message().getContent());
+        assertEquals(0.7f, capturedRequest.temperature());
     }
 
 }

@@ -76,7 +76,7 @@ public class NewsService {
         }
     }
 
-    private void updateNewsSummary(News news, String content) {
+    public void updateNewsSummary(News news, String content) {
         try {
             Message message = new Message("user", content);
             GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);

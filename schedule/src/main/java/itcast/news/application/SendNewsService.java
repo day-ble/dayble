@@ -39,7 +39,6 @@ public class SendNewsService {
         }
 
         LocalDate sendAt = LocalDate.now().plusDays(ALARM_DAY);
-
         newsList.forEach(news -> {
             news.newsUpdate(sendAt);
         });
@@ -60,7 +59,6 @@ public class SendNewsService {
                                 news.getLink(),
                                 news.getThumbnail()))
                 .toList();
-
         List<String> emails = retrieveUserEmails(Interest.NEWS);
 
         if (emails == null || emails.isEmpty()) {
