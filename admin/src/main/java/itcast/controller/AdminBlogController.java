@@ -34,21 +34,33 @@ public class AdminBlogController {
 
     @CheckAuth
     @GetMapping
-    public ResponseTemplate<PageResponse<AdminBlogResponse>> retrieveBlog(
+    public ResponseTemplate<PageResponse<AdminBlogResponse>> retrieveBlogList(
             @LoginMember Long userId,
             @RequestParam(required = false) BlogStatus blogStatus,
             @RequestParam(required = false) Interest interest,
-            @RequestParam(required = false) LocalDate sendAt,
+            @RequestParam(required = false) LocalDate startAt,
+            @RequestParam(required = false) LocalDate endAt,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<AdminBlogResponse> blogPage = adminBlogService.retrieveBlog(userId, blogStatus, interest, sendAt, page, size);
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<AdminBlogResponse> blogPage = adminBlogService.retrieveBlogList(userId, blogStatus, interest, startAt, endAt, page, size);
         PageResponse<AdminBlogResponse> blogPageResponse = new PageResponse<>(
                 blogPage.getContent(),
                 blogPage.getNumber(),
                 blogPage.getSize(),
                 blogPage.getTotalPages()
         );
-        return new ResponseTemplate<>(HttpStatus.OK, "관리자 블로그 조회 성공", blogPageResponse);
+        return new ResponseTemplate<>(HttpStatus.OK, "관리자 블로그 리스트 조회 성공", blogPageResponse);
+    }
+
+    @CheckAuth
+    @GetMapping("/{blogId}")
+    public ResponseTemplate<AdminBlogResponse> retrieveBlog(
+            @LoginMember Long userId,
+            @PathVariable Long blogId
+    ) {
+        AdminBlogResponse response = adminBlogService.retrieveBlog(userId, blogId);
+        return new ResponseTemplate<>(HttpStatus.OK, "관리자 블로그 단건 조회 성공", response);
     }
 
     @CheckAuth
@@ -64,7 +76,10 @@ public class AdminBlogController {
 
     @CheckAuth
     @DeleteMapping("/{blogId}")
-    public ResponseTemplate<AdminBlogResponse> deleteBlog(@LoginMember Long userId, @PathVariable Long blogId) {
+    public ResponseTemplate<AdminBlogResponse> deleteBlog(
+            @LoginMember Long userId,
+            @PathVariable Long blogId
+    ) {
         AdminBlogResponse response = adminBlogService.deleteBlog(userId, blogId);
         return new ResponseTemplate<>(HttpStatus.OK, "관리자 블로그 삭제 성공", response);
     }
