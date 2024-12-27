@@ -1,5 +1,8 @@
 package itcast.news.application;
 
+import static itcast.exception.ErrorCodes.INVALID_NEWS_CONTENT;
+import static itcast.exception.ErrorCodes.NEWS_CRAWLING_ERROR;
+
 import itcast.ai.application.GPTService;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.request.Message;
@@ -8,21 +11,20 @@ import itcast.exception.ItCastApplicationException;
 import itcast.news.dto.request.CreateNewsRequest;
 import itcast.news.repository.NewsRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static itcast.exception.ErrorCodes.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class NewsService {
 
@@ -66,6 +68,10 @@ public class NewsService {
             if (thumbnail.isEmpty()) {
                 throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
             }
+                if (thumbnail.isEmpty()) {
+                    log.error("썸네일이 존재하지 않습니다. {}", link);
+                    throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+                }
 
             CreateNewsRequest newsRequest = new CreateNewsRequest(titles, content, link, thumbnail, publishedAt);
             News news = newsRequest.toEntity(titles, content, link, thumbnail, publishedAt);

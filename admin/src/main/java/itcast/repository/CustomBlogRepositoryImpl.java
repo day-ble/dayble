@@ -25,7 +25,7 @@ public class CustomBlogRepositoryImpl implements CustomBlogRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<AdminBlogResponse> findBlogByCondition(BlogStatus status, Interest interest, LocalDate sendAt, Pageable pageable) {
+    public Page<AdminBlogResponse> findBlogByCondition(BlogStatus status, Interest interest, LocalDate startAt, LocalDate endAt, Pageable pageable) {
         QBlog blog = QBlog.blog;
 
         JPQLQuery<AdminBlogResponse> query = queryFactory
@@ -44,7 +44,7 @@ public class CustomBlogRepositoryImpl implements CustomBlogRepository {
                         blog.sendAt
                 ))
                 .from(blog)
-                .where(statusEq(status), interestEq(interest), sendAtEq(sendAt))
+                .where(statusEq(status), interestEq(interest), sendAtBetween(startAt, endAt))
                 .orderBy(blog.sendAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
@@ -54,7 +54,7 @@ public class CustomBlogRepositoryImpl implements CustomBlogRepository {
         JPQLQuery<Long> countQuery = queryFactory
                 .select(blog.count())
                 .from(blog)
-                .where(statusEq(status), interestEq(interest), sendAtEq(sendAt));
+                .where(statusEq(status), interestEq(interest), sendAtBetween(startAt, endAt));
 
         return new PageImpl<>(content, pageable, countQuery.fetchOne());
     }
@@ -73,14 +73,15 @@ public class CustomBlogRepositoryImpl implements CustomBlogRepository {
         return blog.interest.eq(interest);
     }
 
-    private BooleanExpression sendAtEq(LocalDate sendAt) {
-        if(sendAt == null){
+    private BooleanExpression sendAtBetween(LocalDate startAt, LocalDate endAt) {
+        if (startAt == null && endAt == null) {
             return null;
+        } else if (startAt == null) {
+            return blog.sendAt.loe(endAt);
+        } else if (endAt == null) {
+            return blog.sendAt.goe(startAt);
+        } else {
+            return blog.sendAt.between(startAt, endAt);
         }
-
-        LocalDate startAt = sendAt;
-        LocalDate endAt = sendAt.plusDays(1);
-
-        return blog.sendAt.between(startAt, endAt);
     }
 }

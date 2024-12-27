@@ -9,5 +9,5 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 
 public interface CustomBlogRepository {
-    Page<AdminBlogResponse> findBlogByCondition(BlogStatus status, Interest interest, LocalDate sendAt, Pageable pageable);
+    Page<AdminBlogResponse> findBlogByCondition(BlogStatus status, Interest interest, LocalDate startAt, LocalDate endAt, Pageable pageable);
 }

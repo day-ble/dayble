@@ -21,15 +21,24 @@ public enum ErrorCodes {
     //message
     MESSAGE_SENDING_FAILED("메시지 발송 실패", 4004L, HttpStatus.BAD_REQUEST),
 
+    // Email
+    EMAIL_SENDING_FAILED("메일 발송에 실패하였습니다.", 5001L, HttpStatus.BAD_REQUEST),
+
     // 뉴스 exception
-    INVALID_NEWS_CONTENT("뉴스의 내용이 없습니다",2002L,HttpStatus.BAD_REQUEST),
-    INVALID_NEWS_DATE("출판 날짜 형식이 아닙니다",2003L ,HttpStatus.BAD_REQUEST),
+    INVALID_NEWS_CONTENT("뉴스의 내용이 없습니다", 2002L, HttpStatus.BAD_REQUEST),
+    INVALID_NEWS_DATE("출판 날짜 형식이 아닙니다", 2003L, HttpStatus.BAD_REQUEST),
     CRAWLING_PARSE_ERROR("크롤링에 실패했습니다",2004L,HttpStatus.BAD_REQUEST),
-    TODAY_NEWS_NOT_FOUND("뉴스 선택에 실패했습니다",2005L,HttpStatus.NOT_FOUND),
-    NOT_FOUND_EMAIL("이메일을 찾을 수 없습니다",2006L,HttpStatus.NOT_FOUND),
-    NOT_FOUND_SEND_DATA("발송 데이터를 찾을 수 없습니다",2007L,HttpStatus.NOT_FOUND),
-    INVALID_INTEREST_TYPE_ERROR("invalid타입이 맞지 않습니다",2008L,HttpStatus.BAD_REQUEST),
+
+    BLOG_CRAWLING_ERROR("블로그 크롤링에 실패했습니다", 2004L, HttpStatus.BAD_REQUEST),
+    NEWS_CRAWLING_ERROR("뉴스 크롤링에 실패했습니다", 2004L, HttpStatus.BAD_REQUEST),
+    BLOG_SELECT_ERROR("블로그 선택에 실패하였습니다.", 2004L, HttpStatus.BAD_REQUEST),
+    NEWS_SELECT_ERROR("뉴스 선택에 실패하였습니다.", 2004L, HttpStatus.BAD_REQUEST),
     GPT_SERVICE_ERROR("GPT요약 중 오류가 발생했습니다 ",2009L,HttpStatus.BAD_REQUEST),
+
+    TODAY_NEWS_NOT_FOUND("뉴스 선택에 실패했습니다", 2005L, HttpStatus.NOT_FOUND),
+    NOT_FOUND_EMAIL("이메일을 찾을 수 없습니다", 2006L, HttpStatus.NOT_FOUND),
+    NOT_FOUND_SEND_DATA("발송 데이터를 찾을 수 없습니다", 2007L, HttpStatus.NOT_FOUND),
+    INVALID_INTEREST_TYPE_ERROR("invalid타입이 맞지 않습니다", 2008L, HttpStatus.BAD_REQUEST),
 
     BAD_REQUEST("BAD_REQUEST", 9404L, HttpStatus.BAD_REQUEST),
     BAD_REQUEST_JSON_PARSE_ERROR("[BAD_REQUEST] JSON_PARSE_ERROR - 올바른 JSON 형식이 아님", 9405L, HttpStatus.BAD_REQUEST),

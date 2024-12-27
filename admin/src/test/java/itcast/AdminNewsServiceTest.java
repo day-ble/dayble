@@ -43,7 +43,7 @@ public class AdminNewsServiceTest {
 
     @Test
     @DisplayName("뉴스 생성 성공")
-    public void SuccessNewsCreate() {
+    public void successNewsCreate() {
         //given
         Long userId = 1L;
         LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
@@ -92,11 +92,12 @@ public class AdminNewsServiceTest {
     }
 
     @Test
-    @DisplayName("뉴스 조회 성공")
-    public void SuccessNewsRetrieve() {
+    @DisplayName("뉴스 다건 조회 성공")
+    public void successNewsListRetrieve() {
         // Given
         Long userId = 1L;
-        LocalDate sendAt = LocalDate.of(2024, 12, 1);
+        LocalDate startAt = LocalDate.of(2024, 12, 1);
+        LocalDate endAt = LocalDate.of(2024, 12, 10);
         NewsStatus status = NewsStatus.SUMMARY;
         int page = 0;
         int size = 10;
@@ -130,7 +131,7 @@ public class AdminNewsServiceTest {
                         "http://link2.com",
                         "http:thumb2.com",
                         NewsStatus.SUMMARY,
-                        LocalDate.of(2024, 12, 1))
+                        LocalDate.of(2024, 12, 10))
         );
 
         Pageable pageable = PageRequest.of(page, size);
@@ -138,10 +139,10 @@ public class AdminNewsServiceTest {
 
         given(userRepository.findById(userId)).willReturn(Optional.of(user));
         given(adminRepository.existsByEmail(user.getKakaoEmail())).willReturn(true);
-        given(newsRepository.findNewsByCondition(status, sendAt, pageable)).willReturn(newsPage);
+        given(newsRepository.findNewsByCondition(status, startAt, endAt, pageable)).willReturn(newsPage);
 
         // When
-        Page<AdminNewsResponse> responsePage = adminNewsService.retrieveNews(userId, status, sendAt, page, size);
+        Page<AdminNewsResponse> responsePage = adminNewsService.retrieveNewsList(userId, status, startAt, endAt, page, size);
 
         // Then
         assertEquals(2, responsePage.getContent().size());
@@ -149,12 +150,53 @@ public class AdminNewsServiceTest {
         assertEquals("뉴스2", responsePage.getContent().get(1).title());
         assertEquals(page, responsePage.getNumber());
         assertEquals(size, responsePage.getSize());
-        verify(newsRepository).findNewsByCondition(status, sendAt, pageable);
+        verify(newsRepository).findNewsByCondition(status, startAt, endAt, pageable);
     }
 
     @Test
+    @DisplayName("뉴스 단건 조회 성공")
+    public void successNewsRetrieve() {
+        //given
+        Long userId = 1L;
+        Long newsId = 1L;
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
+        LocalDate fixedDate2 = LocalDate.of(2024, 12, 1);
+
+        User user = User.builder()
+                .id(userId)
+                .kakaoEmail("admin@kakao.com")
+                .build();
+        News news = News.builder()
+                .id(1L)
+                .title("제목")
+                .content("수정본")
+                .originalContent("원본")
+                .interest(Interest.NEWS)
+                .publishedAt(fixedTime)
+                .rating(5)
+                .link("http://example.com")
+                .thumbnail("http://thumbnail.com")
+                .status(NewsStatus.SUMMARY)
+                .sendAt(sendAt)
+                .build();
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+        given(adminRepository.existsByEmail(user.getKakaoEmail())).willReturn(true);
+        given(newsRepository.findById(newsId)).willReturn(Optional.of(news));
+
+        // When
+        AdminNewsResponse response = adminNewsService.retrieveNews(userId, newsId);
+
+        // Then
+        assertEquals("제목", response.title());
+        assertEquals(news.getStatus(), response.status());
+        verify(newsRepository).findById(newsId);
+    }
+
+
+    @Test
     @DisplayName("뉴스 수정 성공")
-    public void SuccessNewsUpdate() {
+    public void successNewsUpdate() {
         //given
         Long userId = 1L;
         Long newsId = 1L;

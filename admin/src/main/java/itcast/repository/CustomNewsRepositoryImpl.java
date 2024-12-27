@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static itcast.domain.news.QNews.news;
@@ -27,7 +26,7 @@ public class CustomNewsRepositoryImpl implements CustomNewsRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<AdminNewsResponse> findNewsByCondition(NewsStatus status, LocalDate sendAt, Pageable pageable) {
+    public Page<AdminNewsResponse> findNewsByCondition(NewsStatus status, LocalDate startAt, LocalDate endAt, Pageable pageable) {
         QNews news = QNews.news;
 
         JPQLQuery<AdminNewsResponse> query = queryFactory
@@ -45,7 +44,7 @@ public class CustomNewsRepositoryImpl implements CustomNewsRepository {
                         news.sendAt
                 ))
                 .from(news)
-                .where(statusEq(status), sendAtEq(sendAt))
+                .where(statusEq(status), sendAtBetween(startAt, endAt))
                 .orderBy(news.sendAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
@@ -55,7 +54,7 @@ public class CustomNewsRepositoryImpl implements CustomNewsRepository {
         JPQLQuery<Long> countQuery = queryFactory
                 .select(news.count())
                 .from(news)
-                .where(statusEq(status), sendAtEq(sendAt));
+                .where(statusEq(status), sendAtBetween(startAt, endAt));
 
         return new PageImpl<>(content, pageable, countQuery.fetchOne());
     }
@@ -67,13 +66,15 @@ public class CustomNewsRepositoryImpl implements CustomNewsRepository {
         return news.status.eq(status);
     }
 
-    private BooleanExpression sendAtEq(LocalDate sendAt) {
-        if (sendAt == null) {
+    private BooleanExpression sendAtBetween(LocalDate startAt, LocalDate endAt) {
+        if (startAt == null && endAt == null) {
             return null;
+        } else if (startAt == null) {
+            return news.sendAt.loe(endAt);
+        } else if (endAt == null) {
+            return news.sendAt.goe(startAt);
+        } else {
+            return news.sendAt.between(startAt, endAt);
         }
-
-        LocalDate endAt = sendAt.plusDays(1);
-
-        return news.sendAt.between(sendAt, endAt);
     }
 }
