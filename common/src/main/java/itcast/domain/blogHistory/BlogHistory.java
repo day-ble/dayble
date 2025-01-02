@@ -3,13 +3,7 @@ package itcast.domain.blogHistory;
 import itcast.domain.BaseEntity;
 import itcast.domain.blog.Blog;
 import itcast.domain.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(name = "blog_history", indexes = {@Index(name = "idx_user_news_created", columnList = "user_id, blog_id, created_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BlogHistory extends BaseEntity {
 
