@@ -37,14 +37,9 @@ public class NewsHistory extends BaseEntity {
     @JoinColumn(name = "news_id")
     private News news;
 
-    @Column(name = "is_dummy", nullable = false)
-    private boolean isDummy;
-
-    //더미데이터 생성용 빌더
     @Builder
-    public NewsHistory(User user, News news, boolean isDummy) {
+    public NewsHistory(User user, News news) {
         this.user = user;
         this.news = news;
-        this.isDummy = isDummy;
     }
 }

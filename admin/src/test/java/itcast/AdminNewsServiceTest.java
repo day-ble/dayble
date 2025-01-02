@@ -160,7 +160,7 @@ public class AdminNewsServiceTest {
         Long userId = 1L;
         Long newsId = 1L;
         LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
-        LocalDate fixedDate2 = LocalDate.of(2024, 12, 1);
+        LocalDate fixedDate = LocalDate.of(2024, 12, 1);
 
         User user = User.builder()
                 .id(userId)
@@ -177,7 +177,7 @@ public class AdminNewsServiceTest {
                 .link("http://example.com")
                 .thumbnail("http://thumbnail.com")
                 .status(NewsStatus.SUMMARY)
-                .sendAt(sendAt)
+                .sendAt(fixedDate)
                 .build();
 
         given(userRepository.findById(userId)).willReturn(Optional.of(user));
