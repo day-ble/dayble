@@ -33,6 +33,7 @@ public enum ErrorCodes {
     NEWS_CRAWLING_ERROR("뉴스 크롤링에 실패했습니다", 2004L, HttpStatus.BAD_REQUEST),
     BLOG_SELECT_ERROR("블로그 선택에 실패하였습니다.", 2004L, HttpStatus.BAD_REQUEST),
     NEWS_SELECT_ERROR("뉴스 선택에 실패하였습니다.", 2004L, HttpStatus.BAD_REQUEST),
+    GPT_SERVICE_ERROR("GPT요약 중 오류가 발생했습니다 ",2009L,HttpStatus.BAD_REQUEST),
 
     TODAY_NEWS_NOT_FOUND("뉴스 선택에 실패했습니다", 2005L, HttpStatus.NOT_FOUND),
     NOT_FOUND_EMAIL("이메일을 찾을 수 없습니다", 2006L, HttpStatus.NOT_FOUND),

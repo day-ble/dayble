@@ -39,49 +39,67 @@ public class NewsService {
         List<String> links = findLinks(URL);
         links = isValidLinks(links);
 
+        List<News> newsList = new ArrayList<>();
+
         links.forEach(link -> {
-            try {
-                Document url = Jsoup.connect(link).get();
-                String titles = url.select("#title_area").text();
-                String content = url.select("#dic_area").text();
-                String date =
-                        url.select(".media_end_head_info_datestamp_bunch").text();
-                String thumbnail =
-                        url.selectFirst("meta[property=og:image]").attr("content");
+            News news = processNews(link);
+            if (news != null) {
+                newsList.add(news);
+            }
+        });
 
-                titles = cleanContent(titles);
-                content = cleanContent(content);
-                LocalDateTime publishedAt = convertDateTime(date);
+        if (!newsList.isEmpty()) {
+            newsRepository.saveAll(newsList);
+        }
+    }
 
+    public News processNews(String link) {
+        try {
+            Document url = Jsoup.connect(link).get();
+            String titles = url.select("#title_area").text();
+            String content = url.select("#dic_area").text();
+            String date = url.select(".media_end_head_info_datestamp_bunch").text();
+            String thumbnail = url.selectFirst("meta[property=og:image]").attr("content");
+
+            titles = cleanContent(titles);
+            content = cleanContent(content);
+            LocalDateTime publishedAt = convertDateTime(date);
+
+            if (thumbnail.isEmpty()) {
+                throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+            }
                 if (thumbnail.isEmpty()) {
                     log.error("썸네일이 존재하지 않습니다. {}", link);
                     throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
                 }
 
-                CreateNewsRequest newsRequest = new CreateNewsRequest(titles, content, link, thumbnail, publishedAt);
-                News news = newsRepository.save(newsRequest.toEntity(titles, content, link, thumbnail, publishedAt));
-                Message message = new Message("user", content);
-                GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);
-                gptService.updateNewsBySummaryContent(request, news.getId());
-            } catch (IOException e) {
-                throw new ItCastApplicationException(NEWS_CRAWLING_ERROR);
-            }
-        });
+            CreateNewsRequest newsRequest = new CreateNewsRequest(titles, content, link, thumbnail, publishedAt);
+            News news = newsRequest.toEntity(titles, content, link, thumbnail, publishedAt);
+            updateNewsSummary(news, content);
+            return news;
+        } catch (IOException e) {
+            throw new ItCastApplicationException(CRAWLING_PARSE_ERROR);
+        }
+    }
+
+    public void updateNewsSummary(News news, String content) {
+        try {
+            Message message = new Message("user", content);
+            GPTSummaryRequest request = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);
+            gptService.updateNewsBySummaryContent(request, news.getId());
+        } catch (Exception e) {
+            throw new ItCastApplicationException(GPT_SERVICE_ERROR);
+        }
     }
 
     public List<String> findLinks(String url) throws IOException {
         Document document = Jsoup.connect(url).get();
         Elements articles = document.select(".sa_thumb_inner");
 
-        List<String> links = new ArrayList<>();
-        articles.forEach(article -> {
-            if (links.size() >= LINK_SIZE) {
-                return;
-            }
-            String link = article.select("a").attr("href");
-            links.add(link);
-        });
-        return links;
+        return articles.stream()
+                .map(article -> article.select("a").attr("href"))
+                .limit(LINK_SIZE)
+                .toList();
     }
 
     public List<String> isValidLinks(List<String> links) {
@@ -127,9 +145,8 @@ public class NewsService {
             throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
         }
 
-        info = info.replaceAll("\\[.*?\\]", "")
+        return info.replaceAll("\\[.*?\\]", "")
                 .replaceAll("\\(.*?\\)", "")
                 .trim();
-        return info;
     }
 }

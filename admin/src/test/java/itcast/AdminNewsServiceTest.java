@@ -160,7 +160,7 @@ public class AdminNewsServiceTest {
         Long userId = 1L;
         Long newsId = 1L;
         LocalDateTime fixedTime = LocalDateTime.of(2024, 12, 1, 12, 0);
-        LocalDate sendAt = LocalDate.of(2024, 12, 1);
+        LocalDate fixedDate2 = LocalDate.of(2024, 12, 1);
 
         User user = User.builder()
                 .id(userId)

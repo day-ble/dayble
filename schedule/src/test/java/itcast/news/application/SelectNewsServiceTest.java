@@ -27,8 +27,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class SelectNewsServiceTest {
     private static final int YESTERDAY = 1;
-    private static final int ALARM_HOUR = 2;
-    private static final int ALARM_DAY = 2;
 
     @Mock
     private UserRepository userRepository;
