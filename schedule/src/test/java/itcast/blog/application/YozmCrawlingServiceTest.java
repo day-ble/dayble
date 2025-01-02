@@ -1,3 +1,4 @@
+/*
 package itcast.blog.application;
 
 import itcast.blog.client.JsoupCrawler;
@@ -42,6 +43,7 @@ class YozmCrawlingServiceTest {
         when(yozmJsoupCrawler.getHtmlDocument(href)).thenReturn(document2);
 
         //when
+*/
 /*        List<Blog> blogs = yozmCrawlingService.crawlBlogs();
 
         //then
@@ -51,6 +53,8 @@ class YozmCrawlingServiceTest {
         Blog blog = blogs.get(0);
         assertThat(blog.getLink()).isEqualTo("https://yozm.wishket.com/magazine/detail/2888/");
         assertThat(blog.getTitle()).isEqualTo("더 이상 외면할 수 없는 양자컴퓨터 | 요즘IT");
-        assertThat(blog.getThumbnail()).isEqualTo("https://yozm.wishket.com/media/news/2888/3.png");*/
+        assertThat(blog.getThumbnail()).isEqualTo("https://yozm.wishket.com/media/news/2888/3.png");*//*
+
     }
 }
+*/

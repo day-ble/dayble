@@ -32,7 +32,7 @@ public class YozmDataParser {
         return IntStream.range(1, MAX_PAGE)
                 .mapToObj(pageNum -> BASE_URL + pageNum + SORTED_URL)
                 .map(jsoupCrawler::getHtmlDocumentOrNull).filter(Objects::nonNull)
-                .map(doc -> doc.select("a.item-title.link-text.link-underline.text900"))
+                .map(doc -> doc.select("a.i tem-title.link-text.link-underline.text900"))
                 .flatMap(Elements::stream)
                 .map(link -> link.attr("abs:href"))
                 .toList();

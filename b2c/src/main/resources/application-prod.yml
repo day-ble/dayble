@@ -1,0 +1,40 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        dialect: org.hibernate.dialect.MySQLDialect
+  kakao:
+    redirect-uri: http://localhost:8080/auth/kakao/callback
+    client-id: ${KAKAO_CLIENT_ID}
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
+
+logging:
+  level:
+    org:
+      hibernate:
+        sql: warn
+        type:
+          descriptor:
+            sql:
+              BasicBinder: warn
+    root: info
+
+server:
+  port: 8080

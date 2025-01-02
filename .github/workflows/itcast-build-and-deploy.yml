@@ -1,0 +1,137 @@
+name: BuildAndDeploy
+
+on:
+  workflow_run:
+    workflows: ["BuildAndTest"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      deployments: write
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set Common Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: common/src/main/resources/application-prod.yml
+        env:
+          spring.datasource.url: ${{ secrets.MYSQL_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+
+      - name: Set Admin Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: admin/src/main/resources/application-prod.yml
+        env:
+          spring.datasource.url: ${{ secrets.MYSQL_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+          jwt.secret.key: ${{ secrets.JWT_SECRET_KEY }}
+
+      - name: Set B2C Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: b2c/src/main/resources/application-prod.yml
+        env:
+          spring.datasource.url: ${{ secrets.MYSQL_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+          spring.kakao.client-id: ${{ secrets.KAKAO_CLIENT_ID }}
+          jwt.secret.key: ${{ secrets.JWT_SECRET_KEY }}
+
+      - name: Set Schedule Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: schedule/src/main/resources/application-prod.yml
+        env:
+          spring.datasource.url: ${{ secrets.MYSQL_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+          aws.ses.access-key: ${{ secrets.AWS_SES_ACCESS_KEY }}
+          aws.ses.secret-key: ${{ secrets.AWS_SES_SECRET_KEY }}
+          aws.ses.sender-email: ${{ secrets.AWS_SES_SENDER_EMAIL }}
+          jwt-secret-key: ${{ secrets.JWT_SECRET_KEY }}
+          sms.api.key: ${{ secrets.SMS_API_KEY }}
+          sms.spi.secret: ${{ secrets.SMS_API_SECRET }}
+          openai.secret-key: ${{ secrets.OPENAI_SECRET_KEY }}
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Set up Docker Compose
+        run: |
+          docker-compose up -d
+          docker-compose ps
+
+      - name: Wait for services to be ready
+        run: |
+          until docker-compose exec -T mysql mysqladmin ping -h"127.0.0.1" --silent; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 5
+          done
+          sleep 10
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle (prod profile)
+        run: ./gradlew clean build -Dspring.profiles.active=prod -Duser.language=ko -Duser.country=KR
+
+      - name: Tear down Docker Compose
+        if: always()
+        run: docker-compose down
+
+      - name: Debug Gradle Build
+        run: |
+          echo "Checking build output..."
+          ls -al admin/build/libs/
+          ls -al b2c/build/libs/
+          ls -al schedule/build/libs/
+
+      - name: Make Zip file
+        run: |
+          zip -r $GITHUB_SHA.zip \
+            admin/build/libs/admin-0.0.1-SNAPSHOT.jar \
+            b2c/build/libs/b2c-0.0.1-SNAPSHOT.jar \
+            schedule/build/libs/schedule-0.0.1-SNAPSHOT.jar \
+            scripts/deploy.sh \
+            appspec.yml
+        shell: bash
+
+      - name: AWS credential setting
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_KSH }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY_KSH }}
+
+      - name: Upload to S3
+        run: aws s3 cp ./$GITHUB_SHA.zip s3://${{ secrets.AWS_S3_BUCKET }}/$GITHUB_SHA.zip
+
+      - name: EC2 Deploy
+        run: aws deploy create-deployment
+          --application-name ${{ secrets.AWS_CODE_DEPLOY_APPLICATION }}
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name ${{ secrets.AWS_CODE_DEPLOY_GROUP }}
+          --s3-location bucket=${{ secrets.AWS_S3_BUCKET }},key=$GITHUB_SHA.zip,bundleType=zip
