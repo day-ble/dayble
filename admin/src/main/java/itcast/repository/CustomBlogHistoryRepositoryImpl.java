@@ -5,7 +5,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import itcast.domain.blogHistory.QBlogHistory;
+import itcast.domain.newsHistory.QNewsHistory;
 import itcast.dto.response.AdminBlogHistoryResponse;
+import itcast.dto.response.AdminNewsHistoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -51,6 +53,25 @@ public class CustomBlogHistoryRepositoryImpl implements CustomBlogHistoryReposit
         return new PageImpl<>(content, pageable, countQuery.fetchOne());
     }
 
+    @Override
+    public List<AdminBlogHistoryResponse> downloadBlogHistoryListByCondition(Long userId, Long blogId, LocalDate startAt, LocalDate endAt){
+        QBlogHistory blogHistory = QBlogHistory.blogHistory;
+
+        JPQLQuery<AdminBlogHistoryResponse> query = queryFactory
+                .select(Projections.constructor(AdminBlogHistoryResponse.class,
+                        blogHistory.id,
+                        blogHistory.user.id,
+                        blogHistory.blog.id,
+                        blogHistory.createdAt,
+                        blogHistory.modifiedAt
+                ))
+                .from(blogHistory)
+                .where(userIdEq(userId), blogIdEq(blogId), createAtBetween(startAt, endAt));
+
+        List<AdminBlogHistoryResponse> content = query.fetch();
+        return content;
+    }
+
     private BooleanExpression userIdEq(Long userId) {
         if(userId == null) {
             return null;
@@ -72,7 +93,18 @@ public class CustomBlogHistoryRepositoryImpl implements CustomBlogHistoryReposit
 
         LocalDateTime startAt = LocalDateTime.of(createdAt, LocalTime.of(0,0,0));
         LocalDateTime endAt = LocalDateTime.of(createdAt, LocalTime.of(23,59, 59));
-
         return blogHistory.createdAt.between(startAt, endAt);
+    }
+
+    private BooleanExpression createAtBetween(LocalDate startAt, LocalDate endAt) {
+        if(startAt == null && endAt == null) {
+            return null;
+        } else if(startAt == null) {
+            return blogHistory.createdAt.loe(endAt.atTime(23, 59,59));
+        } else if(endAt == null) {
+            return blogHistory.createdAt.goe(startAt.atStartOfDay());
+        } else {
+            return blogHistory.createdAt.between(startAt.atStartOfDay(), endAt.atTime(23, 59, 59));
+        }
     }
 }

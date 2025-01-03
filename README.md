@@ -27,7 +27,7 @@
 
 ---
 
-## 2. 채택한 개발 기술과 브랜치 전략
+## 채택한 개발 기술과 브랜치 전략
 
 ![Java17](https://img.shields.io/badge/Java17-007396?style=for-the-badge&logo=java&logoColor=white)
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
