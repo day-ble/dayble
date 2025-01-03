@@ -4,6 +4,7 @@ import itcast.domain.user.User;
 import itcast.domain.user.enums.ArticleType;
 import itcast.domain.user.enums.Interest;
 import itcast.domain.user.enums.SendingType;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -17,6 +18,7 @@ public record ProfileCreateRequest(
         Interest interest,
         @NotNull(message = "발송 타입을 선택해주세요.")
         SendingType sendingType,
+        @Email
         @NotBlank(message = "이메일을 입력해주세요.")
         String email,
         @NotBlank(message = "휴대폰 번호를 입력해주세요.")

@@ -4,12 +4,14 @@ import itcast.domain.user.User;
 import itcast.domain.user.enums.ArticleType;
 import itcast.domain.user.enums.Interest;
 import itcast.domain.user.enums.SendingType;
+import jakarta.validation.constraints.Email;
 
 public record ProfileUpdateRequest(
         String nickname,
         ArticleType articleType,
         Interest interest,
         SendingType sendingType,
+        @Email
         String email,
         String phoneNumber
 ) {
