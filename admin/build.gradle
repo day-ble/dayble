@@ -27,6 +27,9 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    //csv 작업
+    implementation 'com.opencsv:opencsv:5.9'
 }
 
 test {

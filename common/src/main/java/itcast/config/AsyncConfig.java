@@ -1,4 +1,4 @@
-package itcast.async;
+package itcast.config;
 
 import java.util.concurrent.Executor;
 import org.springframework.context.annotation.Bean;

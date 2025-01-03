@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import itcast.domain.newsHistory.NewsHistory;
 import itcast.domain.newsHistory.QNewsHistory;
 import itcast.dto.response.AdminNewsHistoryResponse;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,25 @@ public class CustomNewsHistoryRepositoryImpl implements CustomNewsHistoryReposit
         return new PageImpl<>(content, pageable, countQuery.fetchOne());
     }
 
+    @Override
+    public List<AdminNewsHistoryResponse> downloadNewsHistoryListByCondition(Long userId, Long newsId, LocalDate startAt, LocalDate endAt){
+        QNewsHistory newsHistory = QNewsHistory.newsHistory;
+
+        JPQLQuery<AdminNewsHistoryResponse> query = queryFactory
+                .select(Projections.constructor(AdminNewsHistoryResponse.class,
+                        newsHistory.id,
+                        newsHistory.user.id,
+                        newsHistory.news.id,
+                        newsHistory.createdAt,
+                        newsHistory.modifiedAt
+                ))
+                .from(newsHistory)
+                .where(userIdEq(userId), newsIdEq(newsId), createAtBetween(startAt, endAt));
+
+        List<AdminNewsHistoryResponse> content = query.fetch();
+        return content;
+    }
+
     private BooleanExpression newsIdEq(Long newsId) {
         if(newsId == null) {
             return null;
@@ -72,5 +92,17 @@ public class CustomNewsHistoryRepositoryImpl implements CustomNewsHistoryReposit
         LocalDateTime startAt = LocalDateTime.of(createdAt, LocalTime.of(0, 0,0));
         LocalDateTime endAt = LocalDateTime.of(createdAt, LocalTime.of(23, 59, 59));
         return newsHistory.createdAt.between(startAt, endAt);
+    }
+
+    private BooleanExpression createAtBetween(LocalDate startAt, LocalDate endAt) {
+        if(startAt == null && endAt == null) {
+            return null;
+        } else if(startAt == null) {
+            return newsHistory.createdAt.loe(endAt.atTime(23, 59,59));
+        } else if(endAt == null) {
+            return newsHistory.createdAt.goe(startAt.atStartOfDay());
+        } else {
+            return newsHistory.createdAt.between(startAt.atStartOfDay(), endAt.atTime(23, 59, 59));
+        }
     }
 }

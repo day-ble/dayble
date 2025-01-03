@@ -1,5 +1,9 @@
 package itcast.news.application;
 
+import static itcast.exception.ErrorCodes.CRAWLING_PARSE_ERROR;
+import static itcast.exception.ErrorCodes.GPT_SERVICE_ERROR;
+import static itcast.exception.ErrorCodes.INVALID_NEWS_CONTENT;
+
 import itcast.ai.application.GPTService;
 import itcast.ai.dto.request.GPTSummaryRequest;
 import itcast.ai.dto.request.Message;
@@ -19,8 +23,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-
-import static itcast.exception.ErrorCodes.*;
 
 @Service
 @Slf4j
@@ -67,10 +69,10 @@ public class NewsService {
             if (thumbnail.isEmpty()) {
                 throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
             }
-                if (thumbnail.isEmpty()) {
-                    log.error("썸네일이 존재하지 않습니다. {}", link);
-                    throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
-                }
+            if (thumbnail.isEmpty()) {
+                log.error("썸네일이 존재하지 않습니다. {}", link);
+                throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
+            }
 
             CreateNewsRequest newsRequest = new CreateNewsRequest(titles, content, link, thumbnail, publishedAt);
             News news = newsRequest.toEntity(titles, content, link, thumbnail, publishedAt);
