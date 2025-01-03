@@ -42,4 +42,7 @@ public class NewsHistory extends BaseEntity {
         this.user = user;
         this.news = news;
     }
+
+    @Builder()
+    public NewsHistory(Long id, User user, News news) {}
 }
