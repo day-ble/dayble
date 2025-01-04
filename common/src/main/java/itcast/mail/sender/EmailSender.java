@@ -25,9 +25,9 @@ public class EmailSender {
 
     private final TemplateEngine templateEngine;
 
-    public SendEmailRequest from(final SendMailRequest request) {
+    public SendEmailRequest from(final SendMailRequest request, final String receiver) {
         final Destination destination = new Destination()
-                .withToAddresses(request.receivers());
+                .withToAddresses(receiver);
 
         final Message message = new Message()
                 .withSubject(createContent(String.format(MAIL_SUBJECT)))

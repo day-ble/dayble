@@ -1,8 +1,6 @@
 package itcast.domain.mailEvent;
 
 import itcast.domain.BaseEntity;
-import itcast.domain.blog.Blog;
-import itcast.domain.news.News;
 import itcast.domain.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,11 +26,35 @@ public class MailEvents extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "blog_id")
-    private Blog blog;
+    private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "news_id")
-    private News news;
+    private String summary;
+
+    private String originalLink;
+
+    private String thumbnail;
+
+    private MailEvents(
+            final User user,
+            final String title,
+            final String summary,
+            final String originalLink,
+            final String thumbnail
+    ) {
+        this.user = user;
+        this.title = title;
+        this.summary = summary;
+        this.originalLink = originalLink;
+        this.thumbnail = thumbnail;
+    }
+
+    public static MailEvents of(
+            final User user,
+            final String title,
+            final String summary,
+            final String originalLink,
+            final String thumbnail
+    ) {
+        return new MailEvents(user, title, summary, originalLink, thumbnail);
+    }
 }
