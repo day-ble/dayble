@@ -2,11 +2,12 @@ package itcast.controller;
 
 import itcast.ResponseTemplate;
 import itcast.application.AdminNewsHistoryService;
-
 import itcast.dto.response.AdminNewsHistoryResponse;
 import itcast.dto.response.PageResponse;
 import itcast.jwt.CheckAuth;
 import itcast.jwt.LoginMember;
+import jakarta.mail.MessagingException;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -60,12 +59,26 @@ public class AdminNewsHistoryController {
         String csvContent = adminNewsHistoryService.createCsvFile(adminId, userId, newsId, startAt, endAt);
 
         // 파일 이름 설정
-        String fileName = "NewsHistory_File("+LocalDate.now()+").csv";
+        String fileName = "NewsHistory_File(" + LocalDate.now() + ").csv";
 
         // HTTP 응답 생성
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(csvContent.getBytes());
+    }
+
+    @CheckAuth
+    @GetMapping("/send-mail-csv")
+    public String sendMailCsv(
+            @LoginMember Long adminId,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) Long newsId,
+            @RequestParam(required = false) LocalDate startAt,
+            @RequestParam(required = false) LocalDate endAt
+    ) throws MessagingException {
+        String csvFile = adminNewsHistoryService.createCsvFile(adminId, userId, newsId, startAt, endAt);
+        adminNewsHistoryService.sendEmail(csvFile.getBytes());
+        return "메일이 정상적으로 발송되었습니다";
     }
 }

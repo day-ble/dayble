@@ -13,6 +13,17 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
+
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: ${ADMIN_MAIL}
+    password: ${ADMIN_MAIL_PASSWORD}
+    properties:
+      auth: true
+      starttlsEnable: false
+      sslEnable: true
+
   kakao:
     redirect-uri: http://localhost:8080/auth/kakao/callback
 

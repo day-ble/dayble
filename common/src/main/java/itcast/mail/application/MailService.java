@@ -12,12 +12,13 @@ import itcast.mail.dto.request.SendValidateMailRequest;
 import itcast.mail.repository.MailEventsRepository;
 import itcast.mail.sender.EmailSender;
 import itcast.mail.sender.EmailValidatorSender;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class MailService {
     private final EmailValidatorSender emailValidatorSender;
     private final MailEventsRepository mailEventsRepository;
     private final UserRepository userRepository;
+    private final SlackService slackService;
 
     @Async("taskExecutor")
     public void send(final SendMailRequest sendMailRequest) {
@@ -67,6 +69,7 @@ public class MailService {
                                 mailContent.thumbnail()
                         ))
                         .forEach(mailEventsRepository::save);
+                slackService.postInquiry(receiver);
             }
         }
     }

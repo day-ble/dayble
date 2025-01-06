@@ -6,6 +6,7 @@ import itcast.dto.response.AdminBlogHistoryResponse;
 import itcast.dto.response.PageResponse;
 import itcast.jwt.CheckAuth;
 import itcast.jwt.LoginMember;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -57,14 +58,24 @@ public class AdminBlogHistoryController {
             @RequestParam(required = false) LocalDate endAt
     ) {
         String csvContent = adminBlogHistoryService.createCsvFile(adminId, userId, blogId, startAt, endAt);
-
-        // 파일 이름 설정
         String fileName = "BlogHistory_File("+LocalDate.now()+").csv";
-
-        // HTTP 응답 생성
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(csvContent.getBytes());
+    }
+
+    @CheckAuth
+    @GetMapping("/send-mail-csv")
+    public String sendMailCsv(
+            @LoginMember Long adminId,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) Long blogId,
+            @RequestParam(required = false) LocalDate startAt,
+            @RequestParam(required = false) LocalDate endAt
+    ) throws MessagingException {
+        String csvFile = adminBlogHistoryService.createCsvFile(adminId, userId, blogId, startAt, endAt);
+        adminBlogHistoryService.sendEmail(csvFile.getBytes());
+        return "메일이 정상적으로 발송되었습니다";
     }
 }

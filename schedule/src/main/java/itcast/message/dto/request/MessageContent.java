@@ -6,8 +6,8 @@ public record MessageContent(
         @NotBlank
         String title,
         @NotBlank
-        String summary,
+        String content,
         @NotBlank
-        String originalLink
+        String link
 ){
 }

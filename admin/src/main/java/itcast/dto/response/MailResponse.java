@@ -14,5 +14,6 @@ public record MailResponse(
             String summary,
             String originalLink,
             String thumbnail
-    ) {}
+    ) {
+    }
 }

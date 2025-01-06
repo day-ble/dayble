@@ -36,6 +36,8 @@ jobs:
           spring.datasource.url: ${{ secrets.MYSQL_URL }}
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+          slack.token: ${{ secrets.SLACK_TOKEN }}
+          slack.channel.monitor: ${{ secrets.SLACK_CHANNEL_MONITOR }}
 
       - name: Set Admin Yaml
         uses: microsoft/variable-substitution@v1
@@ -49,6 +51,10 @@ jobs:
           aws.ses.secret-key: ${{ secrets.AWS_SES_SECRET_KEY }}
           aws.ses.sender-email: ${{ secrets.AWS_SES_SENDER_EMAIL }}
           jwt.secret.key: ${{ secrets.JWT_SECRET_KEY }}
+          mail.username: ${{ secrets.ADMIN_MAIL }}
+          mail.password: ${{ secrets.ADMIN_MAIL_PASSWORD }}
+          slack.token: ${{ secrets.SLACK_TOKEN }}
+          slack.channel.monitor: ${{ secrets.SLACK_CHANNEL_MONITOR }}
 
       - name: Set B2C Yaml
         uses: microsoft/variable-substitution@v1
@@ -63,6 +69,11 @@ jobs:
           aws.ses.sender-email: ${{ secrets.AWS_SES_SENDER_EMAIL }}
           spring.kakao.client-id: ${{ secrets.KAKAO_CLIENT_ID }}
           jwt.secret.key: ${{ secrets.JWT_SECRET_KEY }}
+          sms.api.key: ${{ secrets.SMS_API_KEY }}
+          sms.api.secret: ${{ secrets.SMS_API_SECRET }}
+          sms.sender.phone: ${{ secrets.SMS_SENDER_PHONE }}
+          slack.token: ${{ secrets.SLACK_TOKEN }}
+          slack.channel.monitor: ${{ secrets.SLACK_CHANNEL_MONITOR }}
 
       - name: Set Schedule Yaml
         uses: microsoft/variable-substitution@v1
@@ -78,7 +89,10 @@ jobs:
           jwt.secret.key: ${{ secrets.JWT_SECRET_KEY }}
           sms.api.key: ${{ secrets.SMS_API_KEY }}
           sms.api.secret: ${{ secrets.SMS_API_SECRET }}
+          sms.sender.phone: ${{ secrets.SMS_SENDER_PHONE }}
           openai.secret-key: ${{ secrets.OPENAI_SECRET_KEY }}
+          slack.token: ${{ secrets.SLACK_TOKEN }}
+          slack.channel.monitor: ${{ secrets.SLACK_CHANNEL_MONITOR }}
 
       - name: Install Docker Compose
         run: |

@@ -17,6 +17,10 @@ spring:
         show_sql: false
         format_sql: false
         dialect: org.hibernate.dialect.MySQLDialect
+slack:
+  token: ${SLACK_TOKEN}
+  channel:
+    monitor: ${SLACK_CHANNEL_MONITOR}
 
 logging:
   level:

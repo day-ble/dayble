@@ -32,6 +32,18 @@ jwt:
   secret:
     key: ${JWT_SECRET_KEY}
 
+sms:
+  api:
+    key: ${SMS_API_KEY}
+    secret: ${SMS_API_SECRET}
+  sender:
+    phone: ${SMS_SENDER_PHONE}
+
+slack:
+  token: ${SLACK_TOKEN}
+  channel:
+    monitor: ${SLACK_CHANNEL_MONITOR}
+
 logging:
   level:
     org:

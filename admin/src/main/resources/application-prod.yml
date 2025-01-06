@@ -17,15 +17,38 @@ spring:
         show_sql: false
         format_sql: false
         dialect: org.hibernate.dialect.MySQLDialect
+
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: ${ADMIN_MAIL}
+    password: ${ADMIN_MAIL_PASSWORD}
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: false
+          ssl:
+            enable: true
+
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
+
 aws:
   ses:
     access-key: ${AWS_SES_ACCESS_KEY}
     secret-key: ${AWS_SES_SECRET_KEY}
     sender-email: ${AWS_SES_SENDER_EMAIL}
   region: ap-northeast-2
+
+slack:
+  token: ${SLACK_TOKEN}
+  channel:
+    monitor: ${SLACK_CHANNEL_MONITOR}
 
 logging:
   level:
