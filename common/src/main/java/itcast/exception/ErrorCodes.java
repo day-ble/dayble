@@ -14,14 +14,20 @@ public enum ErrorCodes {
     EMAIL_ALREADY_EXISTS("이미 사용 중인 이메일입니다.", 3003L, HttpStatus.CONFLICT),
     PHONE_NUMBER_ALREADY_EXISTS("이미 등록된 전화번호입니다.", 3004L, HttpStatus.CONFLICT),
     INVALID_USER("접근할 수 없는 유저 입니다.", 3005L, HttpStatus.FORBIDDEN),
+    EMAIL_REQUIRED("이메일이 필요합니다.", 3006L, HttpStatus.BAD_REQUEST),
+    PHONE_NUMBER_REQUIRED("전화번호가 필요합니다.", 3007L, HttpStatus.BAD_REQUEST),
+
     USER_EMAIL_NOT_FOUND("해당 유저의 이메일이 존재하지 않습니다", 3006L, HttpStatus.NOT_FOUND),
     //jwt
     JWT_TOKEN_CREATE_ERROR("JWT 토큰 생성에 실패했습니다.", 4001L, HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_TOKEN("유효하지 않거나 만료된 토큰입니다.", 4002L, HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED_ACCESS("로그인이 필요한 기능입니다.", 4003L, HttpStatus.UNAUTHORIZED),
     //message
-    MESSAGE_SENDING_FAILED("메시지 발송 실패", 4004L, HttpStatus.BAD_REQUEST),
-
+    MESSAGE_SENDING_FAILED("메시지 발송에 실패하였습니다", 4004L, HttpStatus.BAD_REQUEST),
+    VERIFICATION_CODE_SENDING_FAILED("인증번호 발송에 실패하였습니다", 4005L, HttpStatus.BAD_REQUEST),
+    VERIFICATION_CODE_MISMATCH("인증번호가 일치하지 않습니다", 4006L, HttpStatus.BAD_REQUEST),
+    PHONE_NUMBER_VERIFICATION_REQUIRED("휴대폰 번호 인증 확인이 필요합니다.", 4007L, HttpStatus.BAD_REQUEST),
+    EMAIL_VERIFICATION_REQUIRED("이메일 인증 확인이 필요합니다.", 4008L, HttpStatus.BAD_REQUEST),
     // Email
     EMAIL_SENDING_FAILED("메일 발송에 실패하였습니다.", 5001L, HttpStatus.BAD_REQUEST),
 

@@ -10,7 +10,6 @@ import itcast.mail.application.MailService;
 import itcast.mail.dto.request.EmailRequest;
 import itcast.mail.dto.request.SendValidateMailRequest;
 import itcast.mail.dto.request.VerifyMailRequest;
-import itcast.mail.dto.response.VerifyMailResponse;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +43,7 @@ public class MailController {
 
     @CheckAuth
     @PostMapping("/verify")
-    public ResponseTemplate<VerifyMailResponse> verifyEmailAuthenticationCode(
+    public ResponseTemplate<Void> verifyEmailAuthenticationCode(
             @RequestBody final VerifyMailRequest request
     ) {
         final String code = (String) redisTemplate.opsForValue().get("email-verification:" + request.email());
@@ -56,9 +55,14 @@ public class MailController {
         if (!request.authenticationCode().equals(code)) {
             throw new ItCastApplicationException(MAIL_AUTH_CODE_MISMATCH);
         }
-
+        redisTemplate.opsForValue().set(
+                "VERIFIED_EMAIL" + request.email(),
+                true,
+                5,
+                TimeUnit.MINUTES
+        );
         redisTemplate.delete("email-verification:" + request.email());
 
-        return new ResponseTemplate<>(HttpStatus.OK, "이메일 인증이 완료되었습니다.", VerifyMailResponse.from(true));
+        return new ResponseTemplate<>(HttpStatus.OK, "이메일 인증이 완료되었습니다.");
     }
 }
