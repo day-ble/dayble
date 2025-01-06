@@ -21,7 +21,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/blog-history")
+@RequestMapping("/api/blog-history")
 public class AdminBlogHistoryController {
 
     private final AdminBlogHistoryService adminBlogHistoryService;

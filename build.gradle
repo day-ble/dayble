@@ -27,6 +27,8 @@ subprojects {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.4.1'
+
         //test
         testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 

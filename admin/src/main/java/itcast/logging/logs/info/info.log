@@ -1,0 +1,28 @@
+16:10:25.311 [] [] [] [main] INFO  itcast.AdminApplication - Starting AdminApplication using Java 17.0.5 with PID 7545 (/Users/yuseonjun/dev/sparta/crawling-project-crowrong-backend/admin/build/classes/java/main started by yuseonjun in /Users/yuseonjun/dev/sparta/crawling-project-crowrong-backend)
+16:10:25.316 [] [] [] [main] INFO  itcast.AdminApplication - The following 1 profile is active: "prod"
+16:10:25.952 [] [] [] [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+16:10:25.990 [] [] [] [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 32 ms. Found 6 JPA repository interfaces.
+16:10:26.386 [] [] [] [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+16:10:26.392 [] [] [] [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+16:10:26.392 [] [] [] [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+16:10:26.418 [] [] [] [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+16:10:26.418 [] [] [] [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1068 ms
+16:10:26.644 [] [] [] [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+16:10:26.671 [] [] [] [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.2.Final
+16:10:26.688 [] [] [] [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+16:10:26.828 [] [] [] [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+16:10:26.843 [] [] [] [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+16:10:26.876 [] [] [] [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (null)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+16:10:27.334 [] [] [] [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+16:10:27.343 [] [] [] [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+16:10:27.348 [] [] [] [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+16:10:27.358 [] [] [] [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.

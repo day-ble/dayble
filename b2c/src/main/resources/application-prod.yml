@@ -21,6 +21,13 @@ spring:
     redirect-uri: http://localhost:8080/auth/kakao/callback
     client-id: ${KAKAO_CLIENT_ID}
 
+aws:
+  ses:
+    access-key: ${AWS_SES_ACCESS_KEY}
+    secret-key: ${AWS_SES_SECRET_KEY}
+    sender-email: ${AWS_SES_SENDER_EMAIL}
+  region: ap-northeast-2
+
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
@@ -36,5 +43,10 @@ logging:
               BasicBinder: warn
     root: info
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
 server:
   port: 8080

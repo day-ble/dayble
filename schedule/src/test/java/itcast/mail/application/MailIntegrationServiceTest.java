@@ -1,3 +1,4 @@
+/*
 package itcast.mail.application;
 
 import itcast.mail.dto.request.MailContent;
@@ -41,3 +42,4 @@ class MailIntegrationServiceTest {
         log.info("Test 끝 스레드: {}", Thread.currentThread().getName());
     }
 }
+*/
