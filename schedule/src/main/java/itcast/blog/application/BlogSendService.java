@@ -10,6 +10,10 @@ import itcast.jwt.repository.UserRepository;
 import itcast.mail.application.MailService;
 import itcast.mail.dto.request.MailContent;
 import itcast.mail.dto.request.SendMailRequest;
+import itcast.message.application.MessageService;
+import itcast.message.dto.request.MessageContent;
+import itcast.message.dto.request.RecieverPhoneNumber;
+import itcast.message.dto.request.SendMessageRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,12 +34,16 @@ public class BlogSendService {
     private final UserRepository userRepository;
 
     private final MailService mailService;
+    private final MessageService messageService;
 
     public void sendBlogForEmail(LocalDate today) {
         sendBlogsByInterestAndCreateHistory(today, Interest.FRONTEND);
         sendBlogsByInterestAndCreateHistory(today, Interest.BACKEND);
     }
-
+    public void sendBlogForMessage(LocalDate today) {
+        sendMessagesByInterestAndCreateHistory(today, Interest.FRONTEND);
+        sendMessagesByInterestAndCreateHistory(today, Interest.BACKEND);
+    }
     /**
      * @param sendAt:   보낼 날짜 확인
      * @param interest: 백엔드 / 프론트엔드
@@ -58,7 +67,7 @@ public class BlogSendService {
         SendMailRequest mailRequest = SendMailRequest.of(emails, mailContents);
         mailService.send(mailRequest);
 
-        createBlogHistory(blogs, emails);
+        createBlogHistoryByEmail(blogs, emails);
     }
 
     private List<String> retrieveUserEmails(Interest interest) {
@@ -68,13 +77,13 @@ public class BlogSendService {
                 .toList();
     }
 
-    private void createBlogHistory(List<Blog> blogs, List<String> userEmails) {
+    private void createBlogHistoryByEmail(List<Blog> blogs, List<String> userEmails) {
         List<User> users = userEmails.stream()
                 .map(userRepository::findByEmail)
                 .toList();
 
         List<BlogHistory> blogHistories = users.stream()
-                .flatMap(user -> blogs.stream() // user 순회하여 모든 blog와 매칭
+                .flatMap(user -> blogs.stream()
                         .map(blog -> BlogHistory.builder()
                                 .user(user)
                                 .blog(blog)
@@ -83,4 +92,48 @@ public class BlogSendService {
 
         blogHistoryRepository.saveAll(blogHistories);
     }
+
+    private void sendMessagesByInterestAndCreateHistory(LocalDate sendAt, Interest interest) {
+        List<Blog> blogs = blogRepository.findAllBySendAtAndInterest(sendAt, interest);
+
+        List<MessageContent> messageContents = blogs.stream()
+                .map(blog -> new MessageContent(
+                        blog.getTitle(),
+                        blog.getContent(),
+                        blog.getLink()
+                ))
+                .collect(Collectors.toList());
+
+        List<RecieverPhoneNumber> phoneNumbers = retrieveUserPhoneNumbers(interest);
+
+        SendMessageRequest sendMessageRequest = new SendMessageRequest(messageContents, phoneNumbers);
+        messageService.sendMessages(sendMessageRequest);
+
+        createBlogHistoryByMessage(blogs, phoneNumbers);
+    }
+
+    private List<RecieverPhoneNumber> retrieveUserPhoneNumbers(Interest interest) {
+        return userRepository.findAllByInterest(interest)
+                .stream()
+                .map(user -> new RecieverPhoneNumber(user.getPhoneNumber()))
+                .collect(Collectors.toList());
+    }
+
+    private void createBlogHistoryByMessage(List<Blog> blogs, List<RecieverPhoneNumber> phoneNumbers) {
+        List<User> users = phoneNumbers.stream()
+                .map(phoneNumber -> userRepository.findByPhoneNumber(phoneNumber.phoneNumber()))
+                .toList();
+
+        List<BlogHistory> blogHistories = users.stream()
+                .flatMap(user -> blogs.stream()
+                        .map(blog -> BlogHistory.builder()
+                                .user(user)
+                                .blog(blog)
+                                .build()))
+                .collect(Collectors.toList());
+
+        blogHistoryRepository.saveAll(blogHistories);
+    }
 }
+
+

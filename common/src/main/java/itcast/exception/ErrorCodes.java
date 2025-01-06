@@ -43,6 +43,7 @@ public enum ErrorCodes {
     NOT_FOUND_EMAIL("이메일을 찾을 수 없습니다", 2006L, HttpStatus.NOT_FOUND),
     NOT_FOUND_SEND_DATA("발송 데이터를 찾을 수 없습니다", 2007L, HttpStatus.NOT_FOUND),
     INVALID_INTEREST_TYPE_ERROR("invalid타입이 맞지 않습니다", 2008L, HttpStatus.BAD_REQUEST),
+    NOT_FOUND_PHONENUMBERS("해당 번호를 찾을 수 없습니다", 2009L, HttpStatus.NOT_FOUND),
 
     MAIL_AUTH_CODE_EXPIRED("인증 코드가 만료되었습니다.", 6001L, HttpStatus.BAD_REQUEST),
     MAIL_AUTH_CODE_MISMATCH("인증 코드가 일치하지 않습니다.", 6002L, HttpStatus.FORBIDDEN),

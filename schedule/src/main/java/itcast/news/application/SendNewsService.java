@@ -10,6 +10,10 @@ import itcast.jwt.repository.UserRepository;
 import itcast.mail.application.MailService;
 import itcast.mail.dto.request.MailContent;
 import itcast.mail.dto.request.SendMailRequest;
+import itcast.message.application.MessageService;
+import itcast.message.dto.request.MessageContent;
+import itcast.message.dto.request.RecieverPhoneNumber;
+import itcast.message.dto.request.SendMessageRequest;
 import itcast.news.repository.NewsHistoryRepository;
 import itcast.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +34,7 @@ public class SendNewsService {
     private final UserRepository userRepository;
     private final NewsHistoryRepository newsHistoryRepository;
     private final MailService mailService;
+    private final MessageService messageService;
 
     @Transactional
     public void selectNews(LocalDate yesterday) {
@@ -44,7 +50,7 @@ public class SendNewsService {
         });
     }
 
-    public void sendNews() {
+    public void sendEmails() {
         List<News> sendNews = newsRepository.findAllBySendAt();
 
         if (sendNews == null || sendNews.isEmpty()) {
@@ -67,7 +73,7 @@ public class SendNewsService {
 
         SendMailRequest mailRequest = new SendMailRequest(emails, mailContents);
         mailService.send(mailRequest);
-        createNewsHistory(sendNews);
+        createNewsHistoryByEmail(sendNews);
     }
 
     public List<String> retrieveUserEmails(Interest interest) {
@@ -80,7 +86,53 @@ public class SendNewsService {
                 .toList();
     }
 
-    public void createNewsHistory(List<News> sendNews) {
+    public void createNewsHistoryByEmail(List<News> sendNews) {
+        List<User> users = userRepository.findAllByInterest(Interest.NEWS);
+        List<NewsHistory> newsHistories = sendNews.stream()
+                .flatMap(news -> users.stream()
+                        .map(user -> NewsHistory.builder()
+                                .user(user)
+                                .news(news)
+                                .build()))
+                .toList();
+        newsHistoryRepository.saveAll(newsHistories);
+    }
+
+    public void sendMessages() {
+        List<News> sendNews = newsRepository.findAllBySendAt();
+
+        if (sendNews == null || sendNews.isEmpty()) {
+            throw new ItCastApplicationException(ErrorCodes.NOT_FOUND_SEND_DATA);
+        }
+
+        List<MessageContent> messageContents = sendNews.stream()
+                .map(news -> new MessageContent(
+                        news.getTitle(),
+                        news.getContent(),
+                        news.getLink()))
+                .toList();
+        List<RecieverPhoneNumber> phoneNumbers = retrieveUserPhoneNumbers(Interest.NEWS);
+
+        if (phoneNumbers == null || phoneNumbers.isEmpty()) {
+            throw new ItCastApplicationException(ErrorCodes.NOT_FOUND_PHONENUMBERS);
+        }
+
+        SendMessageRequest sendMessageRequest = new SendMessageRequest(messageContents, phoneNumbers);
+        messageService.sendMessages(sendMessageRequest);
+        createNewsHistoryByMessage(sendNews);
+    }
+
+    public List<RecieverPhoneNumber> retrieveUserPhoneNumbers(Interest interest) {
+        if (interest != Interest.NEWS) {
+            throw new ItCastApplicationException(ErrorCodes.INVALID_INTEREST_TYPE_ERROR);
+        }
+        return userRepository.findAllByInterest(interest)
+                .stream()
+                .map(user -> new RecieverPhoneNumber(user.getPhoneNumber()))
+                .toList();
+    }
+
+    public void createNewsHistoryByMessage(List<News> sendNews) {
         List<User> users = userRepository.findAllByInterest(Interest.NEWS);
         List<NewsHistory> newsHistories = sendNews.stream()
                 .flatMap(news -> users.stream()
