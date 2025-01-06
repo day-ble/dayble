@@ -22,6 +22,12 @@ public class AdminBlogController {
 
     private final AdminBlogService adminBlogService;
 
+    @GetMapping("/test")
+    public String createBlog1(
+    ) {
+        return "테스트 어드민11111";
+    }
+
     @CheckAuth
     @PostMapping
     public ResponseTemplate<AdminBlogResponse> createBlog(

@@ -1,0 +1,47 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        dialect: org.hibernate.dialect.MySQLDialect
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
+aws:
+  ses:
+    access-key: ${AWS_SES_ACCESS_KEY}
+    secret-key: ${AWS_SES_SECRET_KEY}
+    sender-email: ${AWS_SES_SENDER_EMAIL}
+  region: ap-northeast-2
+
+logging:
+  level:
+    org:
+      hibernate:
+        sql: warn
+        type:
+          descriptor:
+            sql:
+              BasicBinder: warn
+    root: info
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+server:
+  port: 8082

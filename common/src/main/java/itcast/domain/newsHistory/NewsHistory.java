@@ -10,6 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Index;
+import jakarta.persistence.Column;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +20,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(name = "news_history", indexes = {
+@Index(name = "idx_user_news_created", columnList = "user_id, news_id, created_at")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NewsHistory extends BaseEntity {
 
@@ -37,4 +42,7 @@ public class NewsHistory extends BaseEntity {
         this.user = user;
         this.news = news;
     }
+
+    @Builder()
+    public NewsHistory(Long id, User user, News news) {}
 }

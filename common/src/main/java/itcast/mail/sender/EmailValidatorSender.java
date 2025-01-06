@@ -1,10 +1,11 @@
-package itcast.mail.dto.request;
+package itcast.mail.sender;
 
 import com.amazonaws.services.simpleemail.model.Body;
 import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
+import itcast.mail.dto.request.SendValidateMailRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,18 +16,18 @@ import org.thymeleaf.context.Context;
 @Getter
 @Component
 @RequiredArgsConstructor
-public class EmailSender {
+public class EmailValidatorSender {
 
-    private static final String MAIL_SUBJECT = "[IT-Cast 뉴스레터] 오늘의 인기 글을 확인해보세요~🔖";
+    private static final String MAIL_SUBJECT = "[IT-Cast] 메일 인증 번호 입니다.";
 
     @Value("${aws.ses.sender-email}")
     private String senderEmail;
 
     private final TemplateEngine templateEngine;
 
-    public SendEmailRequest from(final SendMailRequest request) {
+    public SendEmailRequest from(final SendValidateMailRequest request) {
         final Destination destination = new Destination()
-                .withToAddresses(request.receivers());
+                .withToAddresses(request.receiver());
 
         final Message message = new Message()
                 .withSubject(createContent(String.format(MAIL_SUBJECT)))
@@ -45,12 +46,12 @@ public class EmailSender {
                 .withData(text);
     }
 
-    private String createHtmlBody(final SendMailRequest request) {
+    private String createHtmlBody(final SendValidateMailRequest request) {
         final Context context = new Context();
         context.setVariable("sender", senderEmail);
         context.setVariable("subject", MAIL_SUBJECT);
-        context.setVariable("contents", request.contents());
+        context.setVariable("authenticationCode", request.authenticationCode());
 
-        return templateEngine.process("email-template", context);
+        return templateEngine.process("email-validate-template", context);
     }
 }
