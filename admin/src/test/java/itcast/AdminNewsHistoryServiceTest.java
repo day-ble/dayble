@@ -1,5 +1,10 @@
 package itcast;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
 import itcast.application.AdminNewsHistoryService;
 import itcast.domain.user.User;
 import itcast.dto.response.AdminNewsHistoryResponse;
@@ -11,11 +16,15 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.Multipart;
 import jakarta.mail.Session;
 import jakarta.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -25,18 +34,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminNewsHistoryServiceTest {
@@ -90,10 +87,12 @@ public class AdminNewsHistoryServiceTest {
 
         given(userRepository.findById(userId)).willReturn(Optional.of(user));
         given(adminRepository.existsByEmail(user.getKakaoEmail())).willReturn(true);
-        given(newsHistoryRepository.findNewsHistoryListByCondition(null, 1L, testDate, pageable)).willReturn(newsHistoryPage);
+        given(newsHistoryRepository.findNewsHistoryListByCondition(null, 1L, testDate, pageable)).willReturn(
+                newsHistoryPage);
 
         //when
-        Page<AdminNewsHistoryResponse> responsePage = adminNewsHistoryService.retrieveNewsHistory(userId, null, 1L, testDate, page, size);
+        Page<AdminNewsHistoryResponse> responsePage = adminNewsHistoryService.retrieveNewsHistory(userId, null, 1L,
+                testDate, page, size);
 
         //then
         assertEquals(2, responsePage.getContent().size());
@@ -129,7 +128,8 @@ public class AdminNewsHistoryServiceTest {
 
         given(userRepository.findById(adminId)).willReturn(Optional.of(user));
         given(adminRepository.existsByEmail(user.getKakaoEmail())).willReturn(true);
-        given(newsHistoryRepository.downloadNewsHistoryListByCondition(userId, newsId, startAt, endAt)).willReturn(newsHistoryResponse);
+        given(newsHistoryRepository.downloadNewsHistoryListByCondition(userId, newsId, startAt, endAt)).willReturn(
+                newsHistoryResponse);
 
         // when
         String csv = adminNewsHistoryService.createCsvFile(adminId, userId, newsId, startAt, endAt);

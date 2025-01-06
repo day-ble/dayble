@@ -7,19 +7,18 @@ import itcast.exception.ErrorCodes;
 import itcast.exception.ItCastApplicationException;
 import itcast.jwt.repository.UserRepository;
 import itcast.mail.repository.MailEventsRepository;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +69,8 @@ public class AdminMailService {
         LocalDateTime startOfDay = createdAt.atStartOfDay();
         LocalDateTime endOfDay = createdAt.atTime(23, 59, 59);
 
-        List<MailEvents> mailEvents = mailEventsRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay, endOfDay);
+        List<MailEvents> mailEvents = mailEventsRepository.findByUserIdAndCreatedAtBetween(userId, startOfDay,
+                endOfDay);
         if (mailEvents.isEmpty()) {
             throw new ItCastApplicationException(ErrorCodes.EMAIL_EVENT_NOT_FOUND);
         }

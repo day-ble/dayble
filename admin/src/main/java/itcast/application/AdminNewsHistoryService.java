@@ -10,6 +10,9 @@ import itcast.repository.AdminRepository;
 import itcast.repository.NewsHistoryRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.io.StringWriter;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
@@ -18,10 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import java.io.StringWriter;
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +31,8 @@ public class AdminNewsHistoryService {
     private final NewsHistoryRepository newsHistoryRepository;
     private final JavaMailSender mailSender;
 
-    public Page<AdminNewsHistoryResponse> retrieveNewsHistory(Long adminId, Long userId, Long newsId, LocalDate createdAt,
+    public Page<AdminNewsHistoryResponse> retrieveNewsHistory(Long adminId, Long userId, Long newsId,
+                                                              LocalDate createdAt,
                                                               int page, int size
     ) {
         isAdmin(adminId);
@@ -42,7 +42,8 @@ public class AdminNewsHistoryService {
 
     public String createCsvFile(Long adminId, Long userId, Long newsId, LocalDate startAt, LocalDate endAt) {
         isAdmin(adminId);
-        List<AdminNewsHistoryResponse> newsHistoryList = newsHistoryRepository.downloadNewsHistoryListByCondition(userId, newsId, startAt, endAt);
+        List<AdminNewsHistoryResponse> newsHistoryList = newsHistoryRepository.downloadNewsHistoryListByCondition(
+                userId, newsId, startAt, endAt);
         StringWriter stringWriter = new StringWriter();
         CSVWriter csvWriter = new CSVWriter(stringWriter);
 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>News letter</title>
+</head>
+<body style="font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #333;">
+<div class="container" style="max-width: 640px;
+            margin: 20px auto;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ddd;">
+
+    <div class="header" style="background-color: #ffffff;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;">
+        <img src="https://travel-spring.s3.ap-northeast-2.amazonaws.com/it-cast-logo.png" alt="Logo" style="max-width: 120px;
+            margin-bottom: 10px;">
+        <h1 style="font-size: 24px;
+            margin: 10px 0 5px;
+            color: #333;
+            font-weight: bold;">It-Cast &#45684;&#49828;&#47112;&#53552;</h1>
+        <p style="font-size: 14px;
+            color: #777;
+            margin: 0;">&#52572;&#49888; IT &#52968;&#53584;&#52768;&#47484; &#48372;&#45236;&#46300;&#47549;&#45768;&#45796;.</p>
+    </div>
+
+    <div class="content" th:each="content : ${contents}" style="padding: 20px;">
+        <div class="content-item" style="margin-bottom: 30px;
+            text-align: center;">
+            <img th:src="${content.thumbnail}" alt="Thumbnail" style="max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 10px;">
+            <h2 th:text="${content.title}" style="font-size: 18px;
+            color: #333;
+            margin: 10px 0;"></h2>
+            <p th:text="${content.summary}" style="font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 10px;"></p>
+            <a th:href="${content.originalLink}" target="_blank" style="display: inline-block;
+            font-size: 14px;
+            color: #0073e6;
+            font-weight: bold;
+            text-decoration: none;
+            margin-top: 5px;
+            padding: 8px 15px;
+            border: 1px solid #0073e6;
+            border-radius: 5px;">&#51088;&#49464;&#55176; &#48372;&#44592;</a>
+        </div>
+    </div>
+
+    <div class="footer" style="background-color: #f2f2f2;
+            padding: 15px;
+            font-size: 12px;
+            color: #888;
+            border-top: 1px solid #ddd;">
+        &copy; 2024 IT News Digest. All rights reserved.
+    </div>
+</div>
+</body>
+</html>
