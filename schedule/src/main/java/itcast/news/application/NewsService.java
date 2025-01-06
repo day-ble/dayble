@@ -72,9 +72,6 @@ public class NewsService {
             LocalDateTime publishedAt = convertDateTime(date);
 
             if (thumbnail.isEmpty()) {
-                throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
-            }
-            if (thumbnail.isEmpty()) {
                 log.error("썸네일이 존재하지 않습니다. {}", link);
                 throw new ItCastApplicationException(INVALID_NEWS_CONTENT);
             }
