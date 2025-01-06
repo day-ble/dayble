@@ -28,8 +28,6 @@ scheduler:
     crawling: "0 0 */3 * * ?"
     selecting: "0 0 6 * * *"
     sending: "0 0 8 * * ?"
-  timeout:
-    connection: 5000
 
 aws:
   ses:
@@ -42,10 +40,17 @@ jwt:
   secret:
     key: ${JWT_SECRET_KEY}
 
+slack:
+  token: ${SLACK_TOKEN}
+  channel:
+    monitor: ${SLACK_CHANNEL_MONITOR}
+
 sms:
   api:
     key: ${SMS_API_KEY}
     secret: ${SMS_API_SECRET}
+  sender:
+    phone: ${SMS_SENDER_PHONE}
 
 openai:
   secret-key: ${OPENAI_SECRET_KEY}
