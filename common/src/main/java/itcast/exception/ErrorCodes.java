@@ -17,7 +17,6 @@ public enum ErrorCodes {
     EMAIL_REQUIRED("이메일이 필요합니다.", 3006L, HttpStatus.BAD_REQUEST),
     PHONE_NUMBER_REQUIRED("전화번호가 필요합니다.", 3007L, HttpStatus.BAD_REQUEST),
 
-    USER_EMAIL_NOT_FOUND("해당 유저의 이메일이 존재하지 않습니다", 3006L, HttpStatus.NOT_FOUND),
     //jwt
     JWT_TOKEN_CREATE_ERROR("JWT 토큰 생성에 실패했습니다.", 4001L, HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_TOKEN("유효하지 않거나 만료된 토큰입니다.", 4002L, HttpStatus.UNAUTHORIZED),
@@ -37,28 +36,28 @@ public enum ErrorCodes {
     // 뉴스 exception
     INVALID_NEWS_CONTENT("뉴스의 내용이 없습니다", 2002L, HttpStatus.BAD_REQUEST),
     INVALID_NEWS_DATE("출판 날짜 형식이 아닙니다", 2003L, HttpStatus.BAD_REQUEST),
-    CRAWLING_PARSE_ERROR("크롤링에 실패했습니다",2004L,HttpStatus.BAD_REQUEST),
+    CRAWLING_PARSE_ERROR("크롤링에 실패했습니다", 2004L, HttpStatus.BAD_REQUEST),
 
     BLOG_CRAWLING_ERROR("블로그 크롤링에 실패했습니다", 2004L, HttpStatus.BAD_REQUEST),
     NEWS_CRAWLING_ERROR("뉴스 크롤링에 실패했습니다", 2004L, HttpStatus.BAD_REQUEST),
     BLOG_SELECT_ERROR("블로그 선택에 실패하였습니다.", 2004L, HttpStatus.BAD_REQUEST),
     NEWS_SELECT_ERROR("뉴스 선택에 실패하였습니다.", 2004L, HttpStatus.BAD_REQUEST),
-    GPT_SERVICE_ERROR("GPT요약 중 오류가 발생했습니다 ",2009L,HttpStatus.BAD_REQUEST),
+    GPT_SERVICE_ERROR("GPT요약 중 오류가 발생했습니다 ", 2009L, HttpStatus.BAD_REQUEST),
 
     TODAY_NEWS_NOT_FOUND("뉴스 선택에 실패했습니다", 2005L, HttpStatus.NOT_FOUND),
     NOT_FOUND_EMAIL("이메일을 찾을 수 없습니다", 2006L, HttpStatus.NOT_FOUND),
     NOT_FOUND_SEND_DATA("발송 데이터를 찾을 수 없습니다", 2007L, HttpStatus.NOT_FOUND),
-    INVALID_INTEREST_TYPE_ERROR("invalid타입이 맞지 않습니다", 2008L, HttpStatus.BAD_REQUEST),
-    NOT_FOUND_PHONENUMBERS("해당 번호를 찾을 수 없습니다", 2009L, HttpStatus.NOT_FOUND),
+    INVALID_INTEREST_TYPE_ERROR("invalid 타입이 맞지 않습니다", 2008L, HttpStatus.BAD_REQUEST),
+    NOT_FOUND_PHONE_NUMBERS("해당 번호를 찾을 수 없습니다", 2009L, HttpStatus.NOT_FOUND),
 
     MAIL_AUTH_CODE_EXPIRED("인증 코드가 만료되었습니다.", 6001L, HttpStatus.BAD_REQUEST),
     MAIL_AUTH_CODE_MISMATCH("인증 코드가 일치하지 않습니다.", 6002L, HttpStatus.FORBIDDEN),
 
     // Slack
-    SLACK_PARSE_ERROR("슬랙 알림에 실패했습니다.",7001L, HttpStatus.BAD_REQUEST),
+    SLACK_PARSE_ERROR("슬랙 알림에 실패했습니다.", 8001L, HttpStatus.BAD_REQUEST),
 
-    MAIL_AUTH_CODE_EXPIRED("인증 코드가 만료되었습니다.", 6001L, HttpStatus.BAD_REQUEST),
-    MAIL_AUTH_CODE_MISMATCH("인증 코드가 일치하지 않습니다.", 6002L, HttpStatus.FORBIDDEN),
+    USER_EMAIL_NOT_FOUND("해당 유저의 이메일이 존재하지 않습니다", 9006L, HttpStatus.NOT_FOUND),
+
 
     BAD_REQUEST("BAD_REQUEST", 9404L, HttpStatus.BAD_REQUEST),
     BAD_REQUEST_JSON_PARSE_ERROR("[BAD_REQUEST] JSON_PARSE_ERROR - 올바른 JSON 형식이 아님", 9405L, HttpStatus.BAD_REQUEST),

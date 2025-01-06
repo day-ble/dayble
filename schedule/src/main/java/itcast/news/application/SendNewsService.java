@@ -16,13 +16,11 @@ import itcast.message.dto.request.RecieverPhoneNumber;
 import itcast.message.dto.request.SendMessageRequest;
 import itcast.news.repository.NewsHistoryRepository;
 import itcast.news.repository.NewsRepository;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -114,7 +112,7 @@ public class SendNewsService {
         List<RecieverPhoneNumber> phoneNumbers = retrieveUserPhoneNumbers(Interest.NEWS);
 
         if (phoneNumbers == null || phoneNumbers.isEmpty()) {
-            throw new ItCastApplicationException(ErrorCodes.NOT_FOUND_PHONENUMBERS);
+            throw new ItCastApplicationException(ErrorCodes.NOT_FOUND_PHONE_NUMBERS);
         }
 
         SendMessageRequest sendMessageRequest = new SendMessageRequest(messageContents, phoneNumbers);
