@@ -18,7 +18,7 @@ spring:
         format_sql: false
         dialect: org.hibernate.dialect.MySQLDialect
   kakao:
-    redirect-uri: https://itcast.site/auth/kakao/callback
+    redirect-uri: ${KAKAO_REDIRECT_URI}
     client-id: ${KAKAO_CLIENT_ID}
 
 aws:

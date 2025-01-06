@@ -68,6 +68,7 @@ jobs:
           aws.ses.secret-key: ${{ secrets.AWS_SES_SECRET_KEY }}
           aws.ses.sender-email: ${{ secrets.AWS_SES_SENDER_EMAIL }}
           spring.kakao.client-id: ${{ secrets.KAKAO_CLIENT_ID }}
+          spring.kakao.redirect-uri: ${{ secrets.KAKAO_REDIRECT_URI }}
           jwt.secret.key: ${{ secrets.JWT_SECRET_KEY }}
           sms.api.key: ${{ secrets.SMS_API_KEY }}
           sms.api.secret: ${{ secrets.SMS_API_SECRET }}
