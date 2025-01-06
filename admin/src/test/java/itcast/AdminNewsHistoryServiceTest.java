@@ -6,10 +6,16 @@ import itcast.dto.response.AdminNewsHistoryResponse;
 import itcast.jwt.repository.UserRepository;
 import itcast.repository.AdminRepository;
 import itcast.repository.NewsHistoryRepository;
+import jakarta.mail.BodyPart;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
+import jakarta.mail.Session;
+import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -18,13 +24,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -38,6 +47,8 @@ public class AdminNewsHistoryServiceTest {
     UserRepository userRepository;
     @Mock
     AdminRepository adminRepository;
+    @Mock
+    private JavaMailSender mailSender;
     @InjectMocks
     AdminNewsHistoryService adminNewsHistoryService;
 
@@ -128,5 +139,29 @@ public class AdminNewsHistoryServiceTest {
         Assertions.assertTrue(csv.contains("\"id\",\"userId\",\"newsId\",\"createdAt\",\"modifiedAt\""));
         Assertions.assertTrue(csv.contains("\"1\",\"1\",\"1\",\"2025-01-01T00:00\",\"2025-01-01T00:00\""));
         Assertions.assertTrue(csv.contains("\"2\",\"2\",\"1\",\"2025-01-01T23:59:59\",\"2025-01-01T23:59:59\""));
+    }
+
+    @Test
+    @DisplayName("뉴스 히스토리 CSV 파일 메일 전송 성공")
+    public void successNewsHistorySendMailCSV() throws MessagingException, IOException {
+        //given
+        byte[] csvFile = "id,userId,newsId,createdAt,modifiedAt\n1,1,1,2025-01-01T00:00,2025-01-01T23:59:59".getBytes();
+        String title = "[관리자 전용 발신] 뉴스 히스토리 CSV 파일";
+        String to = "hamiwood@naver.com";
+        String fileName = "NewsHistory_File(" + LocalDate.now() + ").csv";
+
+        MimeMessage mimeMessage = new MimeMessage((Session) null);
+        Mockito.when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
+
+        // when
+        adminNewsHistoryService.sendEmail(csvFile);
+
+        // then
+        assertThat(mimeMessage.getSubject()).isEqualTo(title);
+        assertThat(mimeMessage.getAllRecipients()[0].toString()).isEqualTo(to);
+
+        Multipart multipart = (Multipart) mimeMessage.getContent();
+        BodyPart attachmentPart = multipart.getBodyPart(1);
+        assertThat(attachmentPart.getFileName()).isEqualTo(fileName);
     }
 }

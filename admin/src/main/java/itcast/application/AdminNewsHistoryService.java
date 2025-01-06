@@ -1,7 +1,6 @@
 package itcast.application;
 
 import com.opencsv.CSVWriter;
-import itcast.domain.newsHistory.NewsHistory;
 import itcast.domain.user.User;
 import itcast.dto.response.AdminNewsHistoryResponse;
 import itcast.exception.ErrorCodes;
@@ -9,10 +8,15 @@ import itcast.exception.ItCastApplicationException;
 import itcast.jwt.repository.UserRepository;
 import itcast.repository.AdminRepository;
 import itcast.repository.NewsHistoryRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
@@ -26,6 +30,7 @@ public class AdminNewsHistoryService {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
     private final NewsHistoryRepository newsHistoryRepository;
+    private final JavaMailSender mailSender;
 
     public Page<AdminNewsHistoryResponse> retrieveNewsHistory(Long adminId, Long userId, Long newsId, LocalDate createdAt,
                                                               int page, int size
@@ -62,6 +67,24 @@ public class AdminNewsHistoryService {
         }
 
         return stringWriter.toString();
+    }
+
+    public void sendEmail(byte[] csvFile) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        String fileName = "NewsHistory_File(" + LocalDate.now() + ").csv";
+        String title = "[관리자 전용 발신] 뉴스 히스토리 CSV 파일";
+        String content = "첨부된 CSV 파일을 확인해주십시오.";
+        String to = "hamiwood@naver.com";
+
+        helper.setFrom("hamiwood@naver.com");
+        helper.setTo(to);
+        helper.setSubject(title);
+        helper.setText(content, false);
+
+        helper.addAttachment(fileName, new ByteArrayResource(csvFile));
+        mailSender.send(message);
     }
 
     private void isAdmin(Long id) {

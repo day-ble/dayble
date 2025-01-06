@@ -7,6 +7,7 @@ import itcast.dto.response.AdminNewsHistoryResponse;
 import itcast.dto.response.PageResponse;
 import itcast.jwt.CheckAuth;
 import itcast.jwt.LoginMember;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -67,5 +68,19 @@ public class AdminNewsHistoryController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(csvContent.getBytes());
+    }
+
+    @CheckAuth
+    @GetMapping("/send-mail-csv")
+    public String sendMailCsv(
+            @LoginMember Long adminId,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) Long newsId,
+            @RequestParam(required = false) LocalDate startAt,
+            @RequestParam(required = false) LocalDate endAt
+    ) throws MessagingException {
+        String csvFile = adminNewsHistoryService.createCsvFile(adminId, userId, newsId, startAt, endAt);
+        adminNewsHistoryService.sendEmail(csvFile.getBytes());
+        return "메일이 정상적으로 발송되었습니다";
     }
 }
