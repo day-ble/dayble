@@ -11,7 +11,7 @@ public class IndexController {
         return "main";
     }
 
-    @GetMapping("/auth/kakao/index")
+    @GetMapping("/auth/kakao/main")
     public String kakaoLogin() {
         return "main";
     }
