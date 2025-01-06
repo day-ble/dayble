@@ -30,6 +30,9 @@ dependencies {
 
     implementation 'com.opencsv:opencsv:5.9'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    implementation 'com.amazonaws:aws-java-sdk-ses:1.12.3'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 test {
