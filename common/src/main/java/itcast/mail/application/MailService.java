@@ -9,18 +9,16 @@ import itcast.domain.user.User;
 import itcast.jwt.repository.UserRepository;
 import itcast.mail.dto.request.SendMailRequest;
 import itcast.mail.dto.request.SendValidateMailRequest;
-import itcast.mail.dto.request.SlackRequestDto;
 import itcast.mail.repository.MailEventsRepository;
 import itcast.mail.sender.EmailSender;
 import itcast.mail.sender.EmailValidatorSender;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
