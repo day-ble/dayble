@@ -2,8 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IT Subscription</title>
   <style>
+    /* 공통 스타일 */
     body {
       margin: 0;
       padding: 0;
@@ -12,51 +14,51 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
 
     .subscription-container {
       text-align: center;
       background-color: #e6fff2;
       border-radius: 20px;
-      padding: 50px;
+      padding: 2rem;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      width: 200%;
-      height: 50%;
-      max-width: 1000px;
+      width: 90%;
+      max-width: 600px;
     }
 
-    /* 로고 */
+    /* 로고 스타일 */
     .logo img {
-      width: 300px;
+      width: 150px;
       height: auto;
+      margin-bottom: 1rem;
     }
 
-    /* 타이틀 */
+    /* 제목 스타일 */
     .title {
-      font-size: 50px;
+      font-size: 1.8rem;
       font-weight: bold;
       color: #34a58b;
-      margin-top: 20px;
-      line-height: 1.6;
+      margin-top: 1rem;
+      line-height: 1.4;
     }
 
-    /* 서브 타이틀 */
+    /* 서브 제목 스타일 */
     .subtitle {
-      font-size: 30px;
+      font-size: 1.2rem;
       color: #7d7d7d;
-      margin: 20px 0;
+      margin: 1rem 0;
       line-height: 1.5;
     }
 
     /* 버튼 스타일 */
     .btn-subscribe {
-      margin-top: 20px;
+      margin-top: 1rem;
       display: inline-block;
-      padding: 15px 30px;
+      padding: 0.8rem 1.6rem;
       background-color: #34a58b;
       color: #ffffff;
-      font-size: 30px;
+      font-size: 1.2rem;
       font-weight: bold;
       text-decoration: none;
       border-radius: 50px;
@@ -66,25 +68,58 @@
     .btn-subscribe:hover {
       background-color: #1e7969;
     }
+
+    /* 반응형 스타일 */
+    @media screen and (max-width: 768px) {
+      .logo img {
+        width: 120px;
+      }
+
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .btn-subscribe {
+        font-size: 1rem;
+        padding: 0.7rem 1.2rem;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .title {
+        font-size: 1.2rem;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+      }
+
+      .btn-subscribe {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
+      }
+    }
   </style>
 </head>
 <body>
 <div class="subscription-container">
   <div class="logo">
-    <img src="https://travel-spring.s3.ap-northeast-2.amazonaws.com/it-cast-logo.png" alt="Logo"
-         style="max-width: 200px; margin-bottom: 10px;">
+    <img src="https://travel-spring.s3.ap-northeast-2.amazonaws.com/it-cast-logo.png" alt="Logo">
   </div>
   <div class="title">
     빠르게 변화하는 IT 정보를 <br /> 하루마다 한 번씩 편하게 확인하세요!
   </div>
   <div class="subtitle">
     하루에 3개의 IT 컨텐츠 받아보기<br />
-      👇🏻👇🏻👇🏻👇🏻👇🏻
+    👇🏻👇🏻👇🏻👇🏻👇🏻
   </div>
   <a
-          th:href="@{'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=bc2c718aa374df7f4b52201962968bbd&redirect_uri=https://itcast.site/auth/kakao/callback&through_account=true'}"
-          class="btn-subscribe"
-  >
+          th:href="@{'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=bc2c718aa374df7f4b52201962968bbd&redirect_uri=http://localhost:8080/auth/kakao/callback&through_account=true'}"
+          class="btn-subscribe">
     무료 구독하기
   </a>
 </div>

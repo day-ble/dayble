@@ -18,13 +18,13 @@ public class AuthController {
     @GetMapping("/auth/kakao/callback")
     public String kakaoLogin(
             @RequestParam String code,
-            HttpServletResponse response) throws JsonProcessingException {
-
+            HttpServletResponse response
+    ) throws JsonProcessingException {
         String jwtToken = authService.kakaoLogin(code);
         Cookie jwtCookie = authService.createJwtCookie(jwtToken);
         System.out.println(jwtCookie.getValue());
         System.out.println(jwtCookie.getName());
         response.addCookie(jwtCookie);
-        return "redirect:main";
+        return "subscribe-page";
     }
 }

@@ -83,12 +83,12 @@ public class UserService {
         if (userRepository.existsByNickname(nickname)) {
             throw new ItCastApplicationException(ErrorCodes.NICKNAME_ALREADY_EXISTS);
         }
-        if (userRepository.existsByEmail(email)) {
-            throw new ItCastApplicationException(ErrorCodes.EMAIL_ALREADY_EXISTS);
-        }
-        if (userRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new ItCastApplicationException(ErrorCodes.PHONE_NUMBER_ALREADY_EXISTS);
-        }
+//        if (userRepository.existsByEmail(email)) {
+//            throw new ItCastApplicationException(ErrorCodes.EMAIL_ALREADY_EXISTS);
+//        }
+//        if (userRepository.existsByPhoneNumber(phoneNumber)) {
+//            throw new ItCastApplicationException(ErrorCodes.PHONE_NUMBER_ALREADY_EXISTS);
+//        }
     }
 
     // SendingType에 따라 필수 항목 확인
@@ -121,8 +121,7 @@ public class UserService {
         }
     }
     private boolean isVerifiedPhoneNumber(String phoneNumber) {
-        String formattedPhoneNumber = phoneNumber.replaceAll("-", "");
-        Boolean isVerified = (Boolean) redisTemplate.opsForValue().get("VERIFIED_PHONE_NUMBER" + formattedPhoneNumber);
+        Boolean isVerified = (Boolean) redisTemplate.opsForValue().get("VERIFIED_PHONE_NUMBER" + phoneNumber);
         return isVerified != null && isVerified;
     }
     private boolean isVerifiedEmail(String email) {
