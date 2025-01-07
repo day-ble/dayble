@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Completed</title>
+    <style>
+        /* 공통 스타일 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0fff0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .confirmation-container {
+            text-align: center;
+            background-color: #e6fff2;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* 아이콘 스타일 */
+        .success-icon {
+            font-size: 4rem;
+            color: #34a58b;
+            margin-bottom: 1rem;
+        }
+
+        /* 제목 스타일 */
+        .title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #34a58b;
+            margin-top: 1rem;
+            line-height: 1.4;
+        }
+
+        /* 서브 제목 스타일 */
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7d7d7d;
+            margin: 1rem 0;
+            line-height: 1.5;
+        }
+
+        /* 버튼 스타일 */
+        .btn-go-back {
+            margin-top: 1rem;
+            display: inline-block;
+            padding: 0.8rem 1.6rem;
+            background-color: #34a58b;
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-go-back:hover {
+            background-color: #1e7969;
+        }
+
+        /* 반응형 스타일 */
+        @media screen and (max-width: 768px) {
+            .success-icon {
+                font-size: 3rem;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .btn-go-back {
+                font-size: 1rem;
+                padding: 0.7rem 1.2rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .btn-go-back {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="confirmation-container">
+    <!-- 성공 아이콘 -->
+    <div class="success-icon">✅</div>
+
+    <!-- 성공 메시지 -->
+    <div class="title">
+        구독이 완료되었습니다!
+    </div>
+
+    <div class="subtitle">
+        이제 매일 IT 정보를 편리하게 받아보실 수 있습니다. <br>
+        이용해 주셔서 감사합니다!
+    </div>
+
+    <!-- 돌아가기 버튼 -->
+    <a th:href="@{'/'}" class="btn-go-back">
+        홈으로 돌아가기
+    </a>
+</div>
+</body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT-Cast Subscription</title>
+    <style>
+        /* 공통 스타일 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0fff0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* 스크롤 방지 */
+        }
+
+        /* 전체 컨테이너 */
+        .subscription-container {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            width: 360px; /* 고정 폭으로 스크롤 방지 */
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* 로고 스타일 */
+        .logo img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        /* 제목 스타일 */
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #34a58b;
+            margin-bottom: 2rem;
+        }
+
+        /* 섹션 제목 스타일 */
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #7d7d7d;
+            margin: 1rem 0 0.5rem;
+            text-align: center;
+        }
+
+        /* 토글 버튼 섹션 */
+        .toggle-section {
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+            align-items: center; /* 수직 가운데 정렬 */
+            gap: 8px; /* 간격 조정 */
+            margin-bottom: 1rem;
+        }
+
+        .toggle-section1 {
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+            align-items: center; /* 수직 가운데 정렬 */
+            gap: 8px; /* 간격 조정 */
+            margin-bottom: 1rem;
+            color: #7d7d7d;
+            margin-right: 2rem;
+        }
+
+        .toggle-section2 {
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+            align-items: center; /* 수직 가운데 정렬 */
+            gap: 8px; /* 간격 조정 */
+            margin-bottom: 1rem;
+            color: #7d7d7d;
+            margin-left: 1rem;
+        }
+
+        .toggle-section label {
+            font-size: 0.9rem;
+            color: #7d7d7d;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: '';
+            height: 14px;
+            width: 14px;
+            border-radius: 50%;
+            background-color: white;
+            transition: transform 0.4s;
+            transform: translateX(3px);
+            bottom: 3px;
+            left: 0;
+        }
+
+        input:checked + .slider {
+            background-color: #34a58b;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* 이메일 입력 스타일 */
+        .email-input {
+            width: calc(100% - 2rem);
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        /* 버튼 스타일 */
+        .submit-button {
+            margin-top: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #34a58b;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .auth-button {
+            margin-top: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #34a58b;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 50%;
+        }
+
+        .submit-button:hover {
+            background-color: #1e7969;
+        }
+
+        /* 반응형 처리 */
+        @media screen and (max-width: 768px) {
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .email-input {
+                font-size: 0.9rem;
+            }
+
+            .submit-button {
+                font-size: 0.9rem;
+                padding: 0.7rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="subscription-container">
+    <!-- 로고 -->
+    <div class="logo">
+        <img src="https://travel-spring.s3.ap-northeast-2.amazonaws.com/it-cast-logo.png" alt="IT-Cast Logo">
+    </div>
+
+    <!-- 제목 -->
+    <div class="title">IT-Cast 구독</div>
+
+    <!-- 구독 정보 -->
+    <div class="section-title">구독정보</div>
+    <div class="toggle-section2">
+        <label>뉴스</label>
+        <label class="toggle">
+            <input type="checkbox" id="newsCheckbox">
+            <span class="slider"></span>
+        </label>
+        <label>블로그</label>
+    </div>
+
+    <!-- 관심분야 -->
+    <div class="section-title">관심분야</div>
+    <div class="toggle-section1">
+        <label>프론트엔드</label>
+        <label class="toggle">
+            <input type="checkbox" id="frontendCheckbox">
+            <span class="slider"></span>
+        </label>
+        <label>백엔드</label>
+    </div>
+
+    <!-- 수신 방법 -->
+    <div class="section-title">수신방법</div>
+    <div class="toggle-section">
+        <label>이메일</label>
+        <label class="toggle">
+            <input type="checkbox" id="toggleCheckbox">
+            <span class="slider"></span>
+        </label>
+        <label>메세지</label>
+    </div>
+
+    <!-- 이메일 또는 메시지 입력 -->
+    <input type="email" class="email-input" id="inputField" placeholder="email@email.com">
+    <button class="auth-button" id="authButton">인증하기</button>
+
+    <!-- 설정하기 버튼 -->
+    <button class="submit-button">설정하기</button>
+</div>
+
+<script>
+    document.querySelector(".submit-button").addEventListener("click", function () {
+        const toggleCheckboxStatus = document.getElementById("toggleCheckbox").checked;
+        const newsStatus = document.getElementById("newsCheckbox").checked;
+        const frontendStatus = document.getElementById("frontendCheckbox").checked;
+        const inputField = document.getElementById("inputField").value;
+
+        const articleType = newsStatus ? 'BLOG' : 'NEWS';
+        const interest = frontendStatus ? 'BACKEND' : 'FRONTEND';
+        const sendingType = toggleCheckboxStatus ? 'MESSAGE' : 'EMAIL';
+
+        let subscriptionData = {
+            nickname: inputField,  // 실제 값을 설정해야 함
+            articleType: articleType, // 뉴스 / 블로그 유형
+            interest: interest,       // 프론트엔드 / 백엔드 관심사
+            sendingType: sendingType,
+            email: null,              // 기본값은 null로 설정
+            phoneNumber: null
+        };
+
+        if (sendingType === 'MESSAGE') {
+            subscriptionData.phoneNumber = inputField; // 메시지 입력값으로 설정
+        } else {
+            subscriptionData.email = inputField; // 이메일 값으로 설정
+        }
+
+        // 서버로 데이터를 보내는 로직
+        fetch('/api/users', {  // /subscribe로 변경
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(subscriptionData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert("설정이 완료되었습니다!");
+                window.location.href = "subscribe";
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert("설정에 실패했습니다. 다시 시도해주세요.");
+            });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleCheckbox = document.getElementById("toggleCheckbox");
+        const inputField = document.getElementById("inputField");
+        const authButton = document.getElementById("authButton");
+        const submitButton = document.querySelector(".submit-button"); // 중복 제거
+
+        // 수신방법 토글 처리
+        toggleCheckbox.addEventListener("change", () => {
+            if (toggleCheckbox.checked) {
+                inputField.setAttribute("type", "text");
+                inputField.setAttribute("placeholder", "메시지를 입력하세요");
+            } else {
+                inputField.setAttribute("type", "email");
+                inputField.setAttribute("placeholder", "email@email.com");
+            }
+        });
+
+        // 인증 버튼 클릭 시 창 열기
+        authButton.addEventListener("click", function () {
+            const email = inputField.value; // 이메일
+            const phoneNumber = inputField.value; // 전화번호 (MESSAGE에 사용될 것임)
+            const toggleCheckboxStatus = document.getElementById("toggleCheckbox").checked;
+            const sendingType = toggleCheckboxStatus ? 'MESSAGE' : 'EMAIL'; // MESSAGE 또는 EMAIL에 따라 다르게 처리
+
+            if (sendingType === 'EMAIL') {
+                if (email) {
+                    // 인증번호 요청 (이메일)
+                    fetch('/mail', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: email }),
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            if (data.statusCode === 200) {
+                                alert("인증 메일이 발송되었습니다.");
+                                openVerificationWindow(email, sendingType);
+                            } else {
+                                alert("인증 메일 발송에 실패했습니다.");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            alert("오류가 발생했습니다.");
+                        });
+                } else {
+                    alert("이메일을 입력하세요.");
+                }
+            } else if (sendingType === 'MESSAGE') {
+                if (phoneNumber) {
+                    // 인증번호 요청 (전화번호)
+                    fetch('/api/code/send', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ phoneNumber: phoneNumber }),
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            if (data.statusCode === 200) {
+                                alert("인증 메시지가 발송되었습니다.");
+                                openVerificationWindow(phoneNumber, sendingType);
+                            } else {
+                                alert("인증 메시지 발송에 실패했습니다.");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            alert("오류가 발생했습니다.");
+                        });
+                } else {
+                    alert("전화번호를 입력하세요.");
+                }
+            }
+        });
+
+        function openVerificationWindow(contact, sendingType) {
+            const verificationWindow = window.open('', '인증창', 'width=400,height=300');
+            verificationWindow.document.write(`
+        <html>
+            <head><title>인증</title></head>
+            <body>
+                <h2>인증번호 입력</h2>
+                <label>인증번호:</label>
+                <input type="text" id="verificationCode" placeholder="인증번호 입력">
+                <button id="verifyButton">인증</button>
+                <p id="message"></p>
+            </body>
+        </html>
+    `);
+
+            verificationWindow.document.getElementById("verifyButton").addEventListener("click", function () {
+                const enteredCode = verificationWindow.document.getElementById("verificationCode").value;
+
+                // 인증번호 검증 API 호출
+                if (sendingType === 'EMAIL') {
+                    // 이메일 인증 검증
+                    fetch('/mail/verify', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: contact,
+                            authenticationCode: enteredCode
+                        })
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            if (data.statusCode === 200) {
+                                alert("인증이 완료되었습니다.");
+                                verificationWindow.close();
+                            } else {
+                                alert("인증 실패. 잘못된 인증번호입니다.");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            alert("오류가 발생했습니다.");
+                        });
+                } else {
+                    // 메시지 인증 검증
+                    fetch('/api/code/verify', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            phoneNumber: contact,
+                            verificationCode: enteredCode
+                        })
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            if (data.statusCode === 200) {
+                                alert("인증이 완료되었습니다.");
+                                verificationWindow.close();
+                            } else {
+                                alert("인증 실패. 잘못된 인증번호입니다.");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            alert("오류가 발생했습니다.");
+                        });
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
