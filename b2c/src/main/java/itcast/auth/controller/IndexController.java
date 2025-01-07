@@ -11,8 +11,8 @@ public class IndexController {
         return "main";
     }
 
-    @GetMapping("/auth/kakao/main")
+    @GetMapping("/subscribe")
     public String kakaoLogin() {
-        return "main";
+        return "subscribe";
     }
 }

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT-Cast Subscription</title>
+    <style>
+        /* 공통 스타일 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0fff0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* 스크롤 방지 */
+        }
+
+        /* 전체 컨테이너 */
+        .subscription-container {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            width: 360px; /* 고정 폭으로 스크롤 방지 */
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* 로고 스타일 */
+        .logo img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        /* 제목 스타일 */
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #34a58b;
+            margin-bottom: 2rem;
+        }
+
+        /* 섹션 제목 스타일 */
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #7d7d7d;
+            margin: 1rem 0 0.5rem;
+            text-align: center;
+        }
+
+        /* 토글 버튼 섹션 */
+        .toggle-section {
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+            align-items: center;    /* 수직 가운데 정렬 */
+            gap: 8px;               /* 간격 조정 */
+            margin-bottom: 1rem;
+        }
+
+        .toggle-section1 {
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+            align-items: center;    /* 수직 가운데 정렬 */
+            gap: 8px;               /* 간격 조정 */
+            margin-bottom: 1rem;
+            color: #7d7d7d;
+            margin-right: 2rem;
+        }
+
+        .toggle-section2 {
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+            align-items: center;    /* 수직 가운데 정렬 */
+            gap: 8px;               /* 간격 조정 */
+            margin-bottom: 1rem;
+            color: #7d7d7d;
+            margin-left: 1rem;
+        }
+
+        .toggle-section label {
+            font-size: 0.9rem;
+            color: #7d7d7d;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: '';
+            height: 14px;
+            width: 14px;
+            border-radius: 50%;
+            background-color: white;
+            transition: transform 0.4s;
+            transform: translateX(3px);
+            bottom: 3px;
+            left: 0;
+        }
+
+        input:checked + .slider {
+            background-color: #34a58b;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* 이메일 입력 스타일 */
+        .email-input {
+            width: calc(100% - 2rem);
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        /* 버튼 스타일 */
+        .submit-button {
+            margin-top: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #34a58b;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .submit-button:hover {
+            background-color: #1e7969;
+        }
+
+        /* 반응형 처리 */
+        @media screen and (max-width: 768px) {
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .email-input {
+                font-size: 0.9rem;
+            }
+
+            .submit-button {
+                font-size: 0.9rem;
+                padding: 0.7rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="subscription-container">
+    <!-- 로고 -->
+    <div class="logo">
+        <img src="https://travel-spring.s3.ap-northeast-2.amazonaws.com/it-cast-logo.png" alt="IT-Cast Logo">
+    </div>
+
+    <!-- 제목 -->
+    <div class="title">IT-Cast 구독</div>
+
+    <!-- 구독 정보 -->
+    <div class="section-title">구독정보</div>
+    <div class="toggle-section2">
+        <label>뉴스</label>
+        <label class="toggle">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+        <label>블로그</label>
+    </div>
+
+    <!-- 관심분야 -->
+    <div class="section-title">관심분야</div>
+    <div class="toggle-section1">
+        <label>프론트엔드</label>
+        <label class="toggle">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+        <label>백엔드</label>
+    </div>
+
+    <!-- 수신 방법 -->
+    <div class="section-title">수신방법</div>
+    <div class="toggle-section">
+        <label>이메일</label>
+        <label class="toggle">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+        <label>메세지</label>
+    </div>
+
+    <!-- 이메일 입력 -->
+    <input type="email" class="email-input" placeholder="email@email.com">
+
+    <!-- 설정하기 버튼 -->
+    <button class="submit-button">설정하기</button>
+</div>
+</body>
+</html>
