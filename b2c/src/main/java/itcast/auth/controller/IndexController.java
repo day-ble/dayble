@@ -11,8 +11,13 @@ public class IndexController {
         return "main";
     }
 
-    @GetMapping("/subscribe")
+    @GetMapping("/auth/kakao/subscribe")
     public String kakaoLogin() {
         return "subscribe";
+    }
+
+    @GetMapping("/subscribe-page")
+    public String kakaoLogin1() {
+        return "subscribe-page";
     }
 }

@@ -25,6 +25,6 @@ public class AuthController {
         System.out.println(jwtCookie.getValue());
         System.out.println(jwtCookie.getName());
         response.addCookie(jwtCookie);
-        return "subscribe";
+        return "subscribe-page";
     }
 }
