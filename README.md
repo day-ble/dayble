@@ -84,67 +84,6 @@
 #### 구독 페이지
 ![구독 페이지 (1)](https://github.com/user-attachments/assets/0d14906a-34bb-4ee9-8f07-9350f70c3279)
 
-### ERD (Entity Relationship Diagram)
-
-서비스의 데이터베이스 구조는 아래 ERD에 기반합니다. 각 엔터티와 관계를 통해 효율적인 데이터 관리를 고려했습니다.
-
-![img_1.png](img_1.png)
-<br>
-
----
-
-## 프로젝트 구조
-
-```
-├─common   // common 담당 모듈
-│  ├─itcast
-│  │   ├─domain
-│  │   │   ├─user
-│  │   │   │   └─User.java
-│  │   │   ├─blog
-│  │   │   │   └─Blog.java
-│  │   │   └─BaseEntity.java // Timestamped.java
-│  │   ├─config
-│  │   ├─exception
-│  │   ├─jwt
-│  │   └─logging
-│  └─ResponseTemplate.java
-├─b2c   
-│   ├─auth
-│   │  ├─client
-│   │  ├─controller
-│   |  | └─ controller.java
-│   |  ├─dto
-│   |  |  ├─request
-│   |  |  └─response
-│   |  └─ application
-│   |      └─ service.java
-│   ├─user
-│   │  ├─repository
-│   │  ├─controller
-│   |  | └─ controller.java
-│   |  ├─dto
-│   |  |  ├─request
-│   |  |  └─response
-│   └─ └─ application
-│         └─ service.java
-├─schedule   // 스케쥴링 담당 모듈
-│   ├─repository
-│   ├─dto
-│   |  ├─request
-│   |  └─response
-│   ├─application
-│   |   └─ service.java
-│   └─ └─ application
-│          └─ service.java
-└─admin         // 어드민 담당 모듈
-    ├─repository
-		...
-```
-<br>
-
----
-
 ## 모듈별 기능
 
 ### B2C 모듈
