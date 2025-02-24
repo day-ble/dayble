@@ -84,6 +84,11 @@
 #### 구독 페이지
 ![구독 페이지 (1)](https://github.com/user-attachments/assets/0d14906a-34bb-4ee9-8f07-9350f70c3279)
 
+---
+## 서비스 아키텍처
+<img width="1104" alt="image" src="https://github.com/user-attachments/assets/569ba91c-e829-459b-b544-0dd1c6923a13" />
+
+---
 ## 모듈별 기능
 
 ### B2C 모듈
