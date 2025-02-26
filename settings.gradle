@@ -1,4 +1,4 @@
-rootProject.name = 'crowrong-project'
+rootProject.name = 'dayble'
 include 'admin'
 include 'schedule'
 include 'common'
