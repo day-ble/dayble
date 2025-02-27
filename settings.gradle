@@ -1,6 +1,1 @@
 rootProject.name = 'dayble'
-include 'admin'
-include 'schedule'
-include 'common'
-include 'b2c'
-
