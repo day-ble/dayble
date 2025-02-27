@@ -1,4 +1,4 @@
-package news.application;
+package com.dayble.blog.news.application;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +16,6 @@ import static org.mockito.Mockito.when;
 
 import com.dayble.blog.ai.application.GPTService;
 import com.dayble.blog.ai.dto.request.GPTSummaryRequest;
-import com.dayble.blog.news.application.NewsService;
 import com.dayble.blog.news.domain.News;
 import com.dayble.blog.news.domain.NewsRepository;
 import java.io.IOException;
@@ -205,5 +204,4 @@ public class NewsServiceTest {
         assertEquals(content, capturedRequest.message().getContent());
         assertEquals(0.7f, capturedRequest.temperature());
     }
-
 }

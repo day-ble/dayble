@@ -1,14 +1,14 @@
-package mail.application;/*
-package itcast.mail.application;
+package com.dayble.blog.mail.application;
 
-import itcast.mail.dto.request.MailContent;
-import itcast.mail.dto.request.SendMailRequest;
+import com.dayble.blog.mail.controller.request.MailContent;
+import com.dayble.blog.mail.controller.request.SendMailRequest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StopWatch;
 
 @SpringBootTest
 class MailIntegrationServiceTest {
@@ -36,10 +36,12 @@ class MailIntegrationServiceTest {
                                 "https://yozm.wishket.com/magazine/detail/2900/",
                                 "https://yozm.wishket.com/media/news/2872/cover.webp")));
 
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         mailService.send(sendMailRequest);
+        stopWatch.stop();
 
-        Thread.sleep(1000);
-        log.info("Test 끝 스레드: {}", Thread.currentThread().getName());
+        log.info("이메일 전송 완료, 실행 시간: {}ms", stopWatch.getTotalTimeMillis());
     }
 }
-*/
+

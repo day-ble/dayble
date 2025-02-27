@@ -1,4 +1,4 @@
-package message.application;//package itcast.message.application;
+package com.dayble.blog.message.application;//package itcast.message.application;
 //
 //
 //import static org.mockito.Mockito.*;

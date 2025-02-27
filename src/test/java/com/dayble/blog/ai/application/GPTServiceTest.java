@@ -1,4 +1,4 @@
-package ai.application;
+package com.dayble.blog.ai.application;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -8,7 +8,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.dayble.blog.ai.application.GPTService;
 import com.dayble.blog.ai.client.GPTClient;
 import com.dayble.blog.ai.dto.request.GPTSummaryRequest;
 import com.dayble.blog.ai.dto.request.Message;
@@ -51,7 +50,7 @@ class GPTServiceTest {
 
         final Blog blog = mock(Blog.class);
 
-        final Message message = new Message("user", originalContent);
+        final Message message = new Message("com/dayble/blog/user", originalContent);
 
         final GPTSummaryRequest gptSummaryRequest = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);
 
@@ -85,7 +84,7 @@ class GPTServiceTest {
         final Long blogId = 1L;
         final String originalContent = "test originalContent";
 
-        final Message message = new Message("user", originalContent);
+        final Message message = new Message("com/dayble/blog/user", originalContent);
 
         final GPTSummaryRequest gptSummaryRequest = new GPTSummaryRequest("gpt-4o-mini", message, 0.7f);
 

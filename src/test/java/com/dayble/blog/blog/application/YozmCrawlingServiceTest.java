@@ -1,4 +1,4 @@
-package blog.application;/*
+package com.dayble.blog.blog.application;/*
 package itcast.blog.application;
 
 import itcast.blog.client.JsoupCrawler;

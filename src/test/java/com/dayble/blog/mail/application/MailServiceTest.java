@@ -1,4 +1,4 @@
-package mail.application;//package itcast.mail.application;
+package com.dayble.blog.mail.application;//package itcast.mail.application;
 //
 //import static org.mockito.Mockito.mock;
 //import static org.mockito.Mockito.verify;

@@ -1,4 +1,4 @@
-package auth.application;//package itcast.auth.application;
+package com.dayble.blog.auth.application;//package itcast.auth.application;
 //
 //import static org.junit.jupiter.api.Assertions.*;
 //import static org.mockito.Mockito.*;

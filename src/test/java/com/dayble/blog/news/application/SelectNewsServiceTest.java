@@ -1,4 +1,4 @@
-package news.application;//package itcast.news.application;
+package com.dayble.blog.news.application;//package itcast.news.application;
 //
 //import itcast.domain.news.News;
 //import itcast.domain.newsHistory.NewsHistory;
